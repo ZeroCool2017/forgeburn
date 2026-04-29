@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, Hammer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency } from '@/lib/loanCalculations';
+import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import QuoteBar from '@/components/forge/QuoteBar';
 import ChainProgress from '@/components/forge/ChainProgress';
 import StatsOrb from '@/components/forge/StatsOrb';
@@ -18,11 +18,22 @@ import MonthlyHeatmap from '@/components/forge/MonthlyHeatmap';
 import ExtraBudgetSlider from '@/components/forge/ExtraBudgetSlider';
 import AddLoanDialog from '@/components/forge/AddLoanDialog';
 import EmptyState from '@/components/forge/EmptyState';
+import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
+import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
 
 export default function Dashboard() {
   const [strategy, setStrategy] = useState('momentum');
   const [extraBudget, setExtraBudget] = useState(200);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Payment flow state
+  const [payingLoan, setPayingLoan] = useState(null);
+  const [shatterTrigger, setShatterTrigger] = useState(0);
+  const [shatterColor, setShatterColor] = useState('#a78bfa');
+  const [shatterOrigin, setShatterOrigin] = useState({ x: 0, y: 0 });
+  const [shatteringLoanId, setShatteringLoanId] = useState(null);
+
+  const cardRefs = useRef({});
   const queryClient = useQueryClient();
 
   const { data: loans = [], isLoading } = useQuery({
@@ -39,6 +50,36 @@ export default function Dashboard() {
     mutationFn: (id) => base44.entities.Loan.delete(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
   });
+
+  const recordPayment = useMutation({
+    mutationFn: ({ loan, amount }) => {
+      const newBalance = Math.max(0, loan.current_balance - amount);
+      return base44.entities.Loan.update(loan.id, { current_balance: newBalance });
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
+  });
+
+  // Trigger the shatter effect then apply the payment
+  const handlePaymentConfirm = useCallback((loan, amount) => {
+    const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
+
+    // Get position from the card ref for the shatter origin
+    const cardEl = cardRefs.current[loan.id];
+    if (cardEl) {
+      const rect = cardEl.getBoundingClientRect();
+      setShatterOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+    }
+
+    setShatterColor(cat.color);
+    setShatteringLoanId(loan.id);
+    setShatterTrigger(t => t + 1); // increment to re-trigger overlay
+
+    // Clear the shatter card highlight after animation
+    setTimeout(() => setShatteringLoanId(null), 600);
+
+    // Apply DB update slightly after for visual effect
+    setTimeout(() => recordPayment.mutate({ loan, amount }), 100);
+  }, [recordPayment]);
 
   const schedule = useMemo(
     () => calculatePayoffSchedule(loans, extraBudget, strategy),
@@ -78,6 +119,26 @@ export default function Dashboard() {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-chart-3/5 rounded-full blur-3xl" />
       </div>
+
+      {/* Shatter overlay — remounts on each new trigger */}
+      <AnimatePresence>
+        {shatterTrigger > 0 && (
+          <ChainShatterOverlay
+            key={shatterTrigger}
+            trigger={shatterTrigger}
+            color={shatterColor}
+            origin={shatterOrigin}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Record payment dialog */}
+      <RecordPaymentDialog
+        loan={payingLoan}
+        open={!!payingLoan}
+        onOpenChange={(open) => !open && setPayingLoan(null)}
+        onConfirm={handlePaymentConfirm}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Header */}
@@ -153,8 +214,17 @@ export default function Dashboard() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {loans.map(loan => (
-                  <div key={loan.id} className="relative group">
-                    <ChainProgress loan={loan} totalOriginal={totalOriginal} />
+                  <div
+                    key={loan.id}
+                    className="relative group"
+                    ref={el => cardRefs.current[loan.id] = el}
+                  >
+                    <ChainProgress
+                      loan={loan}
+                      totalOriginal={totalOriginal}
+                      onPay={() => setPayingLoan(loan)}
+                      isShattering={shatteringLoanId === loan.id}
+                    />
                     <Button
                       variant="ghost"
                       size="icon"
