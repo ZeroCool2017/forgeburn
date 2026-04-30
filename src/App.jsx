@@ -6,6 +6,9 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Dashboard from './pages/Dashboard';
+import Strategy from './pages/Strategy';
+import SettingsPage from './pages/SettingsPage';
+import AppLayout from './components/AppLayout';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -34,7 +37,11 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/strategy" element={<Strategy />} />
+        <Route path="/settings" element={<SettingsPage />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
