@@ -20,6 +20,7 @@ import AddLoanDialog from '@/components/forge/AddLoanDialog';
 import EmptyState from '@/components/forge/EmptyState';
 import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
 import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
+import PullToRefresh from '@/components/forge/PullToRefresh';
 
 export default function Dashboard() {
   const [strategy, setStrategy] = useState('momentum');
@@ -43,12 +44,29 @@ export default function Dashboard() {
 
   const createLoan = useMutation({
     mutationFn: (data) => base44.entities.Loan.create(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
+    onMutate: async (newLoan) => {
+      await queryClient.cancelQueries({ queryKey: ['loans'] });
+      const prev = queryClient.getQueryData(['loans']);
+      queryClient.setQueryData(['loans'], (old = []) => [
+        ...old,
+        { id: `temp-${Date.now()}`, ...newLoan },
+      ]);
+      return { prev };
+    },
+    onError: (_e, _v, ctx) => queryClient.setQueryData(['loans'], ctx.prev),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
   });
 
   const deleteLoan = useMutation({
     mutationFn: (id) => base44.entities.Loan.delete(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ['loans'] });
+      const prev = queryClient.getQueryData(['loans']);
+      queryClient.setQueryData(['loans'], (old = []) => old.filter(l => l.id !== id));
+      return { prev };
+    },
+    onError: (_e, _v, ctx) => queryClient.setQueryData(['loans'], ctx.prev),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
   });
 
   const recordPayment = useMutation({
@@ -56,7 +74,17 @@ export default function Dashboard() {
       const newBalance = Math.max(0, loan.current_balance - amount);
       return base44.entities.Loan.update(loan.id, { current_balance: newBalance });
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
+    onMutate: async ({ loan, amount }) => {
+      await queryClient.cancelQueries({ queryKey: ['loans'] });
+      const prev = queryClient.getQueryData(['loans']);
+      const newBalance = Math.max(0, loan.current_balance - amount);
+      queryClient.setQueryData(['loans'], (old = []) =>
+        old.map(l => l.id === loan.id ? { ...l, current_balance: newBalance } : l)
+      );
+      return { prev };
+    },
+    onError: (_e, _v, ctx) => queryClient.setQueryData(['loans'], ctx.prev),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
   });
 
   // Trigger the shatter effect then apply the payment
@@ -104,6 +132,10 @@ export default function Dashboard() {
     return `${years}yr ${months}mo`;
   };
 
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['loans'] });
+  }, [queryClient]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -113,6 +145,7 @@ export default function Dashboard() {
   }
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div>
       {/* Background gradient orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -241,5 +274,6 @@ export default function Dashboard() {
         )}
       </div>
     </div>
+    </PullToRefresh>
   );
 }

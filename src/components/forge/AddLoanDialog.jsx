@@ -3,9 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 import { CATEGORY_CONFIG } from '@/lib/loanCalculations';
+import CategorySheet from '@/components/forge/CategorySheet';
 
 export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
   const [form, setForm] = useState({
@@ -108,18 +108,7 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
           </div>
           <div>
             <Label className="text-xs text-muted-foreground">Category</Label>
-            <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-              <SelectTrigger className="bg-secondary/50 border-border/50">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(CATEGORY_CONFIG).map(([key, cfg]) => (
-                  <SelectItem key={key} value={key}>
-                    {cfg.emoji} {cfg.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <CategorySheet value={form.category} onChange={(v) => setForm({ ...form, category: v })} />
           </div>
           <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
             Forge This Chain ⚒️
