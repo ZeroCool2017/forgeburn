@@ -24,6 +24,7 @@ export default function BottomNav() {
 
   return (
     <nav
+      aria-label="Main navigation"
       className="fixed left-0 right-0 z-40 glass border-t border-border/50"
       style={{ bottom: 0, paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
@@ -37,6 +38,8 @@ export default function BottomNav() {
             <button
               key={to}
               onClick={() => handleTabPress(to, isActive)}
+              aria-label={label}
+              aria-current={isActive ? 'page' : undefined}
               className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-all select-none ${
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               }`}

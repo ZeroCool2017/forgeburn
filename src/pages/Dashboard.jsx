@@ -262,6 +262,7 @@ export default function Dashboard() {
                       variant="ghost"
                       size="icon"
                       onClick={() => deleteLoan.mutate(loan.id)}
+                      aria-label={`Delete ${loan.name}`}
                       className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10 w-7 h-7"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
