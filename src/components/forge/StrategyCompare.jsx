@@ -52,8 +52,8 @@ export default function StrategyCompare({ loans, extraBudget, activeStrategy, on
         ))}
       </div>
 
-      <ResponsiveContainer width="100%" height={200}>
-        <RadarChart data={radarData}>
+      <ResponsiveContainer width="100%" height={240}>
+        <RadarChart data={radarData} margin={{ top: 16, right: 24, bottom: 16, left: 24 }}>
           <PolarGrid stroke="hsl(260, 15%, 20%)" />
           <PolarAngleAxis
             dataKey="metric"
