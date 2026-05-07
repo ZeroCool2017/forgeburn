@@ -211,7 +211,7 @@ export default function Dashboard() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="obs-label mb-2">carry-the-zero / forge</p>
+              <p className="obs-label mb-2">carry-the-zero / compound</p>
               <div className="flex items-center gap-3 mb-1">
                 <span className="text-3xl">⛓️</span>
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
@@ -219,7 +219,7 @@ export default function Dashboard() {
                 </h1>
               </div>
               <p className="text-xs text-muted-foreground font-mono italic">
-                slowly, then all at once.
+                compound interest works for you, not against you.
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
