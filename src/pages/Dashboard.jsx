@@ -377,7 +377,7 @@ export default function Dashboard() {
 
             <div className="obs-divider my-6" />
             {/* Money Horoscope */}
-            <p className="obs-label mb-3">— astrology & prophecy</p>
+            <p className="obs-label mb-3">— wealth astrology</p>
             <div className="mb-6">
               <MoneyHoroscope birthData={birthData} />
             </div>
@@ -390,8 +390,8 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Main Charts */}
-            <p className="obs-label mb-3">— analysis</p>
+            {/* Payoff Timeline */}
+            <p className="obs-label mb-3">— your timeline</p>
             <div className="mb-6">
               <FreedomTimeline schedule={schedule.schedule} months={schedule.months} />
             </div>
