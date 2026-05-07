@@ -26,8 +26,8 @@ export function useAmbientSound() {
     nodesRef.current = [];
   }, []);
 
-  // ─── ELECTROPLANKTON MODE ─────────────────────────────────────────────────
-  const startElectroplankton = useCallback((ac) => {
+  // ─── DRIFT MODE ─────────────────────────────────────────────────────────
+  const startDrift = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0.0;
     master.gain.linearRampToValueAtTime(0.22, ac.currentTime + 4);
@@ -94,24 +94,25 @@ export function useAmbientSound() {
       timersRef.current.push(tid);
     };
 
-    // Pulsing bass foundation
-    const bass = ac.createOscillator();
-    bass.frequency.value = 35;
-    bass.type = 'sine';
-    const bassGain = ac.createGain();
-    bassGain.gain.setValueAtTime(0.05, ac.currentTime);
+    // Soft multi-layer bass foundation
+    const bassDrones = [
+      { freq: 27.5, vol: 0.06 },  // A0 — very sub
+      { freq: 35, vol: 0.08 },     // B0
+      { freq: 41.2, vol: 0.05 },   // E1
+    ];
 
-    // Bass pulse envelope
-    const bassPulse = setInterval(() => {
-      bassGain.gain.setValueAtTime(0.08, ac.currentTime);
-      bassGain.gain.linearRampToValueAtTime(0.02, ac.currentTime + 0.4);
-    }, 800);
-
-    bass.connect(bassGain);
-    bassGain.connect(master);
-    bass.start();
-    nodesRef.current.push({ osc: bass, gain: bassGain, ac });
-    timersRef.current.push(bassPulse);
+    bassDrones.forEach(({ freq, vol }) => {
+      const bass = ac.createOscillator();
+      const bassGain = ac.createGain();
+      bass.frequency.value = freq;
+      bass.type = 'sine';
+      bassGain.gain.setValueAtTime(0, ac.currentTime);
+      bassGain.gain.linearRampToValueAtTime(vol, ac.currentTime + 2);
+      bass.connect(bassGain);
+      bassGain.connect(master);
+      bass.start();
+      nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+    });
 
     // Ambient beat layer — kick/drum pulse
     const beatGain = ac.createGain();
@@ -175,8 +176,8 @@ export function useAmbientSound() {
     });
   }, []);
 
-  // ─── ENDER MODE — sparse, cold, tactical ─────────────────────────────────
-  const startEnder = useCallback((ac) => {
+  // ─── FOCUS MODE — precise, grounded with soft bass ─────────────────────────────────
+  const startFocus = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
     master.gain.linearRampToValueAtTime(0.18, ac.currentTime + 3);
@@ -239,17 +240,24 @@ export function useAmbientSound() {
       timersRef.current.push(setTimeout(spawnPing, offset));
     });
 
-    // Deep cold sub hum
-    const sub = ac.createOscillator();
-    const subGain = ac.createGain();
-    sub.type = 'sine';
-    sub.frequency.value = 55.0; // A1
-    subGain.gain.setValueAtTime(0, ac.currentTime);
-    subGain.gain.linearRampToValueAtTime(0.05, ac.currentTime + 8);
-    sub.connect(subGain);
-    subGain.connect(master);
-    sub.start();
-    nodesRef.current.push({ osc: sub, gain: subGain, ac });
+    // Soft grounded bass foundation
+    const bassDrones = [
+      { freq: 27.5, vol: 0.08 },  // A0
+      { freq: 55.0, vol: 0.06 },  // A1
+    ];
+
+    bassDrones.forEach(({ freq, vol }) => {
+      const sub = ac.createOscillator();
+      const subGain = ac.createGain();
+      sub.type = 'sine';
+      sub.frequency.value = freq;
+      subGain.gain.setValueAtTime(0, ac.currentTime);
+      subGain.gain.linearRampToValueAtTime(vol, ac.currentTime + 6);
+      sub.connect(subGain);
+      subGain.connect(master);
+      sub.start();
+      nodesRef.current.push({ osc: sub, gain: subGain, ac });
+    });
   }, []);
 
   // ─── DEEP DRONE MODE ─────────────────────────────────────────────────────
@@ -408,19 +416,19 @@ export function useAmbientSound() {
     nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
   }, []);
 
-  const start = useCallback((mode = 'electroplankton', debtProgress = 0) => {
+  const start = useCallback((mode = 'drift', debtProgress = 0) => {
     if (playingRef.current) return;
     try {
       const ac = getCtx();
       if (ac.state === 'suspended') ac.resume();
       playingRef.current = true;
 
-      if (mode === 'electroplankton') startElectroplankton(ac);
-      else if (mode === 'ender') startEnder(ac);
+      if (mode === 'drift') startDrift(ac);
+      else if (mode === 'focus') startFocus(ac);
       else if (mode === 'deep') startDeep(ac);
       else if (mode === 'tulsa') startTulsa(ac);
     } catch (e) {}
-  }, [startElectroplankton, startEnder, startDeep, startTulsa]);
+  }, [startDrift, startFocus, startDeep, startTulsa]);
 
   const updateProgress = useCallback((debtProgress) => {
     // Modulate organism spawn rate and complexity based on progress (0-1)

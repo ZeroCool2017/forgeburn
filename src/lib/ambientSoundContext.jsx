@@ -15,18 +15,18 @@ export const SOUND_MODES = [
     description: 'Pure focus, no audio.',
   },
   {
-    id: 'electroplankton',
-    label: 'Electroplankton',
+    id: 'drift',
+    label: 'Drift',
     sub: 'Living tones · generative',
     icon: '🪸',
-    description: 'Harmonic organisms drift through pentatonic space. Inspired by Toshio Iwai\'s Electroplankton.',
+    description: 'Harmonic organisms drift through pentatonic space. Soft, evolving, organic.',
   },
   {
-    id: 'ender',
-    label: 'Ender',
-    sub: 'Battle room pulse · focused',
+    id: 'focus',
+    label: 'Focus',
+    sub: 'Precision pulse · grounded',
     icon: '⚡',
-    description: 'Sparse, cold, precise. Like the silence between commands in the Battle School. Ender-style tactical focus.',
+    description: 'Sparse, intentional, precise. Tactical focus with soft harmonic grounding.',
   },
   {
     id: 'deep',
@@ -61,7 +61,7 @@ export function AmbientSoundProvider({ children }) {
     }
   }, [mode, start, stop]);
 
-  const toggle = () => setMode(m => m === 'off' ? 'electroplankton' : 'off');
+  const toggle = () => setMode(m => m === 'off' ? 'drift' : 'off');
 
   return (
     <AmbientSoundContext.Provider value={{ enabled: mode !== 'off', mode, setMode, toggle }}>
