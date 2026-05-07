@@ -260,7 +260,7 @@ export default function Dashboard() {
                 </h1>
               </div>
               <p className="text-sm font-mono text-muted-foreground">
-                ∑ chains = 0
+                ∑ chains
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
