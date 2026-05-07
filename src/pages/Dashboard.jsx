@@ -213,14 +213,11 @@ export default function Dashboard() {
             <div>
               <p className="obs-label mb-2">forge / heat · break · fly</p>
               <div className="flex items-center gap-3 mb-1">
-                <span className="text-3xl">🔥</span>
+                <span className="text-3xl">⛓️</span>
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
                   Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
-              <p className="text-xs text-muted-foreground font-mono italic mb-2">
-                the glow before the break
-              </p>
               <p className="text-sm font-mono text-primary">
                 ∑ chains = 0
               </p>
