@@ -364,13 +364,6 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Field Evolution */}
-            <p className="obs-label mb-3">— field evolution</p>
-            <div className="mb-6">
-              <FieldEvolutionPanel habits={habits} loans={loans} refreshInterval={20 * 60000} />
-            </div>
-
-            <div className="obs-divider my-6" />
             {/* Payoff Timeline */}
             <p className="obs-label mb-3">— your timeline</p>
             <div className="mb-6">
