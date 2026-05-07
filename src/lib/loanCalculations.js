@@ -880,6 +880,9 @@ export const QUOTES = [
   { text: "The essence of mathematics is its freedom.", author: "Georg Cantor" },
   { text: "Pure mathematics is, in its way, the poetry of logical ideas.", author: "Albert Einstein" },
   { text: "Mathematics is the language in which God has written the universe.", author: "Galileo Galilei" },
+
+  // Gary
+  { text: "Don't be a dumb ass.", author: "Gary" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
