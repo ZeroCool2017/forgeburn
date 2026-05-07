@@ -131,7 +131,7 @@ function TimePanel({ months }) {
       <div className="flex items-start justify-between mb-3">
         <div>
           <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-1">Time Reclaimed</p>
-          <p className="text-xl font-black text-foreground leading-none">{months} months</p>
+           <p className="text-xl font-black text-foreground leading-none">{months} months to freedom</p>
         </div>
         <p className="text-[10px] font-mono text-muted-foreground text-right">
           each square<br />1 week

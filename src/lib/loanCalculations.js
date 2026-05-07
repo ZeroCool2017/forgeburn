@@ -88,10 +88,10 @@ export function calculateMinimumOnlyPayoff(loans) {
 }
 
 export const STRATEGIES = [
-  { id: 'momentum', name: 'Momentum', description: 'Smart hybrid — balances quick wins with interest savings', icon: '⚡' },
-  { id: 'avalanche', name: 'Avalanche', description: 'Highest interest first — mathematically optimal', icon: '🏔️' },
-  { id: 'snowball', name: 'Snowball', description: 'Smallest balance first — psychological wins', icon: '❄️' },
-  { id: 'blitz', name: 'Blitz', description: 'Highest monthly cost first — maximum cash flow relief', icon: '🔥' },
+  { id: 'momentum', name: 'Momentum', description: 'Smart hybrid — balances quick wins with interest savings', icon: '⛓️' },
+  { id: 'avalanche', name: 'Avalanche', description: 'Highest interest first — mathematically optimal', icon: '💧' },
+  { id: 'snowball', name: 'Snowball', description: 'Smallest balance first — psychological wins', icon: '⚪' },
+  { id: 'blitz', name: 'Blitz', description: 'Highest monthly cost first — maximum cash flow relief', icon: '💥' },
 ];
 
 export const QUOTES = [
