@@ -31,6 +31,7 @@ import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 
 import LoanNarrative from '@/components/forge/LoanNarrative';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
+import MindMapInsights from '@/components/forge/MindMapInsights';
 import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import HabitNodes from '@/components/forge/HabitNodes';
 import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
@@ -52,6 +53,7 @@ export default function Dashboard() {
   const [shatteringLoanId, setShatteringLoanId] = useState(null);
   const [activeMilestone, setActiveMilestone] = useState(null);
   const [milestoneLoanName, setMilestoneLoanName] = useState('');
+  const [showInsight, setShowInsight] = useState(true);
 
   const cardRefs = useRef({});
   const queryClient = useQueryClient();
@@ -334,6 +336,7 @@ export default function Dashboard() {
             <p className="obs-label mb-3">— momentum field</p>
             <div className="mb-6">
               <CelestialMindMap loans={loans} schedule={schedule} />
+              {showInsight && <MindMapInsights loans={loans} habits={habits} onClose={() => setShowInsight(false)} />}
             </div>
 
             <div className="obs-divider my-6" />
