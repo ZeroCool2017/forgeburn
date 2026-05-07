@@ -22,6 +22,7 @@ import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
 import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
 import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
+import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -222,6 +223,15 @@ export default function Dashboard() {
                 totalOriginal={totalOriginal}
                 interestSaved={interestSaved > 0 ? interestSaved : 0}
                 months={monthsSaved > 0 ? monthsSaved : schedule.months}
+              />
+            </div>
+
+            {/* Systems-thinking: compound curve widget */}
+            <div className="mb-6">
+              <CompoundCurveWidget
+                loans={loans}
+                schedule={schedule}
+                minimumSchedule={minimumSchedule}
               />
             </div>
 
