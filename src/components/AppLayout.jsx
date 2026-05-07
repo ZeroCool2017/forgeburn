@@ -10,7 +10,7 @@ export default function AppLayout() {
       <CelestialBackground />
       
       {/* Subtle vignette edges (z-2) */}
-      <div className="fixed inset-0 pointer-events-none z-20"
+      <div className="fixed inset-0 pointer-events-none z-10 opacity-70"
         style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)' }} />
       
       {/* Page content — padded so it clears the bottom nav (z-10) */}

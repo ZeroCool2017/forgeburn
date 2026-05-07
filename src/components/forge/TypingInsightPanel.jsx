@@ -4,42 +4,38 @@ import { base44 } from '@/api/base44Client';
 import { Sparkles } from 'lucide-react';
 
 /**
- * Real-time typing insights about spending habits.
- * Updates every interval with evolving realizations about your money psychology.
+ * Grounded psychological insight about spending patterns.
+ * Types out once on load and stays there.
  */
 
-export default function TypingInsightPanel({ habits, loans, refreshInterval = 8 * 60000 }) {
+export default function TypingInsightPanel({ habits, loans }) {
   const [displayedText, setDisplayedText] = useState('');
   const [fullInsight, setFullInsight] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [generation, setGeneration] = useState(0);
 
-  // Generate new insight
+  // Generate insight once on mount
   useEffect(() => {
-    const generateNewInsight = async () => {
+    const generateInsight = async () => {
       setIsTyping(true);
       setDisplayedText('');
       
       try {
-        const habitSummary = habits.map(h => `• ${h.emoji} ${h.name}: $${h.monthly_average}/mo (${h.pattern})`).join('\n');
+        const habitSummary = habits.map(h => `• ${h.name}: $${h.monthly_average}/mo (${h.pattern})`).join('\n');
         const totalDebt = loans.reduce((s, l) => s + l.current_balance, 0);
         const payoffProgress = loans.length ? 1 - (totalDebt / loans.reduce((s, l) => s + (l.original_balance || l.current_balance), 0)) : 0;
 
-        const prompt = `You are a psychological observer of human spending behavior. Generate a SHORT (1-2 sentences), PROFOUND insight about what this person's spending patterns reveal about their deeper relationship with money, security, pleasure, or identity.
+        const prompt = `Analyze these spending habits and reveal what they genuinely show about this person's values, fears, or coping mechanisms. Be direct and psychological—not mystical.
 
 HABITS:
 ${habitSummary}
 
-Progress paid off: ${Math.round(payoffProgress * 100)}%
-Insight generation #${generation + 1}
+Debt repaid: ${Math.round(payoffProgress * 100)}%
 
-Make each insight:
-- Feel like a realization they're having mid-thought
-- Connect a specific habit to a psychological/emotional truth
-- Sound like you're reading their subconscious
-- Be progressively deeper as generation increases (early: surface psychology, later: existential truths)
-- Include irony or gentle paradox
-- Be 1-2 sentences max
+Write 2-3 sentences that:
+- Connect specific habits to underlying needs (security, control, connection, escape)
+- Reveal what they might be avoiding or seeking through spending
+- Sound like a therapist's observation, not a fortune teller
+- Be honest but compassionate
 
 Write ONLY the insight, nothing else.`;
 
@@ -50,16 +46,16 @@ Write ONLY the insight, nothing else.`;
         setFullInsight(result);
       } catch (error) {
         console.error('Failed to generate insight:', error);
-        setFullInsight('Every purchase is a conversation with your future self.');
+        setFullInsight('Your spending patterns reveal what you need. Understanding why is the first step.');
       }
     };
 
-    generateNewInsight();
-    const interval = setInterval(generateNewInsight, refreshInterval);
-    return () => clearInterval(interval);
-  }, [habits, loans, generation, refreshInterval]);
+    if (habits.length > 0) {
+      generateInsight();
+    }
+  }, []);
 
-  // Typing animation
+  // Typing animation (slow)
   useEffect(() => {
     if (!fullInsight) return;
 
@@ -71,9 +67,8 @@ Write ONLY the insight, nothing else.`;
       } else {
         setIsTyping(false);
         clearInterval(typeInterval);
-        setGeneration(g => g + 1);
       }
-    }, 25); // Typing speed
+    }, 45); // Slow typing speed
 
     return () => clearInterval(typeInterval);
   }, [fullInsight]);
@@ -104,10 +99,6 @@ Write ONLY the insight, nothing else.`;
       <p className="text-sm text-foreground/85 leading-relaxed min-h-12">
         {displayedText}
         {isTyping && <span className="animate-pulse">▌</span>}
-      </p>
-
-      <p className="text-[9px] font-mono text-muted-foreground/50 mt-4 pt-3 border-t border-border/20">
-        Updates every {Math.round(refreshInterval / 60000)} min · Generation #{generation}
       </p>
     </motion.div>
   );
