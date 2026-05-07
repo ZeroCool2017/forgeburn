@@ -219,7 +219,7 @@ export default function Dashboard() {
                 </h1>
               </div>
               <p className="text-xs text-muted-foreground font-mono italic">
-                slowly, then all at once.
+                ∑ links = 0
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
