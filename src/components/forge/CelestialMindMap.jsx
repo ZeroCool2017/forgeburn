@@ -114,78 +114,88 @@ export default function CelestialMindMap({ loans, schedule }) {
         return { ...p, growth: newGrowth };
       });
 
-      // Draw connections
-      ctx.strokeStyle = 'rgba(200, 200, 200, 0.08)';
-      ctx.lineWidth = 0.6;
+      // Draw connections — more visible, neural network style
       currentParticles.forEach((p, i) => {
         currentParticles.slice(i + 1).forEach(q => {
           const dx = q.x - p.x;
           const dy = q.y - p.y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 180) {
-            ctx.globalAlpha = 0.04 * (1 - d / 180);
+          const maxDist = 220;
+          
+          if (d < maxDist) {
+            // Stronger visibility, gradient effect
+            const strength = 1 - (d / maxDist);
+            const pColor = parseInt(p.color.slice(1), 16);
+            const qColor = parseInt(q.color.slice(1), 16);
+            const pR = (pColor >> 16) & 255;
+            const pG = (pColor >> 8) & 255;
+            const pB = pColor & 255;
+            
+            ctx.strokeStyle = `rgba(${pR}, ${pG}, ${pB}, ${0.15 * strength})`;
+            ctx.lineWidth = 0.8 + strength * 1.2;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
-            ctx.globalAlpha = 1;
           }
         });
       });
 
-      // Draw nodes
-      const globalBreath = 1 + Math.sin(currentTime * 0.008) * 0.24;
+      // Draw nodes — Obsidian-like neural network
+      const globalBreath = 1 + Math.sin(currentTime * 0.008) * 0.18;
       
       currentParticles.forEach(p => {
-        const individualWave = 1 + Math.sin(currentTime * 0.006 + p.id.charCodeAt(0) * 0.3) * 0.1;
-        const r = (12 + p.growth * 10) * globalBreath * individualWave;
+        const progress = 1 - (p.balance / p.original);
+        
+        // Size based on growth AND payoff progress (neural growth)
+        const payoffSize = 6 + progress * 12;
+        const baseSize = 10 + p.growth * 8;
+        const r = (baseSize + payoffSize) * globalBreath;
 
         const rgbColor = parseInt(p.color.slice(1), 16);
         const rVal = (rgbColor >> 16) & 255;
         const gVal = (rgbColor >> 8) & 255;
         const bVal = rgbColor & 255;
         
-        const haloBreath = globalBreath + 0.2;
-        const glowGrad = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 3 * haloBreath);
-        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.25)`);
-        glowGrad.addColorStop(0.6, `rgba(${rVal}, ${gVal}, ${bVal}, 0.08)`);
+        // Subtle outer glow
+        const glowGrad = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.5);
+        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.18)`);
         glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0)`);
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 3 * haloBreath, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, r * 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.92)`;
+        // Core node — clean, solid
+        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.95)`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fill();
 
-        const borderAlpha = 0.5 + (globalBreath - 1) * 0.25;
+        // Bright border — indicates activity
+        const borderAlpha = 0.6 + globalBreath * 0.2;
         ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${borderAlpha})`;
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.stroke();
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${0.2 + (globalBreath - 1) * 0.3})`;
-        ctx.beginPath();
-        ctx.arc(p.x - r * 0.3, p.y - r * 0.3, r * 0.4, 0, Math.PI * 2);
-        ctx.fill();
-
-        const progress = 1 - (p.balance / p.original);
-        if (progress > 0.01) {
-          const ringRadius = r + 3;
+        // Progress ring — shows learning/payoff
+        if (progress > 0.02) {
+          const ringRadius = r + 4;
           const startAngle = -Math.PI / 2;
           const endAngle = startAngle + progress * 2 * Math.PI;
-          ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.6)`;
-          ctx.lineWidth = 1;
+          ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.75)`;
+          ctx.lineWidth = 1.8;
+          ctx.lineCap = 'round';
           ctx.beginPath();
           ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
           ctx.stroke();
         }
 
+        // Emoji label
         if (p.emoji) {
-          ctx.font = `${Math.round(r * 1.4)}px Arial`;
+          ctx.font = `${Math.round(r * 1.2)}px Arial`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(p.emoji, p.x, p.y);
@@ -246,7 +256,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Each node grows as you pay down debt. The field learns from your choices and helps you excel across all areas of life.
+        Nodes connect and flow. As patterns emerge, the network uncovers new pathways. Nodes grow larger as you pay — the system learns your choices and discovers emerging patterns.
       </motion.p>
     </motion.div>
   );
