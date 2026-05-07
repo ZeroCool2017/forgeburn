@@ -626,6 +626,170 @@ export const QUOTES = [
   { text: "I'm walking here! And I'm walking away from this interest rate.", author: "Midnight Cowboy (adapted)" },
   { text: "The 90s taught us: alternative is not a genre, it's a posture. Debt freedom is your alternative.", author: "90s Gen X (cultural)" },
 
+  // Skating Polly — Stop Digging
+  { text: "Stop digging yourself deeper. The only way is up and out.", author: "Skating Polly, Stop Digging" },
+  { text: "I don't wanna be stuck in the same hole forever. Every payment is a ladder rung.", author: "Skating Polly, Stop Digging (adapted)" },
+  { text: "It's not about where you started. It's about refusing to stay.", author: "Skating Polly" },
+
+  // JD Samson (Le Tigre / MEN)
+  { text: "We built community out of nothing. You can build a debt-free life out of a plan.", author: "JD Samson" },
+  { text: "Art and survival look the same when you're broke. Keep making moves.", author: "JD Samson" },
+  { text: "DIY or die — that includes your finances.", author: "JD Samson (adapted)" },
+
+  // Bratmobile
+  { text: "Girl germs, budget terms — both require you to know what you're carrying.", author: "Bratmobile (adapted)" },
+  { text: "Punk is not just loud music. Punk is refusing to let debt define your decade.", author: "Bratmobile (adapted)" },
+  { text: "We were angry and broke. Now we're just strategic.", author: "Bratmobile (cultural)" },
+
+  // Megan Thee Stallion
+  { text: "Real hot girl stuff includes knowing your interest rate.", author: "Megan Thee Stallion (adapted)" },
+  { text: "I'm a savage — systematically attacking each balance one by one.", author: "Megan Thee Stallion (adapted)" },
+  { text: "Protect your peace. Pay off your debt. Both require discipline.", author: "Megan Thee Stallion" },
+  { text: "You can't pour from an empty account. Build the bag.", author: "Megan Thee Stallion (adapted)" },
+  { text: "Act up — on your financial goals, not your credit score.", author: "Megan Thee Stallion (adapted)" },
+
+  // Le Tigre
+  { text: "What's yr take on debt collection? Mine is: fight it with a plan.", author: "Le Tigre (adapted)" },
+  { text: "Get off the internet — and onto your amortization schedule.", author: "Le Tigre, Get Off the Internet (adapted)" },
+  { text: "Feminist sweepstakes: zero debt, full autonomy, no permission needed.", author: "Le Tigre (adapted)" },
+  { text: "TKO — total knockout of every balance. That's the plan.", author: "Le Tigre, TKO (adapted)" },
+
+  // Sonic Youth
+  { text: "Teenage riot — against minimum payments.", author: "Sonic Youth, Teenage Riot (adapted)" },
+  { text: "Dirty — but your credit doesn't have to be.", author: "Sonic Youth, Dirty (adapted)" },
+  { text: "Kool Thing is knowing your net worth.", author: "Sonic Youth, Kool Thing (adapted)" },
+  { text: "The noise outside is debt culture. The signal inside is your payoff date.", author: "Sonic Youth (adapted)" },
+  { text: "100% — that's the goal. Zero balance. Full ownership.", author: "Sonic Youth (adapted)" },
+
+  // Pavement
+  { text: "Cut your hair — and cut your unnecessary subscriptions while you're at it.", author: "Pavement, Cut Your Hair (adapted)" },
+  { text: "Silence kit: no more excuses about why the balance hasn't moved.", author: "Pavement, Silence Kit (adapted)" },
+  { text: "Crooked rain, crooked loan — straighten it with extra payments.", author: "Pavement, Crooked Rain (adapted)" },
+  { text: "Shady lane: where debt lives if you don't shine a light on it.", author: "Pavement, Shady Lane (adapted)" },
+  { text: "We dance like ballerinas, but our budget is disciplined.", author: "Pavement (adapted)" },
+
+  // Built to Spill
+  { text: "Keep it like a secret — the secret being how fast you paid this off.", author: "Built to Spill, Keep It Like a Secret (adapted)" },
+  { text: "You in reverse — but your debt balance is moving forward toward zero.", author: "Built to Spill, You In Reverse (adapted)" },
+  { text: "I would hurt a fly — but I won't let interest hurt my future.", author: "Built to Spill (adapted)" },
+  { text: "There's nothing wrong with the city you live in except what you owe in it.", author: "Built to Spill (adapted)" },
+
+  // Japanese baseball players (notable)
+  { text: "Preparation is everything. I prepare for every at-bat the way you should prepare for every payment.", author: "Shohei Ohtani" },
+  { text: "Don't think about what you can't do. Think about what you can do right now.", author: "Ichiro Suzuki" },
+  { text: "Even if you fail seven times, stand up eight.", author: "Ichiro Suzuki (Japanese proverb, practiced)" },
+  { text: "Small improvements every day. That is how championships — and debt freedom — are won.", author: "Ichiro Suzuki (adapted)" },
+  { text: "I want to be someone who surprises people. Including my past self who thought this debt was permanent.", author: "Shohei Ohtani (adapted)" },
+  { text: "Hard work and preparation — that is the only path I know.", author: "Hideki Matsui" },
+  { text: "I never took anything for granted. Every game, every at-bat, every dollar.", author: "Hideki Matsui (adapted)" },
+  { text: "Baseball taught me: you will fail. What matters is whether you show up the next day.", author: "Yu Darvish" },
+
+  // Rickey Sobers — former NBA player
+  { text: "You play hard, you play smart, and you finish what you started.", author: "Rickey Sobers, NBA (adapted)" },
+  { text: "Defense wins games. Offense pays debts. Run both.", author: "Rickey Sobers (adapted)" },
+  { text: "Most people don't know my name. My bank account does.", author: "Rickey Sobers, NBA (adapted)" },
+
+  // OKC Thunder players
+  { text: "I don't care about the doubt. I care about the work.", author: "Shai Gilgeous-Alexander, OKC Thunder" },
+  { text: "Be yourself. Be consistent. The results will come.", author: "Shai Gilgeous-Alexander, OKC Thunder" },
+  { text: "I control what I can control. The rest? Adjust.", author: "Chet Holmgren, OKC Thunder (adapted)" },
+  { text: "There's no shortcut. Just the next play. Just the next payment.", author: "Luguentz Dort, OKC Thunder (adapted)" },
+  { text: "We're building something. Every win adds up. So does every dollar.", author: "Mark Daigneault, OKC Thunder Coach" },
+  { text: "Championship culture starts with discipline in the small moments.", author: "Mark Daigneault, OKC Thunder Coach" },
+  { text: "Jalen Williams: I trust the process even when the process is slow.", author: "Jalen Williams, OKC Thunder (adapted)" },
+
+  // Mitt Romney
+  { text: "I like being able to pay off debt. I like seeing zero.", author: "Mitt Romney (adapted)" },
+  { text: "Corporations are people, my friend — but your loan balance is not your friend.", author: "Mitt Romney (adapted)" },
+  { text: "I've been in business long enough to know: cash flow is everything.", author: "Mitt Romney" },
+  { text: "The answer to our financial challenges isn't complexity. It's discipline.", author: "Mitt Romney (adapted)" },
+
+  // Bernie Sanders
+  { text: "I am sick and tired of hearing about your damn interest rates — so let's do something about them.", author: "Bernie Sanders (adapted)" },
+  { text: "When we stand together, we can break any chain — including debt.", author: "Bernie Sanders (adapted)" },
+  { text: "The middle class built this country. Debt shouldn't be the reward.", author: "Bernie Sanders" },
+  { text: "It's not a radical idea that you should be able to pay off your loans in your lifetime.", author: "Bernie Sanders (adapted)" },
+  { text: "Working families should not spend their lives in debt to the wealthy few.", author: "Bernie Sanders" },
+
+  // Hasan Piker
+  { text: "Eat the rich — but first, understand your loan documents so they can't eat you.", author: "Hasan Piker (adapted)" },
+  { text: "The system is designed to keep you in debt. That's the point. So break the design.", author: "Hasan Piker (adapted)" },
+  { text: "Reading your loan terms is an act of resistance.", author: "Hasan Piker (adapted)" },
+  { text: "You're not lazy. You're underpaid and over-indebted. There's a difference.", author: "Hasan Piker (adapted)" },
+  { text: "Financial literacy is class consciousness. Know your numbers.", author: "Hasan Piker (adapted)" },
+
+  // Native American / Indigenous financial resilience
+  { text: "The land remembers what was taken. So do the people. We rebuild.", author: "Attributed, Indigenous elder (cultural)" },
+  { text: "We have survived everything they tried to do to us. Debt is next.", author: "Native American cultural wisdom (adapted)" },
+  { text: "Our ancestors were rich before they were robbed. We are reclaiming.", author: "Indigenous financial resilience (cultural)" },
+  { text: "Sovereignty starts within. Over your body, your story, your balance sheet.", author: "Native American wisdom (adapted)" },
+  { text: "We don't measure wealth in what we owe. We measure it in what we can give.", author: "Indigenous elder (cultural)" },
+  { text: "Seven generations: every dollar you free today serves the ones who come after.", author: "Haudenosaunee principle (adapted)" },
+
+  // Debt collections history — looking back
+  { text: "The ancient Code of Hammurabi set a maximum debt term of three years. Even 1754 BCE knew: debt cannot be forever.", author: "Code of Hammurabi, 1754 BCE" },
+  { text: "In medieval Europe, debt could land you in a debtor's prison. You carry a spreadsheet. That is progress.", author: "Debtor's Prison history (adapted)" },
+  { text: "The Jubilee year in Leviticus — every 50 years, all debts cancelled. The system once imagined a reset.", author: "Leviticus 25 (historical)" },
+  { text: "Indigenous land was 'purchased' for debt and trinkets. The history of debt is a history of power.", author: "American colonial debt history" },
+  { text: "Sharecroppers were trapped in debt to landowners who set the prices. Know who holds the ledger.", author: "Post-Civil War sharecropping history" },
+  { text: "The company store kept miners in permanent debt. Your lender is not your landlord. You have choices they didn't.", author: "Company store history, 1800s" },
+  { text: "Greenwood was burned because Black wealth threatened the debt economy that white supremacy depended on.", author: "Tulsa Race Massacre, 1921 (historical)" },
+  { text: "Redlining wasn't just about neighborhoods. It was about who got to build credit and who was locked out.", author: "Federal Housing Administration, 1930s-1960s history" },
+  { text: "The GI Bill gave returning soldiers loans and education — but not Black veterans. The gap was designed.", author: "GI Bill inequity, 1944 (historical)" },
+  { text: "Student debt as we know it was born in the 1970s when Nixon shifted education funding. You are not failing — the system shifted.", author: "Student loan history, 1972 (adapted)" },
+  { text: "Credit scoring wasn't standardized until 1989. FICO is younger than most adults in debt right now.", author: "FICO history, 1989" },
+  { text: "Payday lending was made legal state by state in the 1990s. 400% APR was a legislative choice, not a law of nature.", author: "Payday loan deregulation, 1990s history" },
+
+  // Silent Bob / Clerks / Kevin Smith universe
+  { text: "...", author: "Silent Bob (he nods in agreement with your payoff plan)" },
+  { text: "I'm not even supposed to be here today — but I am, and I'm paying this off anyway.", author: "Dante Hicks, Clerks (adapted)" },
+  { text: "You know, there's a million fine-looking ways to get out of debt, and they all start with the same step.", author: "Silent Bob, Chasing Amy (adapted)" },
+  { text: "This job would be great if it weren't for the debt.", author: "Dante Hicks, Clerks (adapted)" },
+  { text: "I'm a firm believer in the philosophy of a ruling class. Especially now that I'm not in one.", author: "Randal Graves, Clerks (adapted)" },
+  { text: "You know what the problem is? We have ideals, but no amortization schedule.", author: "Mallrats (Kevin Smith, adapted)" },
+
+  // Good Will Hunting (Matt Damon / Ben Affleck)
+  { text: "You wasted $150,000 on an education you coulda got for $1.50 in late fees at the public library.", author: "Will Hunting, Good Will Hunting" },
+  { text: "It's not your fault. But the debt is. And now it's your move.", author: "Good Will Hunting (adapted)" },
+  { text: "How do you like them apples? Zero balance.", author: "Will Hunting, Good Will Hunting (adapted)" },
+  { text: "I got to see the world. But first I had to stop running from what I owed — to myself and the bank.", author: "Good Will Hunting (adapted)" },
+  { text: "Son of a bitch — he figured out compound interest.", author: "Good Will Hunting (adapted)" },
+  { text: "Do you know what I wanna do right now? Pay off something.", author: "Good Will Hunting (adapted)" },
+
+  // Foxfire (1996) — starring Angelina Jolie
+  { text: "We run this. We run ourselves. No one owns us — especially not a creditor.", author: "Legs, Foxfire (1996, adapted)" },
+  { text: "They think we're nothing. We know exactly what we're worth.", author: "Foxfire, 1996 (adapted)" },
+  { text: "We were wild and broke. One of those things had to change.", author: "Foxfire, 1996 (adapted)" },
+  { text: "Burn it down — the idea that you can't get free of this.", author: "Foxfire, 1996 (adapted)" },
+
+  // Reality Bites (1994)
+  { text: "I was really going to be something by the age of 23. Then I saw the balance.", author: "Lelaina Pierce, Reality Bites (adapted)" },
+  { text: "There's no point to any of this — unless you build the future you actually want.", author: "Reality Bites, 1994 (adapted)" },
+  { text: "Define irony: a generation that was promised everything now owes everything.", author: "Troy Dyer, Reality Bites (adapted)" },
+  { text: "Evian is naive spelled backwards. Minimum payments are hope spelled backwards.", author: "Reality Bites (adapted)" },
+  { text: "I am not defined by my debt — but I am determined to define when it ends.", author: "Reality Bites, Lelaina (adapted)" },
+  { text: "We graduate. We owe. We work. But we don't stop.", author: "Reality Bites (cultural)" },
+
+  // Disney Haunted Mansion
+  { text: "There's no way out — oh wait, that's just the ride. There's always a way out of debt.", author: "Haunted Mansion (adapted)" },
+  { text: "Our tour has 999 happy haunts — but none of them are as scary as a 29% APR.", author: "Haunted Mansion Ghost Host (adapted)" },
+  { text: "We have 999 happy haunts here. There's room for one more: your old loan balance.", author: "Ghost Host, Haunted Mansion (adapted)" },
+  { text: "Hurry back... hurry back. Don't forget your debt payoff plan.", author: "Madame Leota, Haunted Mansion (adapted)" },
+  { text: "Master Gracey had debts too. Unlike him, you can still do something about it.", author: "Haunted Mansion lore (adapted)" },
+  { text: "They never found the way out. You will.", author: "Haunted Mansion (adapted)" },
+
+  // Lowrider culture / Chicano culture
+  { text: "A lowrider is a work of art. So is a life lived debt-free on your own terms.", author: "Lowrider culture (East LA)" },
+  { text: "We take what we have and make it beautiful. The car, the neighborhood, the future.", author: "Lowrider culture (East LA)" },
+  { text: "Pride in what you own starts with actually owning it — not owing on it.", author: "Lowrider culture (adapted)" },
+  { text: "The hydraulics lift the car. The plan lifts the debt. Both take precision.", author: "Lowrider culture (adapted)" },
+  { text: "Brown Pride means building wealth for our community, dollar by dollar.", author: "Chicano financial resilience (cultural)" },
+  { text: "Cruz Contreras: the streets taught me more about interest than any bank ever did.", author: "East LA cultural (adapted)" },
+  { text: "Slow ride, steady progress. The lowrider philosophy applies to debt payoff.", author: "Lowrider culture (cultural)" },
+  { text: "We customize everything — the ride, the music, the financial plan.", author: "Lowrider / Chicano culture (adapted)" },
+  { text: "George Barris built dream machines from nothing. Build your dream from less debt.", author: "George Barris, Kustom King (adapted)" },
+  { text: "The impala doesn't apologize. Neither should your financial ambition.", author: "Lowrider culture (cultural)" },
+
   // Mathematicians & scientists with diverse abilities
   { text: "A mathematician, like a painter or poet, is a maker of patterns.", author: "G.H. Hardy" },
   { text: "Do not worry about your difficulties in mathematics. I can assure you mine are still greater.", author: "Albert Einstein" },
