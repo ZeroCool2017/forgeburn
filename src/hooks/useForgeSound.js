@@ -58,55 +58,49 @@ export function useForgeSound() {
     } catch (e) { /* audio blocked — silent fail */ }
   }, []);
 
-  // Chain break: satisfying magical progression (G minor arpeggio rising)
+  // Chain break: gentle resonant metallic chime (soft, elegant, Obsidian aesthetic)
   const playChainBreak = useCallback(() => {
     try {
       const ac = getCtx();
       const t = ac.currentTime;
 
-      // Warm bass impact + release (G note)
-      const bass = ac.createOscillator();
-      const bassGain = ac.createGain();
-      bass.connect(bassGain); bassGain.connect(ac.destination);
-      bass.type = 'sine';
-      bass.frequency.value = 196; // G3
-      bassGain.gain.setValueAtTime(0.22, t);
-      bassGain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-      bass.start(t); bass.stop(t + 0.35);
-
-      // Rising magical chord: G minor (G-Bb-D) + upper harmonics
-      // Soft, warm progression that feels victorious not jarring
-      const magicalNotes = [
-        { freq: 196, delay: 0, duration: 0.6 },    // G3
-        { freq: 233, delay: 0.08, duration: 0.55 }, // Bb3
-        { freq: 293, delay: 0.16, duration: 0.5 },  // D4
-        { freq: 392, delay: 0.24, duration: 0.5 },  // G4 — resolution
-        { freq: 587, delay: 0.3, duration: 0.45 },  // D5 — shimmer peak
+      // Soft bell-like resonance: harmonic series of C note (gentle, not jarring)
+      // C4 fundamental with natural overtones for chime quality
+      const baseFreqs = [
+        { freq: 262, gain: 0.08, duration: 1.0 },    // C4 — warm fundamental
+        { freq: 393, gain: 0.06, duration: 1.2 },    // G4 — resonance
+        { freq: 524, gain: 0.05, duration: 1.4 },    // C5 — shimmer
+        { freq: 656, gain: 0.03, duration: 1.3 },    // E5 — ethereal
+        { freq: 787, gain: 0.02, duration: 1.5 },    // G5 — fade shimmer
       ];
 
-      magicalNotes.forEach(note => {
+      baseFreqs.forEach(note => {
         const osc = ac.createOscillator();
         const gain = ac.createGain();
         osc.connect(gain); gain.connect(ac.destination);
         osc.type = 'sine';
         osc.frequency.value = note.freq;
-        gain.gain.setValueAtTime(0, t + note.delay);
-        gain.gain.linearRampToValueAtTime(0.14, t + note.delay + 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.0005, t + note.delay + note.duration);
-        osc.start(t + note.delay);
-        osc.stop(t + note.delay + note.duration);
+        
+        // Gentle fade in, then slow decay (chime characteristic)
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(note.gain, t + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + note.duration);
+        
+        osc.start(t);
+        osc.stop(t + note.duration + 0.1);
       });
 
-      // Top shimmer wash — ethereal, magical
-      const shimmer = ac.createOscillator();
-      const shimmerGain = ac.createGain();
-      shimmer.connect(shimmerGain); shimmerGain.connect(ac.destination);
-      shimmer.type = 'triangle';
-      shimmer.frequency.value = 880;
-      shimmerGain.gain.setValueAtTime(0, t + 0.4);
-      shimmerGain.gain.linearRampToValueAtTime(0.1, t + 0.42);
-      shimmerGain.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
-      shimmer.start(t + 0.4); shimmer.stop(t + 0.8);
+      // Subtle metallic resonance sparkle (very soft, refined)
+      const sparkle = ac.createOscillator();
+      const sparkleGain = ac.createGain();
+      sparkle.connect(sparkleGain); sparkleGain.connect(ac.destination);
+      sparkle.type = 'triangle';
+      sparkle.frequency.value = 1046; // C6 — high shimmer
+      sparkleGain.gain.setValueAtTime(0, t + 0.1);
+      sparkleGain.gain.linearRampToValueAtTime(0.02, t + 0.15);
+      sparkleGain.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
+      sparkle.start(t + 0.1);
+      sparkle.stop(t + 1.3);
     } catch (e) { /* silent fail */ }
   }, []);
 
