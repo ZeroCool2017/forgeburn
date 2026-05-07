@@ -254,93 +254,95 @@ export function useAmbientSound() {
     });
   }, []);
 
-  // ─── HAUNTED MODE — true harpsichord, creepy & eerie ─────────────────────
+  // ─── HAUNTED MODE — mysterious cathedral organ, introspective ─────────────────────
   const startHaunted = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.30, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.28, ac.currentTime + 6);
     master.connect(ac.destination);
 
-    // Tight high-pass for harpsichord bite
-    const hpf = ac.createBiquadFilter();
-    hpf.type = 'highpass';
-    hpf.frequency.value = 1200;
-    hpf.Q.value = 1.2;
+    // Warm cathedral resonance — mysterious, not scary
+    const warmLpf = ac.createBiquadFilter();
+    warmLpf.type = 'lowpass';
+    warmLpf.frequency.value = 2200;
+    warmLpf.Q.value = 0.7;
     
-    // Resonant peak around 3kHz for that plucked quality
-    const resonance = ac.createBiquadFilter();
-    resonance.type = 'peaking';
-    resonance.frequency.value = 2800;
-    resonance.gain.value = 5;
-    resonance.Q.value = 3;
+    // Organ-like resonance peak
+    const orgResonance = ac.createBiquadFilter();
+    orgResonance.type = 'peaking';
+    orgResonance.frequency.value = 1600;
+    orgResonance.gain.value = 4;
+    orgResonance.Q.value = 2.5;
     
-    hpf.connect(resonance);
-    resonance.connect(master);
+    warmLpf.connect(orgResonance);
+    orgResonance.connect(master);
 
-    // Harmonic minor scale (C) — naturally creepy/dark
-    // C-D-Eb-F-G-Ab-B — perfect for haunted vibes
-    const harmoMinor = [130.8, 146.8, 155.6, 174.6, 196.0, 207.7, 246.9, 261.6, 329.6, 392.0, 523.3, 659.3, 783.9];
+    // Phrygian scale (Em: E-F-G-A-B-C-D) — mysterious, not creepy
+    // Deeper, more soulful notes
+    const phrygian = [82.4, 87.3, 98.0, 110.0, 123.5, 130.8, 146.8, 164.8, 196.0, 220.0, 246.9, 293.7, 329.6, 392.0, 523.3, 659.3];
 
-    const spawnPluck = () => {
+    const spawnTone = () => {
       if (!playingRef.current) return;
-      const t = ac.currentTime + 0.02;
-      const freq = harmoMinor[Math.floor(Math.random() * harmoMinor.length)];
-      const duration = 0.35 + Math.random() * 0.45;
+      const t = ac.currentTime + 0.08;
+      const freq = phrygian[Math.floor(Math.random() * phrygian.length)];
+      const duration = 2 + Math.random() * 5;
 
-      // Plucked sound — square -> sine for metallic harpsichord effect
+      // Organ-like tone — sine for smooth, rich sound
       const osc = ac.createOscillator();
       const gain = ac.createGain();
       const vibrato = ac.createOscillator();
       const vibratoGain = ac.createGain();
       
-      osc.type = 'square';
+      osc.type = 'sine'; // Smooth, organ-like
       osc.frequency.value = freq;
       
-      // Subtle vibrato — adds shimmer
-      vibrato.frequency.value = 6.5 + Math.random() * 2;
-      vibratoGain.gain.value = freq * 0.005;
+      // Slow, gentle vibrato — adds depth, not unease
+      vibrato.frequency.value = 5 + Math.random() * 2;
+      vibratoGain.gain.value = freq * 0.006;
       vibrato.connect(vibratoGain);
       vibratoGain.connect(osc.frequency);
 
-      // Sharp attack, quick decay (harpsichord pluck)
-      gain.gain.setValueAtTime(0.11, t);
-      gain.gain.exponentialRampToValueAtTime(0.0005, t + duration);
+      // Smooth attack, long sustain — contemplative
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.055 * 0.5, t + duration * 0.1);
+      gain.gain.linearRampToValueAtTime(0.055, t + duration * 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
       
       osc.connect(gain);
-      gain.connect(hpf);
+      gain.connect(warmLpf);
       vibrato.start(t);
       osc.start(t);
-      osc.stop(t + duration);
-      vibrato.stop(t + duration);
+      osc.stop(t + duration + 0.3);
+      vibrato.stop(t + duration + 0.3);
       nodesRef.current.push({ osc, gain, ac });
 
-      // Irregular timing — unsettling rhythm
-      const nextIn = 800 + Math.random() * 2800;
-      const tid = setTimeout(spawnPluck, nextIn);
+      // Slower, more meditative rhythm
+      const nextIn = 2000 + Math.random() * 4000;
+      const tid = setTimeout(spawnTone, nextIn);
       timersRef.current.push(tid);
     };
 
-    [0, 1800, 3600].forEach(offset => {
-      timersRef.current.push(setTimeout(spawnPluck, offset));
+    [0, 2500, 5200].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnTone, offset));
     });
 
-    // Deep, unnerving sub-drone
-    const subDrone = ac.createOscillator();
-    const subGain = ac.createGain();
-    subDrone.type = 'sine';
-    subDrone.frequency.value = 54.6; // Just below C2 — ominous
-    subGain.gain.setValueAtTime(0, ac.currentTime);
-    subGain.gain.linearRampToValueAtTime(0.12, ac.currentTime + 6);
-    subDrone.connect(subGain);
-    subGain.connect(master);
-    subDrone.start();
-    nodesRef.current.push({ osc: subDrone, gain: subGain, ac, isLoop: true });
+    // Warm foundational drone — mysterious but stable
+    const bassDrone = ac.createOscillator();
+    const bassGain = ac.createGain();
+    bassDrone.type = 'sine';
+    bassDrone.frequency.value = 82.4; // E2 — warm, grounded
+    bassGain.gain.setValueAtTime(0, ac.currentTime);
+    bassGain.gain.linearRampToValueAtTime(0.14, ac.currentTime + 7);
+    bassDrone.connect(bassGain);
+    bassGain.connect(master);
+    bassDrone.start();
+    nodesRef.current.push({ osc: bassDrone, gain: bassGain, ac, isLoop: true });
 
-    // Slow LFO modulation on master — breathing unease
+    // Slow, subtle breathing — contemplative, not unsettling
     const lfo = ac.createOscillator();
     const lfoGain = ac.createGain();
-    lfo.frequency.value = 0.3;
-    lfoGain.gain.value = 0.08;
+    lfo.frequency.value = 0.15; // Very slow breathing
+    lfoGain.gain.value = 0.05;
     lfo.connect(lfoGain);
     lfoGain.connect(master.gain);
     lfo.start();
@@ -596,23 +598,30 @@ export function useAmbientSound() {
   const startWestern = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.34, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.36, ac.currentTime + 5);
     master.connect(ac.destination);
 
-    // Warm resonance with mid-presence
+    // Bright, twangy resonance — more presence + shimmer
     const warmLpf = ac.createBiquadFilter();
     warmLpf.type = 'lowpass';
-    warmLpf.frequency.value = 1800;
-    warmLpf.Q.value = 0.8;
+    warmLpf.frequency.value = 2400; // Brighter cutoff
+    warmLpf.Q.value = 0.6;
     
     const midBoost = ac.createBiquadFilter();
     midBoost.type = 'peaking';
-    midBoost.frequency.value = 350;
-    midBoost.gain.value = 3;
-    midBoost.Q.value = 1.5;
+    midBoost.frequency.value = 1200; // Higher mid-boost for twang
+    midBoost.gain.value = 5;
+    midBoost.Q.value = 2;
+    
+    const twangBoost = ac.createBiquadFilter();
+    twangBoost.type = 'peaking';
+    twangBoost.frequency.value = 2800; // Bright harmonic presence
+    twangBoost.gain.value = 3.5;
+    twangBoost.Q.value = 1.5;
     
     warmLpf.connect(midBoost);
-    midBoost.connect(master);
+    midBoost.connect(twangBoost);
+    twangBoost.connect(master);
 
     // Pentatonic minor — country/western blues
     const westernTones = [
@@ -626,19 +635,19 @@ export function useAmbientSound() {
       const t = ac.currentTime + 0.04;
       const startFreq = westernTones[Math.floor(Math.random() * westernTones.length)];
       const endFreq = westernTones[Math.floor(Math.random() * westernTones.length)];
-      const duration = 3 + Math.random() * 7;
-      const peakVol = 0.055 + Math.random() * 0.075;
+      const duration = 2.5 + Math.random() * 5;
+      const peakVol = 0.06 + Math.random() * 0.08;
 
       const osc = ac.createOscillator();
       const gain = ac.createGain();
-      osc.type = 'sine';
+      osc.type = Math.random() > 0.5 ? 'triangle' : 'sine'; // Triangle for more harmonic richness
       osc.frequency.setValueAtTime(startFreq, t);
-      osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.5);
+      osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.4);
       osc.frequency.linearRampToValueAtTime(endFreq, t + duration);
 
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(peakVol * 0.6, t + duration * 0.15);
-      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.5, t + duration * 0.1);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.3);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
 
       osc.connect(gain);
@@ -647,27 +656,39 @@ export function useAmbientSound() {
       osc.stop(t + duration + 0.2);
       nodesRef.current.push({ osc, gain, ac });
 
-      const nextIn = 1000 + Math.random() * 4500;
+      const nextIn = 800 + Math.random() * 3500;
       timersRef.current.push(setTimeout(spawnSlide, nextIn));
     };
 
-    [0, 1500, 3200, 5200].forEach(offset => {
+    [0, 1200, 2800, 4500].forEach(offset => {
       timersRef.current.push(setTimeout(spawnSlide, offset));
     });
 
-    // Deep, grounded bass — strong presence
-    [55.0, 82.41].forEach((freq, i) => {
+    // Punchy, grounded bass — strong cowboy presence
+    [55.0, 82.41, 110.0].forEach((freq, i) => {
       const bass = ac.createOscillator();
       const bassGain = ac.createGain();
       bass.type = 'sine';
       bass.frequency.value = freq;
       bassGain.gain.setValueAtTime(0, ac.currentTime);
-      bassGain.gain.linearRampToValueAtTime(0.19 - i * 0.025, ac.currentTime + 6 + i * 0.5);
+      bassGain.gain.linearRampToValueAtTime(0.18 - i * 0.02, ac.currentTime + 5 + i * 0.3);
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
       nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
+
+    // Bright harmonic shimmer — twang presence
+    const shimmer = ac.createOscillator();
+    const shimmerGain = ac.createGain();
+    shimmer.type = 'sine';
+    shimmer.frequency.value = 1400; // Bright midrange twang
+    shimmerGain.gain.setValueAtTime(0, ac.currentTime);
+    shimmerGain.gain.linearRampToValueAtTime(0.035, ac.currentTime + 5);
+    shimmer.connect(shimmerGain);
+    shimmerGain.connect(master);
+    shimmer.start();
+    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
   }, []);
 
   // ─── SOUTHERN TRAP MODE — hip hop, boom bap, dark southern soul ───────────
