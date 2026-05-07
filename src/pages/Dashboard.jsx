@@ -34,6 +34,7 @@ import CelestialMindMap from '@/components/forge/CelestialMindMap';
 import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import HabitNodes from '@/components/forge/HabitNodes';
 import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
+import InteractiveHeatmap from '@/components/forge/InteractiveHeatmap';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -384,7 +385,7 @@ export default function Dashboard() {
             </div>
 
             <div className="mb-6">
-              <MonthlyHeatmap schedule={schedule} />
+              <InteractiveHeatmap schedule={schedule.schedule} title="Interactive Interest Map" />
             </div>
 
             <div className="obs-divider my-6" />

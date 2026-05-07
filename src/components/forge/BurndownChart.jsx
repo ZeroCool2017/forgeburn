@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatCurrency } from '@/lib/loanCalculations';
+import { playNoteFromData, playHarmonicChord } from '@/lib/musicalInterface';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
+
+  // Play tone on hover (psychoacoustic feedback)
+  if (payload[0]?.value) {
+    const normalized = Math.max(0, Math.min(1, payload[0].value / 100000));
+    playNoteFromData(normalized);
+  }
+
   return (
     <div className="glass rounded-lg px-3 py-2 text-xs border border-border/50">
       <p className="font-mono text-muted-foreground mb-1">Month {label}</p>
@@ -18,7 +26,16 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function BurndownChart({ schedule, minimumSchedule }) {
+  const [hasInteracted, setHasInteracted] = useState(false);
+
   if (!schedule?.length) return null;
+
+  const handleChartInteraction = () => {
+    if (!hasInteracted) {
+      playHarmonicChord(0);
+      setHasInteracted(true);
+    }
+  };
 
   const data = schedule.map((m, i) => ({
     month: m.month,
@@ -61,7 +78,7 @@ export default function BurndownChart({ schedule, minimumSchedule }) {
       </div>
 
       <ResponsiveContainer width="100%" height={260}>
-        <AreaChart data={data} margin={{ top: 10, right: 25, bottom: 15, left: 15 }}>
+        <AreaChart data={data} margin={{ top: 10, right: 25, bottom: 15, left: 15 }} onClick={handleChartInteraction}>
           <defs>
             <linearGradient id="burnGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="hsl(270, 80%, 65%)" stopOpacity={0.25} />
