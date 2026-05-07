@@ -135,19 +135,20 @@ Write ONLY the insight, nothing else.`;
               )}
             </div>
 
-            {/* Historical insights */}
-            {previousInsights.length > 1 && (
+            {/* What we've learned */}
+            {previousInsights.length > 0 && (
               <div>
-                <p className="text-[10px] font-mono text-muted-foreground/70 uppercase tracking-wider mb-2">Evolution History</p>
-                <div className="space-y-2">
-                  {previousInsights.slice(0, -1).reverse().map((insight, idx) => (
+                <p className="text-[10px] font-mono text-muted-foreground/70 uppercase tracking-wider mb-2">What We've Learned So Far</p>
+                <div className="space-y-2.5">
+                  {previousInsights.map((insight, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="text-xs text-foreground/60 italic p-2 rounded-lg bg-background/30 border border-border/10"
+                      className="text-xs text-foreground/70 p-3 rounded-lg bg-background/40 border border-border/15"
                     >
-                      {insight.substring(0, 100)}...
+                      <p className="text-[9px] text-muted-foreground/60 mb-1.5">Observation {idx + 1}</p>
+                      <p className="leading-relaxed">{insight}</p>
                     </motion.div>
                   ))}
                 </div>
