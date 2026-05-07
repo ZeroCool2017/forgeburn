@@ -936,20 +936,57 @@ export const QUOTES = [
   { text: "Linger — don't let debt linger. Strike hard. Strike fast.", author: "The Cranberries, Linger (adapted)" },
   { text: "Dolores taught us: pain is universal, but so is resilience.", author: "Dolores O'Riordan" },
 
-  // The Kardashians (tongue-in-cheek, real wisdom underneath)
-  { text: "I keep up with my budget the way I keep up with myself — constantly and deliberately.", author: "The Kardashians (adapted)" },
-  { text: "You can't build an empire on borrowed money. You build it on discipline.", author: "Kim Kardashian (adapted)" },
-  { text: "Break the internet — by breaking your debt cycle instead.", author: "The Kardashians (adapted)" },
-  { text: "It's not about the money. It's about knowing where the money goes.", author: "The Kardashians (adapted)" },
-  { text: "Momager energy: manage your debt like a business, not like an emotion.", author: "The Kardashians (adapted)" },
+  // Atlanta Black Business Owners & Leaders
+  { text: "Magic City wasn't built on debt. It was built on vision, hustle, and knowing the room.", author: "Magic City (Atlanta legacy)" },
+  { text: "Atlanta taught me: build what you own, not what owns you.", author: "Atlanta Business Wisdom" },
+  { text: "The difference between surviving and thriving is ownership. Own your debt payoff.", author: "Atlanta Entrepreneur Ethos" },
 
-  // Black Business Builders (expanded)
-  { text: "I created a billion-dollar brand from zero. You can create zero from debt.", author: "Kim Kardashian (business adapted)" },
-  { text: "Failure is feedback. Use it to pay faster.", author: "Kylie Jenner (adapted)" },
-  { text: "Build your brand by controlling your cash flow — not the other way around.", author: "Business Owner Wisdom (adapted)" },
-  { text: "The first rule of generational wealth: know your net worth at all times.", author: "Black Economics" },
-  { text: "Rihanna built Fenty from vision, not from a line of credit. Strategy first.", author: "Rihanna (adapted)" },
-  { text: "Lizzo: Truth hurts. So does debt. Face it and heal.", author: "Lizzo (adapted)" },
+  // Andre 3000 / Outkast
+  { text: "I'm a synthesizer of ideas. Synthesize your financial data.", author: "Andre 3000" },
+  { text: "Hey Ya some love — give that much attention to your balance sheet.", author: "Andre 3000, Hey Ya (adapted)" },
+  { text: "The way I see it, everything is a system. Master yours.", author: "Andre 3000" },
+  { text: "Art is about iteration. Money is about discipline. Both compound.", author: "Andre 3000 (adapted)" },
+
+  // MIA
+  { text: "Swagger on a hundred. Debt at zero.", author: "MIA (adapted)" },
+  { text: "Paper Planes — track every one of them.", author: "MIA, Paper Planes (adapted)" },
+  { text: "Come closer — to financial clarity, not to spending.", author: "MIA (adapted)" },
+  { text: "Galang — your payment schedule is your gang.", author: "MIA (adapted)" },
+
+  // Erykah Badu
+  { text: "On and on. The debt goes on and on... until you stop it.", author: "Erykah Badu (adapted)" },
+  { text: "I'm a healer. So heal your financial wounds.", author: "Erykah Badu (adapted)" },
+  { text: "Window seat. Look down at your debt from above. You can see the path.", author: "Erykah Badu, Window Seat (adapted)" },
+  { text: "Tyrone: be willing to leave what doesn't serve you. Including debt.", author: "Erykah Badu, Tyrone (adapted)" },
+  { text: "The real is back. Real discipline. Real numbers.", author: "Erykah Badu (adapted)" },
+
+  // Gemma Chan
+  { text: "Precision is everything. Be precise with your money.", author: "Gemma Chan" },
+  { text: "Humans are looking for connection. Connect with your financial data.", author: "Gemma Chan (adapted)" },
+  { text: "The only thing constant is change. Keep adapting your strategy.", author: "Gemma Chan (adapted)" },
+  { text: "We have all the time in the world — make sure you're not spending it in debt.", author: "Gemma Chan (adapted)" },
+
+  // Brain Age (DS Game)
+  { text: "Train your brain. Master your spreadsheet.", author: "Brain Age, Nintendo DS (adapted)" },
+  { text: "Your brain age is determined by how sharp you are. Keep your numbers sharp.", author: "Brain Age (adapted)" },
+
+  // Tetris
+  { text: "Fit the pieces where they belong. Stack your payments.", author: "Tetris (adapted)" },
+  { text: "Gaps cost you. Fill every gap in your payment plan.", author: "Tetris (adapted)" },
+  { text: "The line clear feels good. So does paying off a loan.", author: "Tetris (adapted)" },
+  { text: "Speed and strategy — that's the game. That's also debt payoff.", author: "Tetris (adapted)" },
+
+  // Chess Prodigies & Masters
+  { text: "You must see the board ten moves ahead. See your debt ten months out.", author: "Bobby Fischer" },
+  { text: "The beauty of a move lies in the thought behind it.", author: "Bobby Fischer" },
+  { text: "I don't believe in psychology. I believe in good moves.", author: "Bobby Fischer (adapted)" },
+  { text: "Patience in the opening, alertness in the middle game, killing blow in the endgame. Sound familiar?", author: "Rudolf Spielmann (adapted for debt)" },
+  { text: "The strongest weapon is one you don't have to use — unless you do. Know your financial position.", author: "Chess Proverb (adapted)" },
+  { text: "Zugzwang: forced to move and every move weakens you. Debt is zugzwang. Break free.", author: "Chess Principle (adapted)" },
+  { text: "A knight's fork is deceptive. So are hidden fees. Know what you're playing against.", author: "Chess Strategy (adapted)" },
+  { text: "Prophylaxis: prevent your opponent's threat before they execute it. Prevent debt before it grows.", author: "Aron Nimzowitsch, Chess Strategy (adapted)" },
+  { text: "Magnus Carlsen plays boring chess because he understands the fundamentals. Master yours.", author: "Magnus Carlsen (adapted)" },
+  { text: "Capablanca said: a master should play like a book. Your debt payoff should be systematic.", author: "José Raúl Capablanca (adapted)" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
