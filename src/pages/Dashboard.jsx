@@ -350,13 +350,6 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Field Evolution */}
-            <p className="obs-label mb-3">— field evolution</p>
-            <div className="mb-6">
-              <FieldEvolutionPanel habits={habits} loans={loans} refreshInterval={20 * 60000} />
-            </div>
-
-            <div className="obs-divider my-6" />
             {/* Money Horoscope */}
             <p className="obs-label mb-3">— wealth astrology</p>
             <div className="mb-6">
@@ -368,6 +361,13 @@ export default function Dashboard() {
             <p className="obs-label mb-3">— habit patterns</p>
             <div className="mb-6">
               <HabitAstrologyPanel birthData={birthData} />
+            </div>
+
+            <div className="obs-divider my-6" />
+            {/* Field Evolution */}
+            <p className="obs-label mb-3">— field evolution</p>
+            <div className="mb-6">
+              <FieldEvolutionPanel habits={habits} loans={loans} refreshInterval={20 * 60000} />
             </div>
 
             <div className="obs-divider my-6" />

@@ -10,7 +10,7 @@ import { ChevronDown } from 'lucide-react';
  */
 
 export default function FieldEvolutionPanel({ habits, loans, refreshInterval = 20 * 60000 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [evolution, setEvolution] = useState(null);
   const [previousInsights, setPreviousInsights] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,23 +33,22 @@ export default function FieldEvolutionPanel({ habits, loans, refreshInterval = 2
 
         const historicalContext = previousInsights.slice(-3).map((i, idx) => `[Gen ${idx}]: ${i}`).join('\n');
 
-        const prompt = `Reflect on what's changing in how this person understands themselves through their financial choices.
+        const prompt = `You're analyzing spending and debt data for someone navigating financial freedom. Be technical, queer in perspective (multivalent, playful, nonconforming), incisive. Avoid hyphens and flowery language.
 
-CURRENT DATA:
-- Debt repaid: ${Math.round(payoffProgress * 100)}%
-- Habits: ${habits.map(h => h.name).join(', ')}
-- Observation: Generation ${generation}
+CURRENT METRICS:
+Debt repaid: ${Math.round(payoffProgress * 100)}%
+Patterns: ${habits.map(h => h.name).join(', ')}
+Generation: ${generation}
 
-${previousInsights.length > 0 ? `PREVIOUS REALIZATIONS:\n${historicalContext}` : ''}
+${previousInsights.length > 0 ? `PREVIOUS OBSERVATIONS:\n${historicalContext}` : ''}
 
 Generate a 2-3 sentence insight that:
-1. Shows what they might be learning about themselves as they progress
-2. Connect their choices to what they actually want, not what they think they should want
-3. Sound like watching someone slowly understand their own pattern
-4. Be gentle but honest
-5. If generation > 1: reference how their thinking seems to be evolving
+1. Extracts what the data reveals about their actual priorities, not stated ones
+2. Connects spending behavior to structural patterns or values
+3. Sounds like someone reading between the numbers, finding truth in the specifics
+4. Be smart, curious, a little irreverent
+${generation > 1 ? '5. Note how their relationship to money/freedom seems to be shifting based on the pattern so far' : ''}
 
-Make it feel like patient observation, not analysis.
 Write ONLY the insight, nothing else.`;
 
         const result = await base44.integrations.Core.InvokeLLM({
