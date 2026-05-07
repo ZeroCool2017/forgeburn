@@ -94,6 +94,25 @@ export function useAmbientSound() {
       timersRef.current.push(tid);
     };
 
+    // Pulsing bass foundation
+    const bass = ac.createOscillator();
+    bass.frequency.value = 35;
+    bass.type = 'sine';
+    const bassGain = ac.createGain();
+    bassGain.gain.setValueAtTime(0.05, ac.currentTime);
+
+    // Bass pulse envelope
+    const bassPulse = setInterval(() => {
+      bassGain.gain.setValueAtTime(0.08, ac.currentTime);
+      bassGain.gain.linearRampToValueAtTime(0.02, ac.currentTime + 0.4);
+    }, 800);
+
+    bass.connect(bassGain);
+    bassGain.connect(master);
+    bass.start();
+    nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+    timersRef.current.push(bassPulse);
+
     [0, 800, 1600, 2500, 3600, 4800].forEach(offset => {
       const tid = setTimeout(spawnTone, offset);
       timersRef.current.push(tid);

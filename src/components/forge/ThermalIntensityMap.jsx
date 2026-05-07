@@ -122,10 +122,10 @@ function ThermalCell({ loan, index }) {
               repeat: Infinity,
             }}
           >
-            {cat.emoji}
+            ⛓️
           </motion.span>
           <motion.span
-            className="text-2xl font-mono font-black text-white"
+            className="text-[10px] font-mono font-black text-white uppercase tracking-wide"
             animate={{ opacity: [1, 0.7, 1] }}
             transition={{
               duration: randomDuration * 1.2,
@@ -133,7 +133,7 @@ function ThermalCell({ loan, index }) {
               repeat: Infinity,
             }}
           >
-            {Math.round(heatIntensity * 100)}°
+            {heatIntensity < 0.25 ? 'heat' : heatIntensity < 0.5 ? 'forge' : heatIntensity < 0.75 ? 'strike' : 'break'}
           </motion.span>
         </div>
       </motion.div>
