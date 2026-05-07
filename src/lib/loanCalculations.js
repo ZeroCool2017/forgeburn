@@ -1203,3 +1203,23 @@ export function formatCurrency(amount) {
 export function formatCurrencyExact(amount) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
+
+export function estimatePayoffDate(loan, extraBudget = 0, strategy = 'momentum') {
+  if (loan.current_balance <= 0) {
+    return { date: new Date(), months: 0, isPaid: true };
+  }
+
+  let balance = loan.current_balance;
+  let month = 0;
+  const now = new Date();
+
+  while (balance > 0.01 && month < 600) {
+    month++;
+    const interest = (balance * (loan.interest_rate / 100)) / 12;
+    const payment = Math.min(loan.minimum_payment + extraBudget, balance + interest);
+    balance = balance + interest - payment;
+  }
+
+  const payoffDate = new Date(now.getFullYear(), now.getMonth() + month, 1);
+  return { date: payoffDate, months: month, isPaid: false };
+}

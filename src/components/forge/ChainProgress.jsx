@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
+import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
@@ -99,6 +99,8 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const brokenLinks = Math.floor(progress * links);
   const [menuOpen, setMenuOpen] = useState(false);
   const { playStrike } = useForgeSound();
+  const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
+  const formatPayoffDate = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 
   return (
     <motion.div
@@ -183,6 +185,11 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
       <div className="mb-3 rounded-lg overflow-hidden border border-border/20 bg-background/30">
         <PayoffCanvas progress={progress} color={cat.color} />
       </div>
+
+      {/* Payoff date estimate */}
+      <p className="text-xs font-mono text-muted-foreground mb-3 tracking-widest">
+        free by {formatPayoffDate(payoffDate)}
+      </p>
 
       {/* Chain link visualization */}
       <div className="flex items-center gap-0.5 mb-3">
