@@ -28,6 +28,27 @@ const PROMPT_FIELDS = [
     hint: 'Songs that hit different when you\'re working on something hard.',
     placeholder: 'e.g. Tracy Chapman – Fast Car, Radiohead – Everything in Its Right Place…',
   },
+  {
+    key: 'values',
+    icon: Sparkles,
+    label: 'What are you protecting?',
+    hint: 'What freedom looks like to you — time, family, autonomy, security, legacy?',
+    placeholder: 'e.g. Time with my kids, owning my work, sleeping through the night…',
+  },
+  {
+    key: 'wins',
+    icon: Heart,
+    label: 'Small victories that matter',
+    hint: 'What small wins in life would feel most meaningful to celebrate?',
+    placeholder: 'e.g. A week without stress, saying no, trying something new…',
+  },
+  {
+    key: 'systems',
+    icon: Sparkles,
+    label: 'How do you think?',
+    hint: 'Are you a pattern-finder, a builder, a skeptic, a dreamer? How does your mind work?',
+    placeholder: 'e.g. I see systems in everything, I learn by doing, I trust data…',
+  },
 ];
 
 function TagInput({ value = [], onChange, placeholder }) {
@@ -80,8 +101,8 @@ function TagInput({ value = [], onChange, placeholder }) {
 export default function PersonalizationForm() {
   const [data, setData] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { admired_people: [], places: [], songs: [] };
-    } catch { return { admired_people: [], places: [], songs: [] }; }
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { admired_people: [], places: [], songs: [], values: [], wins: [], systems: [] };
+    } catch { return { admired_people: [], places: [], songs: [], values: [], wins: [], systems: [] }; }
   });
   const [saved, setSaved] = useState(false);
 

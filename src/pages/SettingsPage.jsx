@@ -225,7 +225,7 @@ export default function SettingsPage() {
 
           <section className="text-center py-4">
             <p className="text-xs text-muted-foreground font-mono">Carry the Zero · v1.0</p>
-            <p className="text-xs text-muted-foreground/50 mt-0.5 font-display italic">Carry the zero. Own the outcome.</p>
+            <p className="text-xs text-muted-foreground/50 mt-0.5 font-display italic">Interest compounds on what you owe. So does freedom on what you build.</p>
           </section>
         </div>
       </div>
