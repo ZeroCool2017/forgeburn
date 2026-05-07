@@ -1,15 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { Sparkles } from 'lucide-react';
 
 /**
  * Momentum Field — evolving, responsive system that grows smarter
- * Nodes represent loans, breathing and moving as progress is made
- * As you interact, this field learns and helps you excel in all life areas
+ * Nodes represent loans (large) and spending habits (small)
+ * Connections show how spending influences debt growth
  */
 
 export default function CelestialMindMap({ loans, schedule }) {
+  const { data: habits = [] } = useQuery({
+    queryKey: ['spending_habits'],
+    queryFn: () => base44.entities.SpendingHabit.list(),
+  });
   const svgRef = useRef(null);
   const [time, setTime] = useState(0);
   const [particles, setParticles] = useState([]);
@@ -20,16 +26,17 @@ export default function CelestialMindMap({ loans, schedule }) {
   const CX = W / 2;
   const CY = H / 2;
 
-  // Initialize particles based on loans
+  // Initialize particles based on loans + habits
   useEffect(() => {
     if (!loans.length) return;
     
-    const newParticles = loans.map((loan, i) => {
+    const loanParticles = loans.map((loan, i) => {
       const angle = (i / loans.length) * Math.PI * 2;
       const r = 70 + i * 18;
       const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
       return {
-        id: loan.id,
+        id: `loan-${loan.id}`,
+        type: 'loan',
         x: CX + r * Math.cos(angle),
         y: CY + r * Math.sin(angle),
         vx: (Math.random() - 0.5) * 0.3,
@@ -41,11 +48,32 @@ export default function CelestialMindMap({ loans, schedule }) {
         emoji: cat.emoji,
         color: cat.color,
         growth: 0.6,
+        baseRadius: 10,
+      };
+    });
+
+    // Habit particles orbit in a second ring
+    const habitParticles = habits.map((habit, i) => {
+      const angle = (i / Math.max(1, habits.length)) * Math.PI * 2 + Math.PI / 4;
+      const r = 130;
+      return {
+        id: `habit-${habit.id}`,
+        type: 'habit',
+        x: CX + r * Math.cos(angle),
+        y: CY + r * Math.sin(angle),
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
+        name: habit.name,
+        emoji: habit.emoji,
+        color: habit.color,
+        growth: 0.3,
+        baseRadius: 5,
+        monthly: habit.monthly_average,
       };
     });
     
-    setParticles(newParticles);
-  }, [loans]);
+    setParticles([...loanParticles, ...habitParticles]);
+  }, [loans, habits]);
 
   // Animation loop with requestAnimationFrame for smooth 60fps movement
   useEffect(() => {
@@ -120,9 +148,16 @@ export default function CelestialMindMap({ loans, schedule }) {
           const dx = q.x - p.x;
           const dy = q.y - p.y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          const maxDist = 220;
-          
-          if (d < maxDist) {
+
+          // Loans connect to each other; habits connect to loans
+          const isHabitToLoan = (p.type === 'habit' && q.type === 'loan') || (p.type === 'loan' && q.type === 'habit');
+          const isLoanToLoan = p.type === 'loan' && q.type === 'loan';
+
+          let maxDist = 0;
+          if (isLoanToLoan) maxDist = 220;
+          else if (isHabitToLoan) maxDist = 160;
+
+          if (d < maxDist && maxDist > 0) {
             const strength = 1 - (d / maxDist);
             const pColor = parseInt(p.color.slice(1), 16);
             const qColor = parseInt(q.color.slice(1), 16);
@@ -132,40 +167,41 @@ export default function CelestialMindMap({ loans, schedule }) {
             const qR = (qColor >> 16) & 255;
             const qG = (qColor >> 8) & 255;
             const qB = qColor & 255;
-            
-            // Pulsing glow effect along the connection
+
             const pulse = 0.6 + Math.sin(currentTime * 0.005) * 0.4;
-            
-            // Main neural pathway with gradient
+
+            // Main connection with gradient
             const gradient = ctx.createLinearGradient(p.x, p.y, q.x, q.y);
             gradient.addColorStop(0, `rgba(${pR}, ${pG}, ${pB}, ${0.2 * strength * pulse})`);
             gradient.addColorStop(0.5, `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.25 * strength * pulse})`);
             gradient.addColorStop(1, `rgba(${qR}, ${qG}, ${qB}, ${0.2 * strength * pulse})`);
-            
+
             ctx.strokeStyle = gradient;
-            ctx.lineWidth = 0.8 + strength * 1.5;
+            ctx.lineWidth = isHabitToLoan ? 0.6 + strength * 0.8 : 0.8 + strength * 1.5;
             ctx.lineCap = 'round';
+            ctx.setLineDash(isHabitToLoan ? [4, 4] : []);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
-            
-            // Secondary glow halo for stronger visual presence
+            ctx.setLineDash([]);
+
+            // Glow halo
             ctx.strokeStyle = `rgba(${pR}, ${pG}, ${pB}, ${0.08 * strength * pulse})`;
-            ctx.lineWidth = 3 + strength * 2;
+            ctx.lineWidth = isHabitToLoan ? 2 : 3 + strength * 2;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
-            
-            // Animated particle dots flowing along the connection
+
+            // Flowing particles
             const t = (currentTime * 0.001) % 1;
             const flowX = p.x + (q.x - p.x) * t;
             const flowY = p.y + (q.y - p.y) * t;
             const flowGlow = Math.sin(currentTime * 0.008) * 0.5 + 0.5;
             ctx.fillStyle = `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.6 * flowGlow})`;
             ctx.beginPath();
-            ctx.arc(flowX, flowY, 1.2 + strength * 1.5, 0, Math.PI * 2);
+            ctx.arc(flowX, flowY, isHabitToLoan ? 0.8 : 1.2 + strength * 1.5, 0, Math.PI * 2);
             ctx.fill();
           }
         });
@@ -173,20 +209,25 @@ export default function CelestialMindMap({ loans, schedule }) {
 
       // Draw nodes — Obsidian-like neural network
       const globalBreath = 1 + Math.sin(currentTime * 0.008) * 0.18;
-      
+
       currentParticles.forEach(p => {
-        const progress = 1 - (p.balance / p.original);
-        
-        // Size based on growth AND payoff progress (neural growth)
-        const payoffSize = 6 + progress * 12;
-        const baseSize = 10 + p.growth * 8;
-        const r = (baseSize + payoffSize) * globalBreath;
+        let r;
+
+        if (p.type === 'loan') {
+          const progress = 1 - (p.balance / p.original);
+          const payoffSize = 6 + progress * 12;
+          const baseSize = 10 + p.growth * 8;
+          r = (baseSize + payoffSize) * globalBreath;
+        } else {
+          // Habit nodes are smaller, fixed size
+          r = (p.baseRadius + p.growth * 4) * (1 + Math.sin(currentTime * 0.012) * 0.15);
+        }
 
         const rgbColor = parseInt(p.color.slice(1), 16);
         const rVal = (rgbColor >> 16) & 255;
         const gVal = (rgbColor >> 8) & 255;
         const bVal = rgbColor & 255;
-        
+
         // Subtle outer glow
         const glowGrad = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.5);
         glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.18)`);
@@ -205,22 +246,25 @@ export default function CelestialMindMap({ loans, schedule }) {
         // Bright border — indicates activity
         const borderAlpha = 0.6 + globalBreath * 0.2;
         ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${borderAlpha})`;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = p.type === 'habit' ? 0.8 : 1.5;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Progress ring — shows learning/payoff
-        if (progress > 0.02) {
-          const ringRadius = r + 4;
-          const startAngle = -Math.PI / 2;
-          const endAngle = startAngle + progress * 2 * Math.PI;
-          ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.75)`;
-          ctx.lineWidth = 1.8;
-          ctx.lineCap = 'round';
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
-          ctx.stroke();
+        // Progress ring — shows learning/payoff (loans only)
+        if (p.type === 'loan') {
+          const progress = 1 - (p.balance / p.original);
+          if (progress > 0.02) {
+            const ringRadius = r + 4;
+            const startAngle = -Math.PI / 2;
+            const endAngle = startAngle + progress * 2 * Math.PI;
+            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.75)`;
+            ctx.lineWidth = 1.8;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
+            ctx.stroke();
+          }
         }
 
         // Emoji label
@@ -278,7 +322,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Nodes connect and flow. As patterns emerge, the network uncovers new pathways. Nodes grow larger as you pay — the system learns your choices and discovers emerging patterns.
+        Large nodes: your loans. Small nodes: spending habits. Solid lines connect loans; dashed lines show how habits flow into debt growth. Watch how your spending patterns influence your journey to zero.
       </motion.p>
     </motion.div>
   );
