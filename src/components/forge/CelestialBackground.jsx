@@ -8,7 +8,8 @@ import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
 
 export default function CelestialBackground() {
   const canvasRef = useRef(null);
-  const { mode } = useAmbientSoundContext();
+  const contextValue = useAmbientSoundContext();
+  const { mode = 'on' } = contextValue || {};
   const seedRef = useRef(null);
 
   // Generate unique seed per page (from pathname) for reproducible unique patterns
