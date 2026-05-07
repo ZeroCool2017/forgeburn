@@ -204,11 +204,11 @@ export const QUOTES = [
   { text: "The greatest revolution in life is to transform suffering into strength and joy.", author: "Daisaku Ikeda" },
 
   // Native American / AIM
-  { text: "We do not inherit the earth from our ancestors; we borrow it from our children.", author: "Lakota teaching" },
+  { text: "We do not inherit the earth from our ancestors; we borrow it from our children.", author: "Lakota Nation" },
   { text: "They tried to bury us. They didn't know we were seeds.", author: "Dennis Banks, AIM co-founder" },
-  { text: "When we show our respect for other living things, they respond with respect for us.", author: "Arapaho teaching" },
+  { text: "When we show our respect for other living things, they respond with respect for us.", author: "Arapaho Nation" },
   { text: "A nation is not conquered until the hearts of its women are on the ground.", author: "Cheyenne Nation" },
-  { text: "If you talk to the animals they will talk with you and you will know each other.", author: "Chief Dan George" },
+  { text: "If you talk to the animals they will talk with you and you will know each other.", author: "Chief Dan George, Tsleil-Waututh Nation" },
 
   // Indian business leaders
   { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
