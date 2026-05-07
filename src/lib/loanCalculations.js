@@ -302,10 +302,8 @@ export const QUOTES = [
   // Debt & freedom classics
   { text: "The chains of debt are too light to be felt until they are too heavy to be broken.", author: "Warren Buffett" },
   { text: "A man in debt is so far a slave.", author: "Ralph Waldo Emerson" },
-  { text: "Rather go to bed without dinner than to rise in debt.", author: "Benjamin Franklin" },
   { text: "Debt is the worst poverty.", author: "Thomas Fuller" },
   { text: "Every time you borrow money, you're robbing your future self.", author: "Nathan W. Morris" },
-  { text: "Beware of little expenses. A small leak will sink a great ship.", author: "Benjamin Franklin" },
   { text: "The secret to getting ahead is getting started.", author: "Mark Twain" },
   { text: "Wealth consists not in having great possessions, but in having few wants.", author: "Epictetus" },
   { text: "Freedom is not free. It costs discipline.", author: "Unknown" },
