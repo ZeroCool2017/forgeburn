@@ -31,48 +31,69 @@ export default function CelestialMindMap({ loans, schedule }) {
     if (!loans.length) return;
     
     const loanParticles = loans.map((loan, i) => {
+      // Dense center clustering
       const angle = (i / loans.length) * Math.PI * 2;
-      const r = 70 + i * 18;
+      const r = 20 + i * 8 + Math.random() * 15;
       const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
       return {
         id: `loan-${loan.id}`,
         type: 'loan',
         x: CX + r * Math.cos(angle),
         y: CY + r * Math.sin(angle),
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
         balance: loan.current_balance,
         original: loan.original_balance || loan.current_balance,
         category: loan.category,
         name: loan.name,
         emoji: cat.emoji,
         color: cat.color,
-        growth: 0.6,
-        baseRadius: 10,
+        growth: 0.5 + Math.random() * 0.5,
+        baseRadius: 6 + Math.random() * 6,
       };
     });
 
-    // Habit particles orbit in a second ring
+    // Habit particles — sparse outer ring
     const habitParticles = habits.map((habit, i) => {
-      const angle = (i / Math.max(1, habits.length)) * Math.PI * 2 + Math.PI / 4;
-      const r = 130;
+      const angle = (i / Math.max(1, habits.length)) * Math.PI * 2 + Math.random() * 0.5;
+      const r = 90 + Math.random() * 80; // Wider spread
       return {
         id: `habit-${habit.id}`,
         type: 'habit',
         x: CX + r * Math.cos(angle),
         y: CY + r * Math.sin(angle),
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
         name: habit.name,
         emoji: habit.emoji,
         color: habit.color,
-        growth: 0.3,
-        baseRadius: 5,
+        growth: 0.2 + Math.random() * 0.3,
+        baseRadius: 2 + Math.random() * 4,
         monthly: habit.monthly_average,
       };
     });
     
-    setParticles([...loanParticles, ...habitParticles]);
+    // Add more micro-nodes for density (visual complexity)
+    const microNodes = loans.flatMap((loan, idx) => 
+      Array.from({ length: 3 + Math.floor(Math.random() * 3) }).map((_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const r = 30 + Math.random() * 50;
+        const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
+        return {
+          id: `micro-${loan.id}-${i}`,
+          type: 'micro',
+          x: CX + r * Math.cos(angle),
+          y: CY + r * Math.sin(angle),
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          color: cat.color,
+          growth: 0.1 + Math.random() * 0.2,
+          baseRadius: 1 + Math.random() * 2.5,
+        };
+      })
+    );
+    
+    setParticles([...loanParticles, ...habitParticles, ...microNodes]);
   }, [loans, habits]);
 
   // Animation loop with requestAnimationFrame for smooth 60fps movement
@@ -142,20 +163,22 @@ export default function CelestialMindMap({ loans, schedule }) {
         return { ...p, growth: newGrowth };
       });
 
-      // Draw connections — glowing neural pathways
+      // Draw connections — dense chaotic neural network
       currentParticles.forEach((p, i) => {
         currentParticles.slice(i + 1).forEach(q => {
+          if (!p.color || !q.color) return;
+          
           const dx = q.x - p.x;
           const dy = q.y - p.y;
           const d = Math.sqrt(dx * dx + dy * dy);
 
-          // Loans connect to each other; habits connect to loans
-          const isHabitToLoan = (p.type === 'habit' && q.type === 'loan') || (p.type === 'loan' && q.type === 'habit');
-          const isLoanToLoan = p.type === 'loan' && q.type === 'loan';
+          // Much denser connections — any nearby node connects
+          const isHabitToLoan = (p.type === 'habit' && q.type === 'loan') || (p.type === 'loan' && q.type === 'habit') || (p.type === 'habit' && q.type === 'habit');
+          const isLoanToLoan = (p.type === 'loan' && q.type === 'loan') || (p.type === 'loan' && q.type === 'micro') || (p.type === 'micro' && q.type === 'loan') || (p.type === 'micro' && q.type === 'micro');
 
           let maxDist = 0;
-          if (isLoanToLoan) maxDist = 220;
-          else if (isHabitToLoan) maxDist = 160;
+          if (isLoanToLoan) maxDist = 120;
+          else if (isHabitToLoan) maxDist = 200;
 
           if (d < maxDist && maxDist > 0) {
             const strength = 1 - (d / maxDist);
@@ -168,98 +191,105 @@ export default function CelestialMindMap({ loans, schedule }) {
             const qG = (qColor >> 8) & 255;
             const qB = qColor & 255;
 
-            const pulse = 0.6 + Math.sin(currentTime * 0.005) * 0.4;
+            const pulse = 0.5 + Math.sin(currentTime * 0.006) * 0.5;
 
             // Main connection with gradient
             const gradient = ctx.createLinearGradient(p.x, p.y, q.x, q.y);
-            gradient.addColorStop(0, `rgba(${pR}, ${pG}, ${pB}, ${0.2 * strength * pulse})`);
-            gradient.addColorStop(0.5, `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.25 * strength * pulse})`);
-            gradient.addColorStop(1, `rgba(${qR}, ${qG}, ${qB}, ${0.2 * strength * pulse})`);
+            gradient.addColorStop(0, `rgba(${pR}, ${pG}, ${pB}, ${0.15 * strength * pulse})`);
+            gradient.addColorStop(0.5, `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.2 * strength * pulse})`);
+            gradient.addColorStop(1, `rgba(${qR}, ${qG}, ${qB}, ${0.15 * strength * pulse})`);
 
             ctx.strokeStyle = gradient;
-            ctx.lineWidth = isHabitToLoan ? 0.6 + strength * 0.8 : 0.8 + strength * 1.5;
+            ctx.lineWidth = isHabitToLoan ? 0.4 + strength * 0.6 : 0.5 + strength * 1;
             ctx.lineCap = 'round';
-            ctx.setLineDash(isHabitToLoan ? [4, 4] : []);
+            ctx.setLineDash(isHabitToLoan ? [3, 3] : []);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Glow halo
-            ctx.strokeStyle = `rgba(${pR}, ${pG}, ${pB}, ${0.08 * strength * pulse})`;
-            ctx.lineWidth = isHabitToLoan ? 2 : 3 + strength * 2;
+            // Glow halo (subtle)
+            ctx.strokeStyle = `rgba(${pR}, ${pG}, ${pB}, ${0.04 * strength * pulse})`;
+            ctx.lineWidth = isHabitToLoan ? 1.5 : 2 + strength * 1.2;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
 
             // Flowing particles
-            const t = (currentTime * 0.001) % 1;
-            const flowX = p.x + (q.x - p.x) * t;
-            const flowY = p.y + (q.y - p.y) * t;
-            const flowGlow = Math.sin(currentTime * 0.008) * 0.5 + 0.5;
-            ctx.fillStyle = `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.6 * flowGlow})`;
-            ctx.beginPath();
-            ctx.arc(flowX, flowY, isHabitToLoan ? 0.8 : 1.2 + strength * 1.5, 0, Math.PI * 2);
-            ctx.fill();
+            if (strength > 0.3) {
+              const t = (currentTime * 0.0015) % 1;
+              const flowX = p.x + (q.x - p.x) * t;
+              const flowY = p.y + (q.y - p.y) * t;
+              const flowGlow = Math.sin(currentTime * 0.01) * 0.5 + 0.5;
+              ctx.fillStyle = `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.4 * flowGlow})`;
+              ctx.beginPath();
+              ctx.arc(flowX, flowY, isHabitToLoan ? 0.5 : 0.8 + strength * 0.8, 0, Math.PI * 2);
+              ctx.fill();
+            }
           }
         });
       });
 
-      // Draw nodes — Obsidian-like neural network (minimal, breathing)
-      const globalBreath = 1 + Math.sin(currentTime * 0.006) * 0.12;
+      // Draw nodes — chaotic sizes & movement
+      const globalBreath = 1 + Math.sin(currentTime * 0.004) * 0.1;
 
       currentParticles.forEach(p => {
         let r;
 
         if (p.type === 'loan') {
           const progress = 1 - (p.balance / p.original);
-          const payoffSize = 5 + progress * 10;
-          const baseSize = 8 + p.growth * 6;
+          const payoffSize = 4 + progress * 8;
+          const baseSize = (p.baseRadius || 8) + p.growth * 5;
           r = (baseSize + payoffSize) * globalBreath;
+        } else if (p.type === 'micro') {
+          r = (p.baseRadius || 1) * (0.9 + Math.sin(currentTime * 0.008 + p.id.charCodeAt(0)) * 0.15);
         } else {
-          r = (p.baseRadius + p.growth * 3) * (1 + Math.sin(currentTime * 0.01) * 0.1);
+          r = (p.baseRadius || 5) * (1 + Math.sin(currentTime * 0.007 + p.id.charCodeAt(0)) * 0.12);
         }
 
+        if (!p.color) return;
+        
         const rgbColor = parseInt(p.color.slice(1), 16);
         const rVal = (rgbColor >> 16) & 255;
         const gVal = (rgbColor >> 8) & 255;
         const bVal = rgbColor & 255;
 
-        // Soft, ethereal outer glow (life-like breathing)
-        const glowGrad = ctx.createRadialGradient(p.x, p.y, r * 0.5, p.x, p.y, r * 3);
-        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.25)`);
-        glowGrad.addColorStop(0.5, `rgba(${rVal}, ${gVal}, ${bVal}, 0.08)`);
+        // Soft glow (smaller for micro nodes)
+        const glowRad = p.type === 'micro' ? r * 2 : r * 2.5;
+        const glowGrad = ctx.createRadialGradient(p.x, p.y, r * 0.3, p.x, p.y, glowRad);
+        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.2)`);
+        glowGrad.addColorStop(0.6, `rgba(${rVal}, ${gVal}, ${bVal}, 0.05)`);
         glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0)`);
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 3, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, glowRad, 0, Math.PI * 2);
         ctx.fill();
 
-        // Core node — minimal, soft
-        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.85)`;
+        // Core node
+        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.82)`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fill();
 
-        // Subtle shimmer border
-        const shimmer = 0.3 + Math.sin(currentTime * 0.015 + p.id.charCodeAt(0)) * 0.2;
-        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${shimmer * 0.4})`;
-        ctx.lineWidth = 0.6;
+        // Subtle shimmer
+        const shimmer = 0.25 + Math.sin(currentTime * 0.012 + p.id.charCodeAt(0)) * 0.15;
+        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${shimmer})`;
+        ctx.lineWidth = p.type === 'micro' ? 0.3 : 0.5;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Progress ring — subtle (loans only)
+        // Progress ring (loans only, subtle)
         if (p.type === 'loan') {
           const progress = 1 - (p.balance / p.original);
-          if (progress > 0.02) {
-            const ringRadius = r + 3.5;
+          if (progress > 0.01) {
+            const ringRadius = r + 2.5;
             const startAngle = -Math.PI / 2;
             const endAngle = startAngle + progress * 2 * Math.PI;
-            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.5)`;
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.4)`;
+            ctx.lineWidth = 0.8;
             ctx.lineCap = 'round';
             ctx.beginPath();
             ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
