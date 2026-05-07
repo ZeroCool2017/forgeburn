@@ -12,6 +12,7 @@ import Strategy from './pages/Strategy';
 import SettingsPage from './pages/SettingsPage';
 import Onboarding from './pages/Onboarding';
 import AppLayout from './components/AppLayout';
+import CelestialBackground from './components/forge/CelestialBackground';
 import { AmbientSoundProvider } from './lib/ambientSoundContext';
 // Add page imports here
 
@@ -97,6 +98,13 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <AmbientSoundProvider>
+          {/* Global celestial background */}
+          <CelestialBackground />
+          
+          {/* Vignette overlay */}
+          <div className="fixed inset-0 pointer-events-none z-10 opacity-70"
+            style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)' }} />
+          
           <Router>
             <AuthenticatedApp />
           </Router>
