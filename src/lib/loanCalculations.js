@@ -445,22 +445,11 @@ export const QUOTES = [
   { text: "It is not the environment that shapes us, but the spirit with which we confront it.", author: "Daisaku Ikeda" },
   { text: "The greatest revolution in life is to transform suffering into strength and joy.", author: "Daisaku Ikeda" },
 
-  // Native American / AIM
+  // Specific Indigenous leaders & known sources (not generic "Native American wisdom")
   { text: "We do not inherit the earth from our ancestors; we borrow it from our children.", author: "Lakota Nation" },
   { text: "They tried to bury us. They didn't know we were seeds.", author: "Dennis Banks, AIM co-founder" },
-  { text: "When we show our respect for other living things, they respond with respect for us.", author: "Arapaho Nation" },
-  { text: "A nation is not conquered until the hearts of its women are on the ground.", author: "Cheyenne Nation" },
   { text: "If you talk to the animals they will talk with you and you will know each other.", author: "Chief Dan George, Tsleil-Waututh Nation" },
-  { text: "The land does not belong to us. We belong to the land. Remember that with your money.", author: "Native American Principle (adapted)" },
-  { text: "Seven generations: think seven generations ahead in your debt payoff too.", author: "Haudenosaunee Principle" },
-  { text: "The hoop of the people is broken. Rebuild it by rebuilding yourself.", author: "Native American Wisdom" },
-  { text: "Take only what you need. Leave the rest for the next person. Same with debt — clear it.", author: "Native American Principle (adapted)" },
-  { text: "The spirits are watching. So are your future selves. Act accordingly.", author: "Native American Wisdom" },
   { text: "We are all related. The debt you carry affects everyone. Clear it for all.", author: "Mitakuye Oyasin (We Are All Related)" },
-  { text: "The buffalo knew: move together or fall separately. Same with financial responsibility.", author: "Plains Nation (adapted)" },
-  { text: "Listen to the elders. They know the pattern. The pattern is: pay back what you owe.", author: "Native American Elder Wisdom" },
-  { text: "Sovereignty is not given. It is taken, day by day, payment by payment.", author: "Native American Principle (adapted)" },
-  { text: "The fire was nearly extinguished. But we kept it alive. Keep your financial freedom alive the same way.", author: "Native American Resilience" },
 
   // Indian business leaders
   { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
@@ -769,13 +758,7 @@ export const QUOTES = [
   { text: "You're not lazy. You're underpaid and over-indebted. There's a difference.", author: "Hasan Piker (adapted)" },
   { text: "Financial literacy is class consciousness. Know your numbers.", author: "Hasan Piker (adapted)" },
 
-  // Native American / Indigenous financial resilience
-  { text: "The land remembers what was taken. So do the people. We rebuild.", author: "Attributed, Indigenous elder (cultural)" },
-  { text: "We have survived everything they tried to do to us. Debt is next.", author: "Native American cultural wisdom (adapted)" },
-  { text: "Our ancestors were rich before they were robbed. We are reclaiming.", author: "Indigenous financial resilience (cultural)" },
-  { text: "Sovereignty starts within. Over your body, your story, your balance sheet.", author: "Native American wisdom (adapted)" },
-  { text: "We don't measure wealth in what we owe. We measure it in what we can give.", author: "Indigenous elder (cultural)" },
-  { text: "Seven generations: every dollar you free today serves the ones who come after.", author: "Haudenosaunee principle (adapted)" },
+  // Remove this section — generic "Indigenous elder" and "Native American wisdom" without specific attribution
 
   // Debt collections history — looking back
   { text: "The ancient Code of Hammurabi set a maximum debt term of three years. Even 1754 BCE knew: debt cannot be forever.", author: "Code of Hammurabi, 1754 BCE" },
