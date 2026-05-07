@@ -758,6 +758,17 @@ export const QUOTES = [
   { text: "You're not lazy. You're underpaid and over-indebted. There's a difference.", author: "Hasan Piker (adapted)" },
   { text: "Financial literacy is class consciousness. Know your numbers.", author: "Hasan Piker (adapted)" },
 
+  // Stephen King — On Writing
+  { text: "Writing is telepathy. Two minds meeting across space and time without speaking aloud.", author: "Stephen King, On Writing" },
+  { text: "You've got a table covered with red cloth. On it, a cage with a white rabbit marked with the number 8. We're close. We're having a meeting of minds.", author: "Stephen King, On Writing (The Room)" },
+  { text: "There is no magical way to perfect your finances. Only disciplined practice and showing up.", author: "Stephen King, On Writing (adapted)" },
+  { text: "The world is full of people who have stopped listening. Don't stop listening to your numbers.", author: "Stephen King, On Writing (adapted)" },
+  { text: "Your debt story is written in your balance sheet. What's the narrative you're telling?", author: "Stephen King (adapted)" },
+  { text: "Perfect is the enemy of done. Done payments beat perfect excuses.", author: "Stephen King (adapted)" },
+  { text: "The number on the rabbit's back is 8. The most interesting thing isn't the rabbit — it's what the number means to you. What does your balance mean?", author: "Stephen King, On Writing (adapted)" },
+  { text: "A transmission place and a receiving place. Your budget is the transmission. Your future is the receiving.", author: "Stephen King, On Writing (adapted)" },
+  { text: "Your reader lives inside you. So does your future self. Write the story they deserve.", author: "Stephen King, On Writing (adapted)" },
+
   // Remove this section — generic "Indigenous elder" and "Native American wisdom" without specific attribution
 
   // Debt collections history — looking back
