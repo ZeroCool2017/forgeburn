@@ -11,15 +11,19 @@ import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
 function Organism({ index, progress }) {
   const x = useMotionValue(Math.random() * 100);
   const y = useMotionValue(Math.random() * 100);
+  
+  // Synchronized movement pattern: unison → divergence
+  const phase = (index % 4) * 0.25; // Creates groups that move together
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // Move to new position with phase offset for synchronized then divergent behavior
       x.set(Math.random() * 100);
-      y.set(Math.random() * 100);
-    }, 5000 + Math.random() * 4000);
+      y.set(Math.random() * 100 + (Math.sin(phase * Math.PI * 2) * 20)); // Phase-based drift
+    }, 4000 + (phase * 2000)); // Staggered timing based on phase
 
     return () => clearInterval(interval);
-  }, [x, y]);
+  }, [x, y, phase]);
 
   const baseSize = 8 + Math.random() * 12;
   const seed = index * 1234;
@@ -116,7 +120,7 @@ export default function FloatingOrganisms({ debtProgress = 0 }) {
   const { mode } = useAmbientSoundContext();
   
   // More organisms as debt decreases (gamification: progress = more life)
-  const baseOrganismCount = 4 + Math.floor(debtProgress * 0.05); // max ~9 at 100% progress
+  const baseOrganismCount = 8 + Math.floor(debtProgress * 0.15); // max ~20+ at 100% progress
   const isVisible = mode !== 'off';
 
   return (
