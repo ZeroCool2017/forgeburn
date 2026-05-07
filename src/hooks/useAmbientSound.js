@@ -624,6 +624,113 @@ export function useAmbientSound() {
     });
   }, []);
 
+  // ─── 90s HOUSE MODE — deep house euphoria ───────────────────────────────
+  const startHouse90s = useCallback((ac) => {
+    const master = ac.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.25, ac.currentTime + 4);
+    master.connect(ac.destination);
+
+    // Smooth, lush lowpass
+    const lpf = ac.createBiquadFilter();
+    lpf.type = 'lowpass';
+    lpf.frequency.value = 2400;
+    lpf.Q.value = 0.7;
+    lpf.connect(master);
+
+    // 90s house — soulful house chords and pads
+    const houseTones = [
+      98.0, 123.5, 146.8, 196.0,        // G2-G3 (deep soul chords)
+      220.0, 246.9, 293.7, 349.2, 392.0, // A3-G4
+      440.0, 493.9, 587.3, 659.3, 783.9, 880.0, // A4-A5
+    ];
+
+    // Warm, soulful pads
+    const spawnPad = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime + 0.1;
+      const freq = houseTones[Math.floor(Math.random() * houseTones.length)];
+      const duration = 4 + Math.random() * 8;
+      const peakVol = 0.03 + Math.random() * 0.05;
+
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = Math.random() > 0.5 ? 'triangle' : 'sine';
+      osc.frequency.value = freq;
+      osc.detune.value = (Math.random() - 0.5) * 6;
+
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.7, t + duration * 0.15);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+
+      osc.connect(gain);
+      gain.connect(lpf);
+      osc.start(t);
+      osc.stop(t + duration + 0.2);
+      nodesRef.current.push({ osc, gain, ac });
+
+      const nextIn = 1500 + Math.random() * 4500;
+      timersRef.current.push(setTimeout(spawnPad, nextIn));
+    };
+
+    [0, 1500, 3200, 5100].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnPad, offset));
+    });
+
+    // Steady, hypnotic house kick and bass groove
+    const kickBass = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime;
+
+      // Kick drum
+      const kickOsc = ac.createOscillator();
+      const kickGain = ac.createGain();
+      kickOsc.type = 'sine';
+      kickOsc.frequency.setValueAtTime(120, t);
+      kickOsc.frequency.exponentialRampToValueAtTime(50, t + 0.08);
+      kickGain.gain.setValueAtTime(0.14, t);
+      kickGain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+      kickOsc.connect(kickGain);
+      kickGain.connect(master);
+      kickOsc.start(t);
+      kickOsc.stop(t + 0.15);
+
+      // Deep sub-bass groove
+      const subBass = ac.createOscillator();
+      const subGain = ac.createGain();
+      subBass.type = 'sine';
+      subBass.frequency.value = 55.0; // Deep A1
+      subGain.gain.setValueAtTime(0.12, t);
+      subGain.gain.linearRampToValueAtTime(0.1, t + 0.3);
+      subBass.connect(subGain);
+      subGain.connect(master);
+      subBass.start(t);
+      subBass.stop(t + 0.5);
+
+      nodesRef.current.push({ osc: kickOsc, gain: kickGain, ac });
+      nodesRef.current.push({ osc: subBass, gain: subGain, ac });
+
+      // Four-on-the-floor house beat (~120 BPM)
+      const nextKick = 500;
+      timersRef.current.push(setTimeout(kickBass, nextKick));
+    };
+
+    timersRef.current.push(setTimeout(kickBass, 0));
+
+    // Ambient high-frequency shimmer
+    const shimmer = ac.createOscillator();
+    const shimmerGain = ac.createGain();
+    shimmer.type = 'sine';
+    shimmer.frequency.value = 2093; // High C6
+    shimmerGain.gain.setValueAtTime(0, ac.currentTime);
+    shimmerGain.gain.linearRampToValueAtTime(0.015, ac.currentTime + 5);
+    shimmer.connect(shimmerGain);
+    shimmerGain.connect(lpf);
+    shimmer.start();
+    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
+  }, []);
+
   const start = useCallback((mode = 'drift', debtProgress = 0) => {
     if (playingRef.current) return;
     try {
@@ -639,8 +746,9 @@ export function useAmbientSound() {
       else if (mode === 'tulsa') startGreenwood(ac);
       else if (mode === 'uplifting') startUplifting(ac);
       else if (mode === 'western') startWestern(ac);
+      else if (mode === 'house90s') startHouse90s(ac);
     } catch (e) {}
-  }, [startDrift, startFocus, startHarpsichord, startArcade, startDeep, startGreenwood, startUplifting, startWestern]);
+  }, [startDrift, startFocus, startHarpsichord, startArcade, startDeep, startGreenwood, startUplifting, startWestern, startHouse90s]);
 
   const updateProgress = useCallback((debtProgress) => {
     // Modulate organism spawn rate and complexity based on progress (0-1)

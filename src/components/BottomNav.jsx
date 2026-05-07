@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Hammer, Swords, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
+import MuteButton from './MuteButton';
 
 const TABS = [
   { to: '/', label: 'Forge', icon: Hammer },
@@ -28,7 +29,7 @@ export default function BottomNav() {
       className="fixed left-0 right-0 z-40 border-t border-border/30"
       style={{ bottom: 0, paddingBottom: 'env(safe-area-inset-bottom)', background: 'hsl(0,0%,6%/0.92)', backdropFilter: 'blur(20px)' }}
     >
-      <div className="flex items-stretch h-16">
+      <div className="flex items-stretch h-16 gap-1 px-2">
         {TABS.map(({ to, label, icon: Icon }) => {
           const isActive = to === '/'
             ? location.pathname === '/'
@@ -61,6 +62,9 @@ export default function BottomNav() {
             </button>
           );
         })}
+        <div className="flex items-center">
+          <MuteButton />
+        </div>
       </div>
     </nav>
   );

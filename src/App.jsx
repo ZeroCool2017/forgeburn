@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Dashboard from './pages/Dashboard';
 import Strategy from './pages/Strategy';
 import SettingsPage from './pages/SettingsPage';
+import Onboarding from './pages/Onboarding';
 import AppLayout from './components/AppLayout';
 import { AmbientSoundProvider } from './lib/ambientSoundContext';
 // Add page imports here
@@ -49,6 +50,7 @@ function AnimatedRoutes() {
         style={{ willChange: 'transform' }}
       >
         <Routes location={location}>
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/strategy" element={<Strategy />} />

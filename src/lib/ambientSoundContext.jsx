@@ -70,6 +70,13 @@ export const SOUND_MODES = [
     icon: '🤠',
     description: 'Pedal steel guitar slides and cowboy blues. Gritty, resilient, frontier spirit.',
   },
+  {
+    id: 'house90s',
+    label: '90s House',
+    sub: 'Deep house · euphoria',
+    icon: '🕺',
+    description: 'Classic 90s deep house. Soulful loops, warm pads, and hypnotic beats.',
+  },
 ];
 
 export function AmbientSoundProvider({ children }) {
