@@ -30,7 +30,7 @@ export function useAmbientSound() {
   const startDrift = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0.0;
-    master.gain.linearRampToValueAtTime(0.22, ac.currentTime + 4);
+    master.gain.linearRampToValueAtTime(0.26, ac.currentTime + 4);
     master.connect(ac.destination);
 
     const delay = ac.createDelay(4.0);
@@ -62,7 +62,7 @@ export function useAmbientSound() {
       const t = ac.currentTime + 0.05;
       const freq = harmonics[Math.floor(Math.random() * harmonics.length)];
       const detune = (Math.random() - 0.5) * 12;
-      const duration = 3 + Math.random() * 10;
+      const duration = 8 + Math.random() * 18;
       const peakVol = 0.03 + Math.random() * 0.07;
       const type = Math.random() > 0.6 ? 'triangle' : 'sine';
 
@@ -96,10 +96,10 @@ export function useAmbientSound() {
 
     // Strong bass foundation — more presence
     const bassDrones = [
-      { freq: 27.5, vol: 0.12 },  // A0 — very sub
-      { freq: 35, vol: 0.14 },     // B0
-      { freq: 41.2, vol: 0.11 },   // E1
-      { freq: 55.0, vol: 0.09 },   // A1 — mid-bass
+      { freq: 27.5, vol: 0.16 },  // A0 — very sub
+      { freq: 35, vol: 0.18 },     // B0
+      { freq: 41.2, vol: 0.15 },   // E1
+      { freq: 55.0, vol: 0.13 },   // A1 — mid-bass
     ];
 
     bassDrones.forEach(({ freq, vol }) => {
@@ -148,14 +148,14 @@ export function useAmbientSound() {
       timersRef.current.push(tid);
     });
 
-    // Multi-layer drone foundation
+    // Multi-layer drone foundation with more bass
     [32.7, 49.0, 65.4].forEach((droneFreq, i) => {
       const drone = ac.createOscillator();
       const droneGain = ac.createGain();
       drone.type = 'sine';
       drone.frequency.value = droneFreq;
       droneGain.gain.setValueAtTime(0, ac.currentTime);
-      droneGain.gain.linearRampToValueAtTime(0.04 + i * 0.015, ac.currentTime + 5 + i);
+      droneGain.gain.linearRampToValueAtTime(0.06 + i * 0.02, ac.currentTime + 5 + i);
       drone.connect(droneGain);
       droneGain.connect(master);
       drone.start();
@@ -558,15 +558,23 @@ export function useAmbientSound() {
   const startWestern = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.26, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.28, ac.currentTime + 5);
     master.connect(ac.destination);
 
-    // Warm resonance
+    // Warm resonance with mid-presence
     const warmLpf = ac.createBiquadFilter();
     warmLpf.type = 'lowpass';
-    warmLpf.frequency.value = 1600;
-    warmLpf.Q.value = 0.7;
-    warmLpf.connect(master);
+    warmLpf.frequency.value = 1800;
+    warmLpf.Q.value = 0.8;
+    
+    const midBoost = ac.createBiquadFilter();
+    midBoost.type = 'peaking';
+    midBoost.frequency.value = 350;
+    midBoost.gain.value = 3;
+    midBoost.Q.value = 1.5;
+    
+    warmLpf.connect(midBoost);
+    midBoost.connect(master);
 
     // Pentatonic minor — country/western blues
     const westernTones = [
@@ -580,43 +588,43 @@ export function useAmbientSound() {
       const t = ac.currentTime + 0.04;
       const startFreq = westernTones[Math.floor(Math.random() * westernTones.length)];
       const endFreq = westernTones[Math.floor(Math.random() * westernTones.length)];
-      const duration = 2 + Math.random() * 5;
-      const peakVol = 0.045 + Math.random() * 0.065;
+      const duration = 3 + Math.random() * 7;
+      const peakVol = 0.055 + Math.random() * 0.075;
 
       const osc = ac.createOscillator();
       const gain = ac.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(startFreq, t);
-      osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.6);
+      osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.5);
       osc.frequency.linearRampToValueAtTime(endFreq, t + duration);
 
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(peakVol * 0.5, t + duration * 0.2);
-      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.5);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.6, t + duration * 0.15);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
 
       osc.connect(gain);
       gain.connect(warmLpf);
       osc.start(t);
-      osc.stop(t + duration + 0.15);
+      osc.stop(t + duration + 0.2);
       nodesRef.current.push({ osc, gain, ac });
 
-      const nextIn = 1200 + Math.random() * 4000;
+      const nextIn = 1000 + Math.random() * 4500;
       timersRef.current.push(setTimeout(spawnSlide, nextIn));
     };
 
-    [0, 2000, 4000, 6000].forEach(offset => {
+    [0, 1500, 3200, 5200].forEach(offset => {
       timersRef.current.push(setTimeout(spawnSlide, offset));
     });
 
-    // Deep, grounded bass
+    // Deep, grounded bass — strong presence
     [55.0, 82.41].forEach((freq, i) => {
       const bass = ac.createOscillator();
       const bassGain = ac.createGain();
       bass.type = 'sine';
       bass.frequency.value = freq;
       bassGain.gain.setValueAtTime(0, ac.currentTime);
-      bassGain.gain.linearRampToValueAtTime(0.16 - i * 0.03, ac.currentTime + 6 + i * 0.5);
+      bassGain.gain.linearRampToValueAtTime(0.19 - i * 0.025, ac.currentTime + 6 + i * 0.5);
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();

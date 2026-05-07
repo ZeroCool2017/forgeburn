@@ -30,6 +30,8 @@ import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
 import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 
 import LoanNarrative from '@/components/forge/LoanNarrative';
+import CelestialMindMap from '@/components/forge/CelestialMindMap';
+import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -152,6 +154,9 @@ export default function Dashboard() {
     return `${years}yr ${months}mo`;
   };
 
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
   const handleRefresh = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey: ['loans'] });
   }, [queryClient]);
@@ -212,7 +217,10 @@ export default function Dashboard() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-mono text-muted-foreground tracking-widest mb-2">forge/ glow → strike ⟶ break</p>
+              <div className="flex items-center gap-3 mb-2">
+                <p className="text-xs font-mono text-muted-foreground tracking-widest">forge/ glow → strike ⟶ break</p>
+                <p className="text-xs font-mono text-muted-foreground/50">{dateStr}</p>
+              </div>
               <div className="flex items-center gap-3 mb-1">
                 <span className="text-3xl">⛓️</span>
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
@@ -301,10 +309,17 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Systems Map */}
-            <p className="obs-label mb-3">— connections</p>
+            {/* Celestial Mind Map */}
+            <p className="obs-label mb-3">— living mind map</p>
             <div className="mb-6">
-              <SystemsMapWidget loans={loans} schedule={schedule} />
+              <CelestialMindMap loans={loans} schedule={schedule} />
+            </div>
+
+            <div className="obs-divider my-6" />
+            {/* Money Horoscope */}
+            <p className="obs-label mb-3">— astrology & prophecy</p>
+            <div className="mb-6">
+              <MoneyHoroscope />
             </div>
 
             <div className="obs-divider my-6" />
