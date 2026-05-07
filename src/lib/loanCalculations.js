@@ -95,6 +95,128 @@ export const STRATEGIES = [
 ];
 
 export const QUOTES = [
+  // Future (rapper)
+  { text: "I turned my pain into progress.", author: "Future" },
+  { text: "Leveling up is a lifestyle, not a moment.", author: "Future" },
+  { text: "Mask off. Face your numbers.", author: "Future" },
+  { text: "Every move I make is intentional. Every payment should be too.", author: "Future" },
+  { text: "I came from nothing. Debt is just another nothing to overcome.", author: "Future" },
+  { text: "Used to count pennies, now I'm counting purpose.", author: "Future" },
+  { text: "They didn't believe in the vision. The balance sheet will.", author: "Future" },
+  { text: "Life is good when you're living on your own terms.", author: "Future" },
+
+  // Good Will Hunting
+  { text: "You're not perfect, sport. And let me save you the suspense — neither is your balance sheet. But the question is whether you're perfect for the life you want.", author: "Good Will Hunting (adapted)" },
+  { text: "It's not your fault.", author: "Good Will Hunting" },
+  { text: "Most days I wish I never met you — the debt. Because then I could sleep at night.", author: "Good Will Hunting (adapted)" },
+  { text: "Do you like apples? I paid off that card. How do you like them apples?", author: "Good Will Hunting (adapted)" },
+  { text: "Real loss is only possible when you've loved something more than yourself. Love your future self more than this debt.", author: "Good Will Hunting (adapted)" },
+  { text: "You'll have bad times, but it'll always wake you up to the good stuff you weren't paying attention to.", author: "Good Will Hunting" },
+  { text: "Some people can't believe in themselves until someone else believes in them first.", author: "Good Will Hunting" },
+
+  // Moneyball / Billy Beane / Michael Lewis
+  { text: "Adapt or die.", author: "Billy Beane, Moneyball" },
+  { text: "Your goal shouldn't be to buy players. Your goal should be to buy wins.", author: "Billy Beane, Moneyball" },
+  { text: "The market for baseball players is an irrational one. So is the market for everything else.", author: "Michael Lewis, Moneyball" },
+  { text: "People operate with beliefs and biases. To the extent you can eliminate both and replace with data, you gain a competitive advantage.", author: "Billy Beane, Moneyball" },
+  { text: "Anybody who's not using statistics is going to get left behind.", author: "Moneyball" },
+  { text: "The first thing I learned was that there's an answer in the data if you know how to look for it.", author: "Moneyball" },
+  { text: "We're not selling jeans here. We're finding value where no one else is looking.", author: "Moneyball (adapted)" },
+  { text: "The inability to envision a certain kind of person doing a certain kind of thing is the problem.", author: "Michael Lewis, Moneyball" },
+
+  // Warby Parker founders (Neil Blumenthal & Dave Gilboa)
+  { text: "Every problem is an opportunity in disguise.", author: "Neil Blumenthal, Warby Parker" },
+  { text: "Build something that's genuinely good for people, and the business will follow.", author: "Neil Blumenthal, Warby Parker" },
+  { text: "We asked: why does this have to cost so much? The answer was: it doesn't.", author: "Dave Gilboa, Warby Parker" },
+  { text: "Constraints force creativity. We didn't have money, so we had to think differently.", author: "Dave Gilboa, Warby Parker" },
+  { text: "Don't accept the status quo just because it's the status quo.", author: "Neil Blumenthal, Warby Parker" },
+  { text: "A business can scale and still have a soul.", author: "Warby Parker" },
+
+  // Dolly Parton
+  { text: "If you want the rainbow, you gotta put up with the rain.", author: "Dolly Parton" },
+  { text: "It costs a lot of money to look this cheap.", author: "Dolly Parton" },
+  { text: "I'm not going to limit myself just because people won't accept the fact that I can do something else.", author: "Dolly Parton" },
+  { text: "Find out who you are and do it on purpose.", author: "Dolly Parton" },
+  { text: "The way I see it, if you want the rainbow, you gotta put up with the rain.", author: "Dolly Parton" },
+  { text: "I'm a tough old bird. Debt doesn't scare me — it motivates me.", author: "Dolly Parton" },
+  { text: "You'll never do a whole lot unless you're brave enough to try.", author: "Dolly Parton" },
+
+  // Kacey Musgraves
+  { text: "Follow your arrow wherever it points.", author: "Kacey Musgraves" },
+  { text: "You can't be everyone's cup of tea. Some people prefer coffee.", author: "Kacey Musgraves" },
+  { text: "Step off the beaten track. It doesn't have to be the fast lane.", author: "Kacey Musgraves" },
+  { text: "Slow burn — the best things take the time they take.", author: "Kacey Musgraves" },
+  { text: "I think a lot of life is figuring out which things matter and which things don't.", author: "Kacey Musgraves" },
+  { text: "Rainbow — after all, it's been a long time coming.", author: "Kacey Musgraves" },
+  { text: "Golden hour. That's what freedom feels like when you finally get there.", author: "Kacey Musgraves" },
+  { text: "Same trailer, different park. Your zip code doesn't define your worth.", author: "Kacey Musgraves" },
+
+  // Tracy Chapman
+  { text: "All that you have is your soul.", author: "Tracy Chapman" },
+  { text: "I had a feeling I could be someone. Be someone.", author: "Tracy Chapman" },
+  { text: "Don't you know, talking about a revolution — it sounds like a whisper at first.", author: "Tracy Chapman" },
+  { text: "Fast car — sometimes you just need a way out, and that's okay. Then you build your way back.", author: "Tracy Chapman" },
+  { text: "We've got to make a decision — leave tonight or live and die this way.", author: "Tracy Chapman" },
+  { text: "Why do the babies starve when there's enough food to feed the world? Ask the same about wealth.", author: "Tracy Chapman" },
+  { text: "The revolution starts with you changing your relationship to money.", author: "Tracy Chapman (adapted)" },
+
+  // Radiohead
+  { text: "Everything in its right place.", author: "Radiohead" },
+  { text: "For a minute there, I lost myself. Then I found the spreadsheet.", author: "Radiohead (adapted)" },
+  { text: "You do it to yourself — and that's what really hurts.", author: "Radiohead" },
+  { text: "Fitter, happier, more productive — one payment at a time.", author: "Radiohead (adapted)" },
+  { text: "Just because you feel it doesn't mean it's there — unless it's on the balance sheet.", author: "Radiohead" },
+  { text: "No surprises, please. Know your numbers.", author: "Radiohead (adapted)" },
+  { text: "How to disappear completely — that's what debt does to your future if you let it.", author: "Radiohead (adapted)" },
+  { text: "I'm not living. I'm just killing time. Until the debt is gone.", author: "Radiohead (adapted)" },
+
+  // Pavement
+  { text: "Range life. Cut your costs, find your range, live in it.", author: "Pavement (adapted)" },
+  { text: "Gold soundz — the sound of a zero balance.", author: "Pavement (adapted)" },
+  { text: "Stop breathing, start living — once the debt stops breathing down your neck.", author: "Pavement (adapted)" },
+  { text: "Crooked rain, crooked rain — even the mess has a pattern if you look.", author: "Pavement (adapted)" },
+  { text: "Silence is golden but so is a paid-off loan.", author: "Pavement (adapted)" },
+  { text: "Stereo — two channels: what you owe and what you own.", author: "Pavement (adapted)" },
+
+  // Built to Spill
+  { text: "You have to know where you've been to know where you're going.", author: "Built to Spill (adapted)" },
+  { text: "Some things last a long time. Make sure your savings is one of them.", author: "Built to Spill (adapted)" },
+  { text: "Carry the zero — don't let it carry you.", author: "Built to Spill (adapted)" },
+  { text: "I want to see movies of my dreams — debt-free ones.", author: "Built to Spill (adapted)" },
+  { text: "Whatever people say, the numbers don't lie.", author: "Built to Spill (adapted)" },
+  { text: "Big dipper, little dipper — even stars navigate by fixed points. Find yours.", author: "Built to Spill (adapted)" },
+
+  // They Might Be Giants
+  { text: "Older — you're going to get older anyway. Make it count.", author: "They Might Be Giants" },
+  { text: "Birdhouse in your soul — build something that outlasts the debt.", author: "They Might Be Giants" },
+  { text: "Istanbul, not Constantinople — names change. So do your finances, if you work at it.", author: "They Might Be Giants (adapted)" },
+  { text: "The sun is a mass of incandescent gas — and debt is a mass of accumulated choices. Choices change.", author: "They Might Be Giants (adapted)" },
+  { text: "Flood — when the numbers rise, you rise with them.", author: "They Might Be Giants (adapted)" },
+  { text: "Particle man, triangle man — which one are you? Be the one who does the math.", author: "They Might Be Giants (adapted)" },
+  { text: "Ana Ng — somewhere out there, someone paid off their last loan today.", author: "They Might Be Giants (adapted)" },
+
+  // Athletes through adversity
+  { text: "I've missed more than 9,000 shots. I've lost almost 300 games. I've failed over and over. That is why I succeed.", author: "Michael Jordan" },
+  { text: "You have to expect things of yourself before you can do them.", author: "Michael Jordan" },
+  { text: "Hard days are the best because that's when champions are made.", author: "Gabby Douglas" },
+  { text: "I didn't come this far to only come this far.", author: "Serena Williams" },
+  { text: "Every time you stay out late, every time you sleep in, every time you miss a workout — I know something you don't.", author: "Lance Armstrong (on adversity)" },
+  { text: "You can't put a limit on anything. The more you dream, the farther you get.", author: "Michael Phelps" },
+  { text: "Somewhere behind the athlete you've become, the hours of practice, and the coaches who pushed you — is a little kid who fell in love with the game.", author: "Mia Hamm" },
+  { text: "Pain is temporary. Quitting lasts forever.", author: "Lance Armstrong" },
+  { text: "The only way to prove you're a good sport is to lose.", author: "Ernie Banks" },
+  { text: "It's not whether you get knocked down — it's whether you get up.", author: "Vince Lombardi" },
+  { text: "Champions keep playing until they get it right.", author: "Billie Jean King" },
+  { text: "Pressure is a privilege — it only comes to those who earn it.", author: "Billie Jean King" },
+  { text: "Do you know what my favorite part of the game is? The opportunity to play.", author: "Mike Singletary" },
+  { text: "Adversity causes some men to break; others to break records.", author: "William Arthur Ward" },
+  { text: "I hated every minute of training. But I said, don't quit. Suffer now and live the rest of your life as a champion.", author: "Muhammad Ali" },
+  { text: "Float like a butterfly, sting like a bee — hit your debt with the same precision.", author: "Muhammad Ali (adapted)" },
+  { text: "If my mind can conceive it and my heart can believe it, then I can achieve it.", author: "Muhammad Ali" },
+  { text: "I work hard every single day. Not some days. Every single day.", author: "Wayde van Niekerk" },
+  { text: "Doubt me, watch me work.", author: "Coco Gauff" },
+  { text: "Every loss teaches you something a win never could.", author: "Coco Gauff" },
+
   // Debt & freedom classics
   { text: "The chains of debt are too light to be felt until they are too heavy to be broken.", author: "Warren Buffett" },
   { text: "A man in debt is so far a slave.", author: "Ralph Waldo Emerson" },
