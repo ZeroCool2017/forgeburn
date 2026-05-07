@@ -187,3 +187,69 @@ export function playShimmerChime(pitchVariation = 0) {
     // Fail silently if audio context unavailable
   }
 }
+
+// High-fidelity electroplankton tone — distinct note that layers with ambient
+// Mapped to a data value (0-1) to create unique melodic interactions
+export function playElectroplantonTone(normalizedValue = 0.5, duration = 0.7) {
+  try {
+    const ac = getAudioContext();
+    if (ac.state === 'suspended') ac.resume();
+
+    const t = ac.currentTime;
+    
+    // Map normalized value to pentatonic frequency space (same scale as harmonic system)
+    const noteIndex = Math.floor(normalizedValue * (NOTE_SEQUENCE.length - 1));
+    const baseFreq = PENTATONIC_NOTES[NOTE_SEQUENCE[noteIndex]];
+    
+    // Create 3-layer polyphonic texture for richness
+    const oscs = [];
+    const gains = [];
+
+    // Layer 1: Primary tone (sine, clean)
+    const osc1 = ac.createOscillator();
+    const gain1 = ac.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.value = baseFreq;
+    gain1.gain.setValueAtTime(0, t);
+    gain1.gain.linearRampToValueAtTime(0.07, t + 0.04);
+    gain1.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    osc1.connect(gain1);
+    gain1.connect(ac.destination);
+    oscs.push(osc1);
+    gains.push(gain1);
+
+    // Layer 2: Upper harmonic (adds shimmer, slightly pitch-bent)
+    const osc2 = ac.createOscillator();
+    const gain2 = ac.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = baseFreq * 1.5; // Perfect fifth above
+    gain2.gain.setValueAtTime(0, t);
+    gain2.gain.linearRampToValueAtTime(0.05, t + 0.06);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + duration * 0.95);
+    osc2.connect(gain2);
+    gain2.connect(ac.destination);
+    oscs.push(osc2);
+    gains.push(gain2);
+
+    // Layer 3: Sub-bass warmth (very low, rich)
+    const osc3 = ac.createOscillator();
+    const gain3 = ac.createGain();
+    osc3.type = 'triangle';
+    osc3.frequency.value = baseFreq * 0.25; // Two octaves below
+    gain3.gain.setValueAtTime(0, t);
+    gain3.gain.linearRampToValueAtTime(0.03, t + 0.08);
+    gain3.gain.exponentialRampToValueAtTime(0.001, t + duration * 1.1);
+    osc3.connect(gain3);
+    gain3.connect(ac.destination);
+    oscs.push(osc3);
+    gains.push(gain3);
+
+    // Start all oscillators
+    oscs.forEach(osc => {
+      osc.start(t);
+      osc.stop(t + duration * 1.1);
+    });
+  } catch (e) {
+    // Fail silently
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { playHarmonicChord } from '@/lib/musicalInterface';
+import { playElectroplantonTone } from '@/lib/musicalInterface';
 import HeatmapNoteModal from './HeatmapNoteModal';
 
 /**
@@ -20,18 +20,20 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
   const maxValue = Math.max(...months.map(m => m.totalInterest || 0));
   const minValue = Math.min(...months.map(m => m.totalInterest || 0));
 
+  const handleCellHover = (monthIndex, value) => {
+    // Hover triggers a subtle electroplankton shimmer
+    const normalized = (value - minValue) / (maxValue - minValue || 1);
+    playElectroplantonTone(normalized, 0.5);
+  };
+
   const handleCellClick = (monthIndex, value) => {
     // Open modal for this month
     setSelectedMonth(months[monthIndex].month);
     setSelectedInterest(value);
 
-    // Play chord based on interest intensity
+    // Click plays richer, longer electroplankton tone
     const normalized = (value - minValue) / (maxValue - minValue || 1);
-    let chordType = 0;
-    if (normalized < 0.33) chordType = 0; // Minor
-    else if (normalized < 0.66) chordType = 1; // Major
-    else chordType = 2; // Complex
-    playHarmonicChord(chordType);
+    playElectroplantonTone(normalized, 0.8);
     
     if (navigator.vibrate) navigator.vibrate(40);
   };
@@ -73,7 +75,10 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
               <motion.button
                 key={idx}
                 onClick={() => handleCellClick(idx, value)}
-                onHoverStart={() => setHoveredCell(idx)}
+                onHoverStart={() => {
+                  setHoveredCell(idx);
+                  handleCellHover(idx, value);
+                }}
                 onHoverEnd={() => setHoveredCell(null)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.92 }}
