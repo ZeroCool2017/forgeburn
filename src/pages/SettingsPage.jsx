@@ -53,7 +53,7 @@ export default function SettingsPage() {
           <Settings className="w-6 h-6 text-primary" />
           <div>
             <h1 className="text-2xl font-black text-foreground tracking-tight">Settings</h1>
-            <p className="text-sm text-muted-foreground">Manage your ChainForge account</p>
+            <p className="text-sm text-muted-foreground">Manage your Carry the Zero account</p>
           </div>
         </motion.div>
 
@@ -168,8 +168,8 @@ export default function SettingsPage() {
 
           {/* App info */}
           <section className="text-center py-4">
-            <p className="text-xs text-muted-foreground font-mono">ChainForge · v1.0</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Break every chain. Forge your freedom.</p>
+            <p className="text-xs text-muted-foreground font-mono">Carry the Zero · v1.0</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Carry the zero. Own the outcome.</p>
           </section>
         </div>
       </div>

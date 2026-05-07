@@ -444,18 +444,56 @@ export const QUOTES = [
   { text: "The problem with the rat race is that even if you win, you're still a rat in debt.", author: "Mr. O'Neill, Daria" },
   { text: "Let's visualize a future where we all make our minimum payments on time. Feel that?", author: "Mr. O'Neill, Daria" },
 
+  // Winona Ryder — real life & films
+  { text: "I think too much. I think ahead. I think behind. I think sideways. I think it all. If it existed, I've thought of it.", author: "Winona Ryder" },
+  { text: "I wasn't at my best, but I never stopped trying to fight my way back.", author: "Winona Ryder" },
+  { text: "I still have a long way to go, but I'm already so far from where I used to be — and that's the point.", author: "Winona Ryder" },
+  { text: "When you're young, you're not afraid of what comes next. You're excited by it.", author: "Winona Ryder" },
+  { text: "I'm not really a part of any scene. I've always felt like an outsider.", author: "Winona Ryder" },
+  { text: "The quicker I can pay off my debt to myself, the sooner I'm free to live on my own terms.", author: "Winona Ryder (adapted)" },
+  // Beetlejuice
+  { text: "I myself am strange and unusual.", author: "Lydia Deetz, Beetlejuice" },
+  { text: "Being strange is just another way of being alive on your own terms.", author: "Lydia Deetz, Beetlejuice (adapted)" },
+  // Reality Bites
+  { text: "I was really going to be something by the age of 23.", author: "Lelaina Pierce, Reality Bites" },
+  { text: "You can't navigate the future by the map of the past.", author: "Reality Bites (adapted)" },
+  { text: "There's no point in being anything other than authentic when everything costs this much.", author: "Reality Bites (adapted)" },
+  { text: "I just need something more than this. That's not a problem — that's a plan.", author: "Lelaina Pierce, Reality Bites (adapted)" },
+  // Girl, Interrupted
+  { text: "Crazy isn't being broken or swallowing a dark secret. It's you or me, amplified.", author: "Susanna, Girl, Interrupted" },
+  { text: "Have you ever confused a dream with life? Have you ever stolen something when you had the cash?", author: "Susanna, Girl, Interrupted" },
+  { text: "I know what it's like to want to die. How it hurts to smile. How you try to fit in but you can't. But you'll never really know.", author: "Susanna, Girl, Interrupted" },
+  // Edward Scissorhands
+  { text: "I'm not a mistake. I'm unfinished. There's a difference.", author: "Edward Scissorhands (adapted)" },
+  // Little Women
+  { text: "I want to do something splendid — something heroic or wonderful that won't be forgotten after I'm dead.", author: "Jo March, Little Women (Winona Ryder)" },
+  { text: "I find it poor logic to say that because women are good, women should vote. Men do not vote because they are good; they vote because they are men, and women should vote, not because we are angels, but because we are human.", author: "Jo March, Little Women" },
+  // Heathers
+  { text: "Dear Diary: I believe I'm a good person. I think there's good in everyone. But here we are, first week of senior year — and I'm crossing paths with people who are making it hard to remember that.", author: "Veronica, Heathers" },
+  { text: "I want to be a real person, not a loan you keep rolling over.", author: "Veronica, Heathers (adapted)" },
+
   // Donald Judd
   { text: "Design has to work. Art does not.", author: "Donald Judd" },
   { text: "The whole idea of a corner of anything is that it is a limit — define it, then exceed it.", author: "Donald Judd" },
   { text: "Space is made by the artist or architect. It is not found or packaged.", author: "Donald Judd" },
   { text: "Everything exists in a specific space. Know where you are.", author: "Donald Judd" },
 
-  // Moneyball / Billy Beane / Michael Lewis
+  // Moneyball — film & book (expanded)
   { text: "Adapt or die.", author: "Billy Beane, Moneyball" },
-  { text: "Your goal shouldn't be to buy players. Your goal should be to buy wins.", author: "Billy Beane, Moneyball" },
+  { text: "Your goal shouldn't be to buy players. Your goal should be to buy wins. Figure out what winning is and buy that.", author: "Billy Beane, Moneyball" },
   { text: "The market for baseball players is an irrational one. So is the market for everything else.", author: "Michael Lewis, Moneyball" },
   { text: "People in both fields operate with beliefs and biases. To the extent you can eliminate both and replace with data, you gain a competitive advantage.", author: "Billy Beane, Moneyball" },
   { text: "It's hard not to be romantic about baseball. It's hard not to be romantic about compound interest too.", author: "Moneyball (adapted)" },
+  { text: "How can you not be romantic about baseball? How can you not be romantic about carrying the zero?", author: "Billy Beane, Moneyball (adapted)" },
+  { text: "The first thing I do every morning is look at the scoreboard. Not yesterday's — today's. Same with your balance.", author: "Moneyball (adapted)" },
+  { text: "You get on base, we win. You don't, we lose. The math of it is simple. Everything else is noise.", author: "Billy Beane, Moneyball" },
+  { text: "There are rich teams and there are poor teams, and then there's fifty feet of crap, and then there's us. We work with what we've got.", author: "Billy Beane, Moneyball" },
+  { text: "I hate losing more than I even want to win. Losing is poverty. Winning is the absence of debt.", author: "Billy Beane, Moneyball (adapted)" },
+  { text: "It's hard to get on base if you can't step up to the plate. Show up. Pay something.", author: "Moneyball (adapted)" },
+  { text: "The problem we're trying to solve is that there are rich teams and poor teams. Some are winning unfairly. We have to find a way to win anyway.", author: "Peter Brand, Moneyball" },
+  { text: "When you get the answer, it's hard to believe the question was that simple all along.", author: "Peter Brand, Moneyball (adapted)" },
+  { text: "People who run ball clubs think in terms of buying players. Your mistake is doing the same thing.", author: "Peter Brand, Moneyball" },
+  { text: "We're trying to find value in places that other people are ignoring. Your payoff schedule is a market inefficiency. Exploit it.", author: "Moneyball (adapted)" },
 
   // 400m Track Stars
   { text: "The race is not always to the swift, but to those who keep on running.", author: "Michael Johnson" },

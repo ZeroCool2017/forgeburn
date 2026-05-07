@@ -187,15 +187,15 @@ export default function Dashboard() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="obs-label mb-2">chainforge / forge</p>
+              <p className="obs-label mb-2">carry-the-zero / forge</p>
               <div className="flex items-center gap-3 mb-1">
                 <Hammer className="w-5 h-5 text-primary" />
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
-                  Chain<span className="text-primary">Forge</span>
+                  Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
               <p className="text-xs text-muted-foreground font-mono">
-                Break every chain. Forge your freedom.
+                Carry the zero. Own the outcome.
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
