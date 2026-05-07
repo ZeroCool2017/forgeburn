@@ -95,4 +95,8 @@ export const QUOTE_GROUPS = [
   { id: 'moneyball', label: 'Moneyball / Billy Beane', filter: q => q.author?.includes('Beane') || q.author?.includes('Moneyball') || q.author?.includes('Michael Lewis') },
   { id: 'gwh', label: 'Good Will Hunting', filter: q => q.author?.includes('Good Will Hunting') },
   { id: 'athletes', label: 'Athletes', filter: q => ['Jordan','Phelps','Ali','Gauff','Serena','Lombardi','Billie Jean','Mia Hamm','Wayde','Johnson','Richards','Shai','Niekerk'].some(a => q.author?.includes(a)) },
+  { id: 'daria_chars', label: 'Daria Characters (Quinn, DeMartino, O\'Neill)', filter: q => (q.author?.includes('Daria') && (q.author?.includes('Quinn') || q.author?.includes('DeMartino') || q.author?.includes("O'Neill") || q.author?.includes('Tom Sloane'))) || q.author?.includes('Mr. O\'Neill, Daria') },
+  { id: 'beavis_butthead', label: 'Beavis and Butthead', filter: q => q.author?.includes('Beavis') || q.author?.includes('Butthead') },
+  { id: 'data_scientists', label: 'Data Scientists', filter: q => q.author?.includes('Deming') || q.author?.includes('Box') || q.author?.includes('Data Science') || q.author?.includes('Branigin') || q.author?.includes('Data Analyst') },
+  { id: 'tetris_champs', label: 'Tetris Champions', filter: q => q.author?.includes('Tetris') && (q.author?.includes('Champion') || q.author?.includes('Master')) },
 ];

@@ -987,6 +987,46 @@ export const QUOTES = [
   { text: "Prophylaxis: prevent your opponent's threat before they execute it. Prevent debt before it grows.", author: "Aron Nimzowitsch, Chess Strategy (adapted)" },
   { text: "Magnus Carlsen plays boring chess because he understands the fundamentals. Master yours.", author: "Magnus Carlsen (adapted)" },
   { text: "Capablanca said: a master should play like a book. Your debt payoff should be systematic.", author: "José Raúl Capablanca (adapted)" },
+
+  // Daria Characters
+  { text: "Fashion club rule #1: Never let them see you sweat. Financial rule #1: Same.", author: "Quinn Morgendorffer, Daria" },
+  { text: "Looking good is a full-time job. So is compound interest, apparently.", author: "Quinn Morgendorffer, Daria" },
+  { text: "I have a very strict rule: I never worry about anything I can accessorize my way out of.", author: "Quinn Morgendorffer, Daria" },
+  { text: "I'd give you advice, but it would require me to care about the outcome.", author: "Mr. DeMartino, Daria" },
+  { text: "Would someone — ANYONE — in this class like to explain why they are CHOOSING financial illiteracy?!", author: "Mr. DeMartino, Daria" },
+  { text: "The CORRECT answer, Mr. O'Neill, is that you cannot borrow your way to freedom.", author: "Mr. DeMartino, Daria" },
+  { text: "Money doesn't buy happiness. But it does buy the specific brand of misery you prefer.", author: "Tom Sloane, Daria" },
+  { text: "Old money stays old because it doesn't do anything reckless. Like carry a balance.", author: "Tom Sloane, Daria" },
+  { text: "The problem with the rat race is that even if you win, you're still a rat in debt.", author: "Mr. O'Neill, Daria" },
+  { text: "Let's visualize a future where we all make our minimum payments on time. Feel that?", author: "Mr. O'Neill, Daria" },
+
+  // Beavis and Butthead
+  { text: "Hehehehe... like, we should pay attention to our interest rates.", author: "Beavis and Butthead (adapted)" },
+  { text: "Like, financial responsibility is cool. Hehehehe.", author: "Beavis, Beavis and Butthead (adapted)" },
+  { text: "Hey, like, this balance sheet is like, actually interesting for once. Uhhhh.", author: "Butthead, Beavis and Butthead (adapted)" },
+  { text: "Dude, like, paying off debt is like the most metal thing you can do. Like, commitment, man.", author: "Butthead, Beavis and Butthead (adapted)" },
+  { text: "Like, I don't know anything about money, but I know debt sucks. Hehehehe.", author: "Beavis, Beavis and Butthead (adapted)" },
+  { text: "This sucks. That sucks. But you know what doesn't suck? A zero balance.", author: "Beavis and Butthead (adapted)" },
+
+  // Famous Data Scientists
+  { text: "In God we trust. Everyone else must bring data.", author: "William Edwards Deming" },
+  { text: "The plural of anecdote is not data — and your gut feeling is definitely not a financial plan.", author: "Roger Branigin (attributed)" },
+  { text: "All models are wrong, but some are useful. Your balance sheet is a model. Make it useful.", author: "George E. P. Box" },
+  { text: "Data-driven decisions beat emotional ones 10 times out of 10. Look at your numbers.", author: "Data Science Principle" },
+  { text: "The best time to start analyzing your finances is now. The second best is before you got here.", author: "Data Science Wisdom" },
+  { text: "Correlation is not causation, but compound interest is predictable. Trust the math.", author: "Data Analyst (adapted)" },
+  { text: "Your data tells a story. Make sure yours is about freedom, not slavery.", author: "Data Science Philosophy" },
+  { text: "Bias in data leads to bad outcomes. Bias in your budget does too. Check both.", author: "Data Science Ethics (adapted)" },
+
+  // Tetris Champions
+  { text: "The game doesn't care how you feel. The balance sheet doesn't either. Adapt.", author: "Tetris Champion (adapted)" },
+  { text: "Speed matters, but pattern recognition matters more. Learn your debt patterns.", author: "Tetris Master (adapted)" },
+  { text: "You can't win by moving randomly. You can't pay off debt by ignoring it either.", author: "Tetris Champion (adapted)" },
+  { text: "The goal is not perfection. The goal is to keep the blocks from piling up. Same with debt.", author: "Tetris Strategy (adapted)" },
+  { text: "Falling pieces don't ask for permission. Neither does interest. Stay ahead.", author: "Tetris Champion Philosophy (adapted)" },
+  { text: "High scores come from consistency and focus. So does financial freedom.", author: "Tetris Master (adapted)" },
+  { text: "You win Tetris by knowing when to push and when to hold. Same strategy applies to extra payments.", author: "Tetris Champion (adapted)" },
+  { text: "I once held the world record. The only record that matters now is my zero balance.", author: "Tetris Champion (adapted)" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
