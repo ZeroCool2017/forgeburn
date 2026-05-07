@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Settings, User, Trash2, LogOut, ShieldAlert } from 'lucide-react';
+import { Settings, User, Trash2, LogOut, ShieldAlert, Headphones } from 'lucide-react';
+import AmbientSoundToggle from '@/components/forge/AmbientSoundToggle';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -70,6 +71,18 @@ export default function SettingsPage() {
                 <p className="text-xs text-muted-foreground font-mono">{user?.email}</p>
               </div>
             </div>
+          </section>
+
+          {/* Sound */}
+          <section className="glass rounded-2xl p-5">
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Headphones className="w-3.5 h-3.5" />
+              Sound
+            </h2>
+            <AmbientSoundToggle />
+            <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+              A synthesized lo-fi ambient loop with soft drones, vinyl hiss, and pentatonic chimes — designed for focused debt work.
+            </p>
           </section>
 
           {/* Session */}

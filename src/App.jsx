@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Strategy from './pages/Strategy';
 import SettingsPage from './pages/SettingsPage';
 import AppLayout from './components/AppLayout';
+import { AmbientSoundProvider } from './lib/ambientSoundContext';
 // Add page imports here
 
 const TAB_ORDER = ['/', '/strategy', '/settings'];
@@ -93,10 +94,12 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <AuthenticatedApp />
-        </Router>
-        <Toaster />
+        <AmbientSoundProvider>
+          <Router>
+            <AuthenticatedApp />
+          </Router>
+          <Toaster />
+        </AmbientSoundProvider>
       </QueryClientProvider>
     </AuthProvider>
   )
