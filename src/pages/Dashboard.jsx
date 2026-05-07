@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Hammer } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import QuoteBar from '@/components/forge/QuoteBar';
@@ -211,13 +211,13 @@ export default function Dashboard() {
             <div>
               <p className="obs-label mb-2">carry-the-zero / forge</p>
               <div className="flex items-center gap-3 mb-1">
-                <Hammer className="w-5 h-5 text-primary" />
+                <Zap className="w-5 h-5 text-primary" />
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
                   Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
               <p className="text-xs text-muted-foreground font-mono">
-                Carry the zero. Own the outcome.
+                The work is the work.
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />

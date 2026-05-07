@@ -76,6 +76,8 @@ export const QUOTE_GROUPS = [
   { id: 'future', label: 'Future', filter: q => q.author === 'Future' },
   { id: 'music', label: 'Music (Radiohead, Pavement, etc.)', filter: q => ['Radiohead','Pavement','Built to Spill','Tracy Chapman','Kacey Musgraves','Dolly Parton','Charly Crockett','Cardi B','Grimes'].some(a => q.author?.includes(a)) },
   { id: 'gary', label: 'Gary', filter: q => q.author === 'Gary' },
+  { id: 'clairo', label: 'Clairo', filter: q => q.author?.includes('Clairo') },
+  { id: 'presti', label: 'Sam Presti / Thunder', filter: q => q.author?.includes('Presti') || q.author?.includes('Thunder') },
   { id: 'finance', label: 'Finance & Systems Thinking', filter: q => ['Buffett','Graham','JL Collins','Ken Honda','James Clear','Donella','Peter Senge','Meadows','Ackoff','Deming','Benjamin Hardy'].some(a => q.author?.includes(a)) },
   { id: 'moneyball', label: 'Moneyball / Billy Beane', filter: q => q.author?.includes('Beane') || q.author?.includes('Moneyball') || q.author?.includes('Michael Lewis') },
   { id: 'gwh', label: 'Good Will Hunting', filter: q => q.author?.includes('Good Will Hunting') },

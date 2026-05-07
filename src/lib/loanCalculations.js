@@ -883,6 +883,16 @@ export const QUOTES = [
 
   // Gary
   { text: "Don't be a dumb ass.", author: "Gary" },
+
+  // Clairo
+  { text: "I want to make things that feel like home.", author: "Clairo" },
+  { text: "Softness is not weakness. It's a choice.", author: "Clairo" },
+
+  // Sam Presti & OKC Thunder
+  { text: "You control what you control. Everything else is noise.", author: "Sam Presti" },
+  { text: "The Thunder is built on draft picks and long-term vision, not shortcuts.", author: "Sam Presti" },
+  { text: "In the NBA, as in debt, compounding matters more than the headline move.", author: "Sam Presti (adapted)" },
+  { text: "The best trade is the one you don't make. The best debt is the one you don't take.", author: "Sam Presti (adapted)" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
