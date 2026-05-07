@@ -35,6 +35,7 @@ import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import HabitNodes from '@/components/forge/HabitNodes';
 import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
 import InteractiveHeatmap from '@/components/forge/InteractiveHeatmap';
+import CelestialBackground from '@/components/forge/CelestialBackground';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -202,6 +203,9 @@ export default function Dashboard() {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div>
+      {/* Celestial night sky background */}
+      <CelestialBackground />
+
       {/* Floating Electroplankton organisms */}
       <FloatingOrganisms debtProgress={totalDebt > 0 ? (totalOriginal - totalDebt) / totalOriginal : 0} />
 
