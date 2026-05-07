@@ -95,30 +95,28 @@ const AuthenticatedApp = () => {
 function App() {
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Global celestial background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <CelestialBackground />
-      </div>
-      
-      {/* Vignette overlay */}
-      <div className="fixed inset-0 pointer-events-none z-10 opacity-70"
-        style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)' }} />
-      
-      {/* App content */}
-      <div className="relative z-20">
-        <AuthProvider>
-          <QueryClientProvider client={queryClientInstance}>
-            <AmbientSoundProvider>
-              <Router>
-                <AuthenticatedApp />
-              </Router>
-              <Toaster />
-            </AmbientSoundProvider>
-          </QueryClientProvider>
-        </AuthProvider>
-      </div>
-    </div>
+    <AuthProvider>
+      <QueryClientProvider client={queryClientInstance}>
+        <AmbientSoundProvider>
+          {/* Global celestial background */}
+          <div className="fixed inset-0 pointer-events-none z-0">
+            <CelestialBackground />
+          </div>
+          
+          {/* Vignette overlay */}
+          <div className="fixed inset-0 pointer-events-none z-10 opacity-70"
+            style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)' }} />
+          
+          {/* App content */}
+          <div className="relative z-20">
+            <Router>
+              <AuthenticatedApp />
+            </Router>
+          </div>
+          <Toaster />
+        </AmbientSoundProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   )
 }
 
