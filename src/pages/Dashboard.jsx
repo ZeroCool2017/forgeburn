@@ -207,7 +207,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
               <StatsOrb label="Total Debt" value={formatCurrency(totalDebt)} sublabel={`of ${formatCurrency(totalOriginal)}`} delay={0} />
               <StatsOrb label="Free In" value={formatMonths(schedule.months)} sublabel={`${monthsSaved > 0 ? monthsSaved + ' months saved' : 'vs minimum'}`} delay={0.1} />
-              <StatsOrb label="Interest Cost" value={formatCurrency(schedule.totalInterest)} sublabel={interestSaved > 0 ? `Saving ${formatCurrency(interestSaved)}` : ''} delay={0.2} />
+              <StatsOrb label="Forge Power" value={interestSaved > 0 ? formatCurrency(interestSaved) : '—'} sublabel={interestSaved > 0 ? `${monthsSaved}mo reclaimed` : 'add extra budget'} delay={0.2} accent="chart-3" />
               <StatsOrb label="Chains" value={loans.length} sublabel={`${loans.filter(l => l.current_balance <= 0).length} broken`} delay={0.3} />
             </div>
 
