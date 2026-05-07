@@ -1087,6 +1087,65 @@ export const QUOTES = [
   { text: "High scores come from consistency and focus. So does financial freedom.", author: "Tetris Master (adapted)" },
   { text: "You win Tetris by knowing when to push and when to hold. Same strategy applies to extra payments.", author: "Tetris Champion (adapted)" },
   { text: "I once held the world record. The only record that matters now is my zero balance.", author: "Tetris Champion (adapted)" },
+
+  // Video Game Pioneers (90s)
+  { text: "A game is not finished until someone says it's finished. A debt is not finished until it's zero.", author: "Shigeru Miyamoto, Nintendo" },
+  { text: "The best way to predict the future is to invent it — then ship it, then iterate.", author: "Shigeru Miyamoto (adapted)" },
+  { text: "I think that gameplay is really where it's at. It's the interactions and the feel. Know your financial feel.", author: "Shigeru Miyamoto (adapted)" },
+  { text: "Create experiences, not just products. Create freedom, not just payments.", author: "Shigeru Miyamoto (adapted)" },
+  { text: "I prefer to make games that are simple to understand but offer great depth. Your budget should be the same.", author: "Shigeru Miyamoto (adapted)" },
+
+  { text: "The power of the word 'no'. That's what makes games sharp. Say no to unnecessary spending.", author: "Hideo Kojima, Metal Gear Solid" },
+  { text: "Stealth is not about avoiding confrontation. It's about choosing your battles. Choose your financial battles carefully.", author: "Hideo Kojima (adapted)" },
+  { text: "The game is more than just the mechanics. The game is the narrative, the emotion, the stakes.", author: "Hideo Kojima (adapted)" },
+  { text: "I make games as art. Your debt payoff should be an art form too.", author: "Hideo Kojima (adapted)" },
+  { text: "Break the rules if it makes the experience better. Break old financial habits if they're broken.", author: "Hideo Kojima (adapted)" },
+
+  { text: "Finish him! Finish the debt, and move on to the next level.", author: "Ed Boon & John Tobias, Mortal Kombat" },
+  { text: "We brought brutality to games. Bring discipline to your balance sheet.", author: "Ed Boon & John Tobias (adapted)" },
+  { text: "Arcade roots taught us: the player has to earn it. Earn your financial freedom.", author: "Ed Boon & John Tobias (adapted)" },
+  { text: "Every character has a fatality. Your debt has an expiration date.", author: "Mortal Kombat (adapted)" },
+
+  { text: "Crash demands a certain level of polish. So does a debt payoff plan.", author: "David Jaffe, Insomniac Games" },
+  { text: "The platformer is about precision and timing. So is financial recovery.", author: "David Jaffe (adapted)" },
+  { text: "You have to make the player feel powerful. Make yourself feel powerful with every extra payment.", author: "David Jaffe (adapted)" },
+
+  { text: "PC gaming is about freedom. So is financial independence.", author: "Gabe Newell, Valve" },
+  { text: "The most powerful thing you can do is empower the player. Empower yourself with data and discipline.", author: "Gabe Newell (adapted)" },
+  { text: "Community is the game. Transparency in your finances is your community.", author: "Gabe Newell (adapted)" },
+
+  { text: "The system is the subject. Your debt system is your teacher.", author: "Warren Spector, Deus Ex" },
+  { text: "Give the player a choice. Give yourself choices about where your money goes.", author: "Warren Spector (adapted)" },
+  { text: "Immersive sim — every action has a consequence. Every payment has a consequence in your favor.", author: "Warren Spector (adapted)" },
+
+  { text: "God games are about scale and ambition. Dream big about your debt-free future.", author: "Peter Molyneux, Bullfrog Productions" },
+  { text: "I want to make games that affect people emotionally. Make your debt payoff affect you emotionally — in joy.", author: "Peter Molyneux (adapted)" },
+  { text: "The magic circle is sacred. Respect your budget's boundaries.", author: "Peter Molyneux (adapted)" },
+
+  // Arcade & Video Game Competition Winners
+  { text: "I held the Pac-Man world record. The record that really matters is clearing all your debt.", author: "Billy Mitchell, Arcade Legend" },
+  { text: "You don't beat the machine. You understand it. Understand your own financial machine.", author: "Billy Mitchell (adapted)" },
+  { text: "The arcade taught me: pattern recognition and patience win.", author: "Billy Mitchell (adapted)" },
+
+  { text: "I played for 130+ hours straight to beat Donkey Kong. Will you dedicate 130 minutes to your payoff plan?", author: "Steve Wiebe, Donkey Kong Champion" },
+  { text: "It took me 25 years, but I beat the king. How long will your debt take? You choose.", author: "Steve Wiebe (adapted)" },
+  { text: "The competition was the obsession. Make debt payoff your obsession.", author: "Steve Wiebe (adapted)" },
+
+  { text: "Twin Galaxies documents the highest scores. Document your lowest balance.", author: "Walter Day, Twin Galaxies Founder" },
+  { text: "Records exist to be beaten. Your current balance exists to be zero.", author: "Walter Day (adapted)" },
+  { text: "The arcade was the arena. Your spreadsheet is yours. Own it.", author: "Walter Day (adapted)" },
+
+  { text: "Speed runners turn constraints into art. Turn your budget constraints into financial art.", author: "Speed Running Community (adapted)" },
+  { text: "Every frame counts. Every dollar counts.", author: "Speed Running Philosophy" },
+  { text: "Sequence breaking is finding a better route. Find a better route to debt freedom.", author: "Speed Running (adapted)" },
+
+  { text: "Fighting game tournaments teach you to adapt mid-battle. Adapt your strategy mid-payoff.", author: "Fighting Game Community (adapted)" },
+  { text: "You study your opponent. Study your debt and interest rates like they're your opponent.", author: "Fighting Game Wisdom (adapted)" },
+  { text: "Frame data wins matches. Your payment schedule is your frame data.", author: "Fighting Game Community (adapted)" },
+
+  { text: "The cheat code is not cheating if you understand the game first. Know your game before you break it.", author: "90s Gaming Wisdom" },
+  { text: "Extra lives in the game. No extra lives in debt. Play once and win.", author: "90s Arcade Philosophy (adapted)" },
+  { text: "Game Over is not the end. Zero balance is the beginning.", author: "Video Game Wisdom (adapted)" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
