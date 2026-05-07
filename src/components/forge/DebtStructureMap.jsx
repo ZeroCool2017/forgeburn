@@ -107,7 +107,7 @@ export default function DebtStructureMap({ loans, totalOriginal }) {
 
     // Title
     ctx.font = 'bold 11px monospace';
-    ctx.fillStyle = 'hsl(140, 100%, 240%, 0.6)';
+    ctx.fillStyle = 'hsl(270, 80%, 65%)';
     ctx.textAlign = 'left';
     ctx.fillText('Debt Structure Map', 12, 20);
   }, [loans]);
@@ -133,8 +133,8 @@ export default function DebtStructureMap({ loans, totalOriginal }) {
       </div>
       <canvas
         ref={canvasRef}
-        width={420}
-        height={280}
+        width={540}
+        height={320}
         className="w-full rounded-lg border border-border/20"
         style={{ display: 'block', background: 'hsl(260, 18%, 7%)' }}
       />
