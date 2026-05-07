@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QUOTES } from '@/lib/loanCalculations';
+import { getShuffledQuotes } from '@/lib/loanCalculations';
 import { Sparkles } from 'lucide-react';
 
 export default function QuoteBar() {
-  const [index, setIndex] = useState(Math.floor(Math.random() * QUOTES.length));
+  const [quotes] = useState(() => getShuffledQuotes());
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prev => (prev + 1) % QUOTES.length);
+      setIndex(prev => (prev + 1) % quotes.length);
     }, 12000);
     return () => clearInterval(interval);
-  }, []);
+  }, [quotes]);
 
-  const quote = QUOTES[index];
+  const quote = quotes[index];
 
   return (
     <div className="relative overflow-hidden rounded-xl glass glow-purple px-6 py-4">

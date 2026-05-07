@@ -95,83 +95,135 @@ export const STRATEGIES = [
 ];
 
 export const QUOTES = [
-  // Originals
+  // Debt & freedom classics
   { text: "The chains of debt are too light to be felt until they are too heavy to be broken.", author: "Warren Buffett" },
   { text: "A man in debt is so far a slave.", author: "Ralph Waldo Emerson" },
   { text: "Rather go to bed without dinner than to rise in debt.", author: "Benjamin Franklin" },
   { text: "Debt is the worst poverty.", author: "Thomas Fuller" },
   { text: "Every time you borrow money, you're robbing your future self.", author: "Nathan W. Morris" },
-  { text: "Financial freedom is available to those who learn about it and work for it.", author: "Robert Kiyosaki" },
-  { text: "The secret to getting ahead is getting started.", author: "Mark Twain" },
-  { text: "Do not save what is left after spending, but spend what is left after saving.", author: "Warren Buffett" },
-  { text: "It's not about how much money you make, but how much money you keep.", author: "Robert Kiyosaki" },
-  { text: "Wealth consists not in having great possessions, but in having few wants.", author: "Epictetus" },
-  { text: "The goal isn't more money. The goal is living life on your terms.", author: "Chris Brogan" },
   { text: "Beware of little expenses. A small leak will sink a great ship.", author: "Benjamin Franklin" },
-  { text: "You must gain control over your money or the lack of it will forever control you.", author: "Dave Ramsey" },
+  { text: "The secret to getting ahead is getting started.", author: "Mark Twain" },
+  { text: "Wealth consists not in having great possessions, but in having few wants.", author: "Epictetus" },
   { text: "Freedom is not free. It costs discipline.", author: "Unknown" },
 
-  // Warren Buffett
+  // Compounding interest
+  { text: "Compound interest is the eighth wonder of the world. He who understands it, earns it; he who doesn't, pays it.", author: "Albert Einstein (attributed)" },
+  { text: "The most powerful force in the universe is compound interest.", author: "Albert Einstein (attributed)" },
+  { text: "Time is the friend of the wonderful company, the enemy of the mediocre.", author: "Warren Buffett" },
+  { text: "The stock market is a device to transfer money from the impatient to the patient.", author: "Warren Buffett" },
+  { text: "Someone is sitting in the shade today because someone planted a tree a long time ago.", author: "Warren Buffett" },
   { text: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
   { text: "Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.", author: "Warren Buffett" },
-  { text: "Someone is sitting in the shade today because someone planted a tree a long time ago.", author: "Warren Buffett" },
   { text: "The most important investment you can make is in yourself.", author: "Warren Buffett" },
-  { text: "It takes 20 years to build a reputation and five minutes to ruin it.", author: "Warren Buffett" },
+  { text: "Do not save what is left after spending, but spend what is left after saving.", author: "Warren Buffett" },
+
+  // Ben Graham
+  { text: "The intelligent investor is a realist who sells to optimists and buys from pessimists.", author: "Benjamin Graham" },
+  { text: "The individual investor should act consistently as an investor and not as a speculator.", author: "Benjamin Graham" },
+  { text: "In the short run, the market is a voting machine. In the long run, it is a weighing machine.", author: "Benjamin Graham" },
+  { text: "The market is there to serve you, not to guide you.", author: "Benjamin Graham" },
+
+  // JL Collins (A Simple Path to Wealth)
+  { text: "Spend less than you earn. Invest the surplus. Avoid debt.", author: "JL Collins" },
+  { text: "Debt is the most potent force for keeping you from your goals.", author: "JL Collins" },
+  { text: "The more you can simplify your financial life, the more you are in control of it.", author: "JL Collins" },
+  { text: "Financial independence is about having options, not things.", author: "JL Collins" },
+
+  // Ken Honda (Happy Money)
+  { text: "When you receive money with a grateful heart, you attract more of it.", author: "Ken Honda" },
+  { text: "Money is just energy. When you let it flow freely, it comes back to you.", author: "Ken Honda" },
+  { text: "The way you treat money reflects how you treat yourself.", author: "Ken Honda" },
+  { text: "Arigato — say thank you to every dollar that comes in and every dollar that goes out.", author: "Ken Honda" },
+
+  // James Clear (Atomic Habits)
+  { text: "You do not rise to the level of your goals. You fall to the level of your systems.", author: "James Clear" },
+  { text: "Every action you take is a vote for the type of person you wish to become.", author: "James Clear" },
+  { text: "Small habits compound into remarkable results over time.", author: "James Clear" },
+  { text: "The most practical way to change who you are is to change what you do.", author: "James Clear" },
+  { text: "Goals are good for setting direction. Systems are best for making progress.", author: "James Clear" },
+
+  // Marsha Linehan (DBT)
+  { text: "You can't go back and change the beginning, but you can start where you are and change the ending.", author: "Marsha Linehan" },
+  { text: "Radical acceptance is the path out of hell — refusing it keeps you there.", author: "Marsha Linehan" },
+  { text: "The willingness to suffer is what makes the willingness to change possible.", author: "Marsha Linehan" },
+  { text: "A life worth living is built one moment at a time.", author: "Marsha Linehan" },
+
+  // Grimes
+  { text: "I want to be a billionaire so I can fund art projects. That's literally it.", author: "Grimes" },
+  { text: "The future is weird and uncertain and that's the most exciting thing about it.", author: "Grimes" },
+  { text: "I think creativity is just another form of problem solving.", author: "Grimes" },
+
+  // Coco Gauff
+  { text: "Doubt me, watch me work.", author: "Coco Gauff" },
+  { text: "I learned that the journey matters more than the destination.", author: "Coco Gauff" },
+  { text: "Use your voice. Even when it shakes.", author: "Coco Gauff" },
+  { text: "Every loss teaches you something a win never could.", author: "Coco Gauff" },
 
   // Jack Dorsey
   { text: "Make every detail perfect and limit the number of details to perfect.", author: "Jack Dorsey" },
   { text: "The strongest thing you can do is ask for help.", author: "Jack Dorsey" },
-  { text: "I try to build simple things that solve complex problems.", author: "Jack Dorsey" },
+  { text: "Edit your life frequently and ruthlessly.", author: "Jack Dorsey" },
 
   // Shai Gilgeous-Alexander
   { text: "I just trust the process and trust my preparation.", author: "Shai Gilgeous-Alexander" },
-  { text: "The work you put in when no one's watching shows up when everyone is.", author: "Shai Gilgeous-Alexander" },
   { text: "Stay calm, stay ready. Pressure is a privilege.", author: "Shai Gilgeous-Alexander" },
+  { text: "The work you put in when no one's watching shows up when everyone is.", author: "Shai Gilgeous-Alexander" },
 
-  // Mitt Romney
-  { text: "We are a people who built this nation from nothing — immigrants and pioneers — and there is nothing we cannot do.", author: "Mitt Romney" },
-  { text: "Character is doing the right thing when nobody's looking.", author: "Mitt Romney" },
+  // Dr. V — Aravind Eye Care
+  { text: "Are you a leader for your own convenience, or have you been called to serve?", author: "Dr. Govindappa Venkataswamy (Dr. V)" },
+  { text: "If we are going to solve the problems of this world, we have to expand our love to match it.", author: "Dr. Govindappa Venkataswamy (Dr. V)" },
+  { text: "McDonald's can deliver burgers to every corner of the world. Why can't we deliver sight?", author: "Dr. Govindappa Venkataswamy (Dr. V)" },
 
-  // SGI Buddhism (Daisaku Ikeda)
+  // Oklahoma figures
+  { text: "The most beautiful things in the world cannot be seen or touched — they are felt with the heart.", author: "Wilma Mankiller, Cherokee Nation Chief" },
+  { text: "We must trust our own thinking, trust our own strength.", author: "Wilma Mankiller, Cherokee Nation Chief" },
+  { text: "In every crisis there is an opportunity.", author: "Wilma Mankiller, Cherokee Nation Chief" },
+  { text: "I've always been a systems thinker. Look at the structure, not just the problem.", author: "Brad Henry, Oklahoma Governor" },
+  { text: "Music is the shorthand of emotion.", author: "Leon Russell, Oklahoma musician" },
+
+  // SGI / Daisaku Ikeda
   { text: "A great human revolution in just a single individual will help achieve a change in the destiny of a nation.", author: "Daisaku Ikeda" },
   { text: "Hardships strengthen us. Every challenge we overcome is a step toward a life of greater value.", author: "Daisaku Ikeda" },
-  { text: "The greatest revolution in life is to transform suffering into strength and joy.", author: "Daisaku Ikeda" },
   { text: "It is not the environment that shapes us, but the spirit with which we confront it.", author: "Daisaku Ikeda" },
-  { text: "Never let your circumstances determine your worth. You are the author of your own story.", author: "Daisaku Ikeda" },
+  { text: "The greatest revolution in life is to transform suffering into strength and joy.", author: "Daisaku Ikeda" },
 
-  // Native American Church / American Indian Movement leaders
+  // Native American / AIM
   { text: "We do not inherit the earth from our ancestors; we borrow it from our children.", author: "Native American Proverb" },
-  { text: "The ground on which we stand is sacred ground. It is the blood of our ancestors.", author: "Plenty Coups, Crow Nation" },
-  { text: "When we show our respect for other living things, they respond with respect for us.", author: "Arapaho Proverb" },
-  { text: "We must protect the forests for our children, grandchildren, and children yet to be born.", author: "Qwatsinas, Nuxalk Nation" },
-  { text: "A nation is not conquered until the hearts of its women are on the ground.", author: "Cheyenne Proverb" },
   { text: "They tried to bury us. They didn't know we were seeds.", author: "Dennis Banks, AIM co-founder" },
-  { text: "The spirit of the people is greater than the man's technology.", author: "Dennis Banks, AIM co-founder" },
+  { text: "When we show our respect for other living things, they respond with respect for us.", author: "Arapaho Proverb" },
+  { text: "A nation is not conquered until the hearts of its women are on the ground.", author: "Cheyenne Proverb" },
   { text: "If you talk to the animals they will talk with you and you will know each other.", author: "Chief Dan George" },
-  { text: "The greatest gift is not found in stores but in the hearts of true friends.", author: "Native American Proverb" },
 
-  // Liberal Indian business leaders
-  { text: "The art of moving money is making sure it moves toward opportunity, not away from it.", author: "Anand Mahindra" },
+  // Indian business leaders
+  { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
+  { text: "The world is full of magic things, patiently waiting for our senses to grow sharper.", author: "Ratan Tata" },
+  { text: "Treat money as a tool, not a goal.", author: "Azim Premji" },
   { text: "Success is not just about making wealth but about making a difference.", author: "Narayana Murthy" },
   { text: "To survive, you must tell stories.", author: "Anita Roddick" },
-  { text: "The world is full of magic things, patiently waiting for our senses to grow sharper.", author: "Ratan Tata" },
-  { text: "Leadership is about making others better as a result of your presence.", author: "Ratan Tata" },
-  { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
-  { text: "Treat money as a tool, not a goal. It will take you wherever you need to go.", author: "Azim Premji" },
-  { text: "Building a sustainable business is not about the next quarter — it's about the next generation.", author: "Azim Premji" },
 
   // Keith Haring
   { text: "Art is nothing if you don't reach every segment of the people.", author: "Keith Haring" },
-  { text: "I am not a commodity, I am a human being — full of contradictions and possibilities.", author: "Keith Haring" },
-  { text: "The public needs art, and it is important for people to use it.", author: "Keith Haring" },
   { text: "Don't worry about trying to be better than someone else. Be the best version of yourself.", author: "Keith Haring" },
+  { text: "The public needs art, and it is important for people to use it.", author: "Keith Haring" },
 
   // David Hockney
   { text: "All you can do is work. That's what keeps you going.", author: "David Hockney" },
-  { text: "The moment you cheat for the sake of beauty, you know you're an artist.", author: "David Hockney" },
   { text: "I'm always interested in moving forward. You can't be afraid to change.", author: "David Hockney" },
   { text: "Every new medium gives us a new perspective on older media.", author: "David Hockney" },
+
+  // Mitt Romney
+  { text: "Character is doing the right thing when nobody's looking.", author: "Mitt Romney" },
 ];
+
+// Fisher-Yates shuffle so quotes never repeat in the same order
+export function getShuffledQuotes() {
+  const arr = [...QUOTES];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 export const CATEGORY_CONFIG = {
   student: { emoji: '🎓', label: 'Student', color: '#818cf8' },
