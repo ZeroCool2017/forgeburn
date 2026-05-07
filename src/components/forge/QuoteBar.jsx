@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getShuffledQuotes } from '@/lib/loanCalculations';
+import { getAllActiveQuotes } from '@/lib/quoteStore';
 import { Sparkles } from 'lucide-react';
 
 export default function QuoteBar() {
-  const [quotes] = useState(() => getShuffledQuotes());
+  const [quotes] = useState(() => getAllActiveQuotes());
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

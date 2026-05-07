@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Settings, User, Trash2, LogOut, ShieldAlert, Headphones, Globe } from 'lucide-react';
+import { Settings, User, Trash2, LogOut, ShieldAlert, Headphones, Globe, BookOpen } from 'lucide-react';
+import QuoteManager from '@/components/forge/QuoteManager';
 import AmbientSoundToggle from '@/components/forge/AmbientSoundToggle';
 import PersonalizationForm from '@/components/forge/PersonalizationForm';
 import { Button } from '@/components/ui/button';
@@ -81,6 +82,15 @@ export default function SettingsPage() {
               Your World
             </h2>
             <PersonalizationForm />
+          </section>
+
+          {/* Quote Library */}
+          <section className="glass rounded-2xl p-5">
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
+              <BookOpen className="w-3.5 h-3.5" />
+              Quote Library
+            </h2>
+            <QuoteManager />
           </section>
 
           {/* Sound */}

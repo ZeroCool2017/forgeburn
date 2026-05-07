@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency } from '@/lib/loanCalculations';
+import { getAllActiveQuotes } from '@/lib/quoteStore';
 
 // Obsidian / Notion editorial style — each panel is a clean, typographic data story
 
@@ -184,16 +185,24 @@ function StoryPanel({ totalDebt, interestSaved, months }) {
   );
 }
 
-const PANELS = ['story', 'zero', 'compound', 'grid', 'time'];
+const PANELS = ['story', 'zero', 'compound', 'grid', 'time', 'quote'];
 
 export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved, months }) {
   const [panelIndex, setPanelIndex] = useState(0);
+  const [activeQuotes] = useState(() => getAllActiveQuotes());
+  const [quoteIdx, setQuoteIdx] = useState(0);
   const paidOff = (totalOriginal || totalDebt) - totalDebt;
 
   useEffect(() => {
-    const t = setInterval(() => setPanelIndex(p => (p + 1) % PANELS.length), 9000);
+    const t = setInterval(() => {
+      setPanelIndex(p => {
+        const next = (p + 1) % PANELS.length;
+        if (PANELS[next] === 'quote') setQuoteIdx(q => (q + 1) % activeQuotes.length);
+        return next;
+      });
+    }, 9000);
     return () => clearInterval(t);
-  }, []);
+  }, [activeQuotes]);
 
   const panel = PANELS[panelIndex];
 
@@ -233,6 +242,15 @@ export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved
           {panel === 'zero'     && <ZeroPanel totalDebt={totalOriginal || totalDebt} paidOff={paidOff} />}
           {panel === 'grid'     && <GridPanel interestSaved={interestSaved} months={months} />}
           {panel === 'time'     && <TimePanel months={months} />}
+          {panel === 'quote'   && (
+            <div className="flex flex-col justify-center h-full py-2">
+              <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">From the Library</p>
+              <p className="text-lg font-display italic text-foreground/90 leading-relaxed mb-4">
+                "{activeQuotes[quoteIdx]?.text}"
+              </p>
+              <p className="text-xs font-mono text-muted-foreground">— {activeQuotes[quoteIdx]?.author}</p>
+            </div>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>
