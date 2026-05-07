@@ -229,6 +229,18 @@ export const QUOTES = [
 
   // Mitt Romney
   { text: "Character is doing the right thing when nobody's looking.", author: "Mitt Romney" },
+
+  // Daria (MTV)
+  { text: "I don't have low self-esteem. I have low esteem for everyone else.", author: "Daria Morgendorffer" },
+  { text: "My goal is not to wake up at 40 with the bitter realization that I've wasted my life in a job I hate.", author: "Daria Morgendorffer" },
+  { text: "It's not that I'm antisocial. I just have nothing to say to people who have nothing to say.", author: "Daria Morgendorffer" },
+  { text: "You're not a failure if you don't make it. You're a success if you try.", author: "Helen Morgendorffer, Daria" },
+  { text: "I say if you're going to do something, be honest about it.", author: "Daria Morgendorffer" },
+  { text: "I like having low expectations. It's the only way I'm ever pleasantly surprised.", author: "Daria Morgendorffer" },
+  { text: "Is it lonely being the only sane person in the room? Probably. But it beats the alternative.", author: "Daria Morgendorffer" },
+  { text: "The only thing worse than being talked about is not being talked about. Unless they're discussing your debt.", author: "Jane Lane, Daria" },
+  { text: "Fashion is just a way to tell people what to think of you before they get to know you.", author: "Daria Morgendorffer" },
+  { text: "It's a crazy world. You either laugh or you owe someone money.", author: "Jane Lane, Daria" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
