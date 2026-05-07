@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { formatCurrency } from '@/lib/loanCalculations';
+import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { getAllActiveQuotes } from '@/lib/quoteStore';
+import { Sparkles, BookOpen } from 'lucide-react';
 
 // Obsidian / Notion editorial style — each panel is a clean, typographic data story
 
@@ -185,9 +186,106 @@ function StoryPanel({ totalDebt, interestSaved, months }) {
   );
 }
 
-const PANELS = ['story', 'zero', 'compound', 'grid', 'time', 'quote'];
+// Obsidian callout quote panel — matches QuoteBar style exactly
+function CalloutQuotePanel({ quote }) {
+  if (!quote) return null;
+  // Greenwood quotes get a warm amber accent; others get primary purple
+  const isGreenwood = quote.author?.includes('Greenwood') || quote.author?.includes('Black Wall Street') ||
+    quote.author?.includes('Gurley') || quote.author?.includes('Stradford') || quote.author?.includes('Mabel Little') ||
+    quote.author?.includes('A.C. Jackson');
+  const accentColor = isGreenwood ? 'hsl(38,90%,55%)' : 'hsl(258,80%,68%)';
+  const labelText = isGreenwood ? 'greenwood / black wall street' : 'from the library';
 
-export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved, months }) {
+  return (
+    <div className="flex flex-col justify-center h-full py-1">
+      <div className="relative rounded-xl border overflow-hidden"
+        style={{ borderColor: `${accentColor}30`, background: `${accentColor}06` }}>
+        {/* Left callout accent */}
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl"
+          style={{ background: `linear-gradient(to bottom, ${accentColor}80, ${accentColor}20)` }} />
+        <div className="pl-5 pr-4 py-4">
+          <div className="flex items-start gap-2.5">
+            {isGreenwood
+              ? <BookOpen className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: accentColor }} />
+              : <Sparkles className="w-3.5 h-3.5 mt-0.5 shrink-0 animate-pulse-glow" style={{ color: accentColor }} />
+            }
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: accentColor, opacity: 0.7 }}>
+                {labelText}
+              </p>
+              <p className="text-sm font-display italic leading-relaxed" style={{ color: 'hsl(240,10%,88%)', opacity: 0.9 }}>
+                "{quote.text}"
+              </p>
+              <p className="text-[11px] font-mono text-muted-foreground mt-2">
+                — {quote.author}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Debt Story panel — each loan linked to a narrative sentence
+function DebtStoryPanel({ loans }) {
+  if (!loans?.length) return null;
+  const sorted = [...loans].sort((a, b) => b.current_balance - a.current_balance);
+  const totalMonthlyInterest = loans.reduce((s, l) => s + (l.current_balance * l.interest_rate / 100) / 12, 0);
+
+  return (
+    <div className="flex flex-col h-full">
+      <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">Your Debt Story</p>
+      <div className="flex-1 space-y-2.5 overflow-hidden">
+        {sorted.slice(0, 4).map((loan, i) => {
+          const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
+          const original = loan.original_balance || loan.current_balance;
+          const pct = Math.round((1 - loan.current_balance / original) * 100);
+          const monthlyInterest = (loan.current_balance * loan.interest_rate / 100) / 12;
+          return (
+            <motion.div
+              key={loan.id}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="flex items-start gap-2.5"
+            >
+              <span className="text-base shrink-0 mt-0.5">{cat.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-xs font-mono font-semibold text-foreground truncate">{loan.name}</p>
+                  <span className="text-[10px] font-mono text-muted-foreground shrink-0">{pct}% done</span>
+                </div>
+                {/* Progress bar */}
+                <div className="w-full h-1 bg-border/30 rounded-full mb-1">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${pct}%` }}
+                    transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    className="h-full rounded-full"
+                    style={{ background: cat.color }}
+                  />
+                </div>
+                <p className="text-[10px] font-mono text-muted-foreground">
+                  {formatCurrency(monthlyInterest)}/mo in interest · {formatCurrency(loan.current_balance)} left
+                </p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+      <div className="border-t border-border/20 pt-2 mt-2">
+        <p className="text-[10px] font-mono text-muted-foreground">
+          Combined interest drain: <span className="text-destructive font-semibold">{formatCurrency(totalMonthlyInterest)}/mo</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const PANELS = ['story', 'debtstory', 'zero', 'compound', 'grid', 'time', 'quote'];
+
+export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved, months, loans }) {
   const [panelIndex, setPanelIndex] = useState(0);
   const [activeQuotes] = useState(() => getAllActiveQuotes());
   const [quoteIdx, setQuoteIdx] = useState(0);
@@ -242,15 +340,8 @@ export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved
           {panel === 'zero'     && <ZeroPanel totalDebt={totalOriginal || totalDebt} paidOff={paidOff} />}
           {panel === 'grid'     && <GridPanel interestSaved={interestSaved} months={months} />}
           {panel === 'time'     && <TimePanel months={months} />}
-          {panel === 'quote'   && (
-            <div className="flex flex-col justify-center h-full py-2">
-              <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">From the Library</p>
-              <p className="text-lg font-display italic text-foreground/90 leading-relaxed mb-4">
-                "{activeQuotes[quoteIdx]?.text}"
-              </p>
-              <p className="text-xs font-mono text-muted-foreground">— {activeQuotes[quoteIdx]?.author}</p>
-            </div>
-          )}
+          {panel === 'quote'   && <CalloutQuotePanel quote={activeQuotes[quoteIdx]} />}
+          {panel === 'debtstory' && <DebtStoryPanel loans={loans} />}
         </motion.div>
       </AnimatePresence>
     </div>

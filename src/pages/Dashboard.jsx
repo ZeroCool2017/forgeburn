@@ -231,6 +231,7 @@ export default function Dashboard() {
                 totalOriginal={totalOriginal}
                 interestSaved={interestSaved > 0 ? interestSaved : 0}
                 months={monthsSaved > 0 ? monthsSaved : schedule.months}
+                loans={loans}
               />
             </div>
 
