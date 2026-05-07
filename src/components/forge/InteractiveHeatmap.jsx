@@ -53,12 +53,12 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="glass rounded-2xl p-5"
+      className="glass rounded-2xl p-3"
     >
       {/* Header */}
-      <div className="mb-4">
-        <h3 className="text-sm font-semibold text-foreground mb-1">{title}</h3>
-        <p className="text-xs text-muted-foreground/70">Click any month to explore and record your financial observations.</p>
+      <div className="mb-2">
+        <h3 className="text-sm font-semibold text-foreground mb-0.5">{title}</h3>
+        <p className="text-[10px] text-muted-foreground/70">Click any month to explore and record your financial observations.</p>
         {showHabitNote && (
           <motion.p
             initial={{ opacity: 0, y: -4 }}
@@ -70,9 +70,9 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
         )}
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {/* 12-month grid */}
-        <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
+        <div className="grid grid-cols-6 gap-1">
           {months.map((month, idx) => {
             const value = month.totalInterest || 0;
             const normalized = maxValue > 0 ? (value - minValue) / (maxValue - minValue) : 0;
@@ -140,9 +140,9 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
         </div>
 
         {/* Gradient legend */}
-        <div className="mt-5 flex items-center justify-between text-[10px] text-muted-foreground/70">
+        <div className="mt-3 flex items-center justify-between text-[10px] text-muted-foreground/70">
           <p className="font-mono text-xs">Low</p>
-          <div className="flex-1 mx-3 h-2 rounded-full overflow-hidden"
+          <div className="flex-1 mx-2 h-1.5 rounded-full overflow-hidden"
             style={{
               background: `linear-gradient(90deg, hsl(270, 60%, 55%), hsl(200, 70%, 50%), hsl(150, 60%, 50%), hsl(30, 80%, 50%), hsl(0, 90%, 50%))`
             }}
