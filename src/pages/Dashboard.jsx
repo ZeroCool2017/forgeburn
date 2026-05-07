@@ -259,9 +259,7 @@ export default function Dashboard() {
                   Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
-              <p className="text-sm font-mono text-muted-foreground">
-                ∑ chains
-              </p>
+
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
           </div>
