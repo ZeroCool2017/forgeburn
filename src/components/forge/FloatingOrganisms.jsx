@@ -8,9 +8,11 @@ import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
  * Density increases with debt paydown (gamification touch).
  */
 
-function Organism({ index, progress, totalCount }) {
+function Organism({ index, progress, totalCount, positions }) {
   const x = useMotionValue(Math.random() * 100);
   const y = useMotionValue(Math.random() * 100);
+  const xRef = useRef(x.get());
+  const yRef = useRef(y.get());
   
   const seed = index * 1234;
   const baseSize = 6 + Math.random() * 10;
@@ -28,11 +30,40 @@ function Organism({ index, progress, totalCount }) {
       time += 16; // ~60fps
       
       // Smooth sine wave for x (left-right oscillation)
-      const xWave = 50 + Math.sin(time / cycleTime * Math.PI * 2 + phase) * 40;
+      let xWave = 50 + Math.sin(time / cycleTime * Math.PI * 2 + phase) * 40;
       
       // Offset y sine for perpendicular motion (creates orbital feel)
-      const yWave = 50 + Math.cos((time / cycleTime * Math.PI * 2 + phase) * 0.7) * 35;
+      let yWave = 50 + Math.cos((time / cycleTime * Math.PI * 2 + phase) * 0.7) * 35;
       
+      // Gentle collision/bounce with nearby organisms
+      if (positions.current) {
+        positions.current[index] = { x: xWave, y: yWave };
+        
+        for (let i = 0; i < totalCount; i++) {
+          if (i === index || !positions.current[i]) continue;
+          
+          const other = positions.current[i];
+          const dx = other.x - xWave;
+          const dy = other.y - yWave;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const minDist = 15; // Soft bounce distance
+          
+          if (dist < minDist && dist > 0) {
+            // Gentle repulsion
+            const force = (minDist - dist) * 0.15;
+            const angle = Math.atan2(dy, dx);
+            xWave -= Math.cos(angle) * force;
+            yWave -= Math.sin(angle) * force;
+          }
+        }
+      }
+      
+      // Clamp to viewport
+      xWave = Math.max(2, Math.min(98, xWave));
+      yWave = Math.max(2, Math.min(98, yWave));
+      
+      xRef.current = xWave;
+      yRef.current = yWave;
       x.set(xWave);
       y.set(yWave);
       
@@ -41,7 +72,7 @@ function Organism({ index, progress, totalCount }) {
 
     animationFrame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrame);
-  }, [x, y, phase, cycleTime]);
+  }, [x, y, phase, cycleTime, index, totalCount, positions]);
 
   return (
     <motion.div
@@ -131,6 +162,7 @@ function Organism({ index, progress, totalCount }) {
 
 export default function FloatingOrganisms({ debtProgress = 0 }) {
   const { mode } = useAmbientSoundContext();
+  const positionsRef = useRef({});
   
   // More organisms as debt decreases (gamification: progress = more life)
   const baseOrganismCount = 10 + Math.floor(debtProgress * 0.2); // max ~20+ at 100% progress
@@ -152,6 +184,7 @@ export default function FloatingOrganisms({ debtProgress = 0 }) {
           index={i}
           progress={debtProgress}
           totalCount={baseOrganismCount}
+          positions={positionsRef}
         />
       ))}
     </div>
