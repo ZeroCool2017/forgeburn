@@ -58,13 +58,13 @@ export default function CelestialMindMap({ loans, schedule }) {
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, W, H);
 
-    // Draw obsidian grid background
-    ctx.fillStyle = 'rgba(140, 100, 240, 0.03)';
-    const spacing = 20;
+    // Draw obsidian grid background — very subtle
+    ctx.fillStyle = 'rgba(140, 100, 240, 0.02)';
+    const spacing = 24;
     for (let x = spacing; x < W; x += spacing) {
       for (let y = spacing; y < H; y += spacing) {
         ctx.beginPath();
-        ctx.arc(x, y, 0.7, 0, Math.PI * 2);
+        ctx.arc(x, y, 0.5, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -74,6 +74,9 @@ export default function CelestialMindMap({ loans, schedule }) {
       const payoffProgress = 1 - (p.balance / p.original);
       const targetGrowth = 0.8 + payoffProgress * 0.6;
       const newGrowth = p.growth + (targetGrowth - p.growth) * 0.05;
+      
+      // Breathing pulse based on time
+      const breathPulse = 1 + Math.sin(time * 0.02 + p.id.charCodeAt(0)) * 0.15;
 
       // Soft attraction to center
       const toCenterX = CX - p.x;
@@ -113,21 +116,21 @@ export default function CelestialMindMap({ loans, schedule }) {
       p.x = Math.max(20, Math.min(W - 20, p.x));
       p.y = Math.max(20, Math.min(H - 20, p.y));
 
-      return { ...p, growth: newGrowth };
+      return { ...p, growth: newGrowth, breathPulse };
     });
 
     setParticles(updated);
 
-    // Draw connections (subtle web)
-    ctx.strokeStyle = 'rgba(140, 100, 240, 0.1)';
-    ctx.lineWidth = 0.8;
+    // Draw connections (very minimal, mostly grayscale)
+    ctx.strokeStyle = 'rgba(200, 200, 200, 0.08)';
+    ctx.lineWidth = 0.6;
     updated.forEach((p, i) => {
       updated.slice(i + 1).forEach(q => {
         const dx = q.x - p.x;
         const dy = q.y - p.y;
         const d = Math.sqrt(dx * dx + dy * dy);
         if (d < 180) {
-          ctx.globalAlpha = 0.05 * (1 - d / 180);
+          ctx.globalAlpha = 0.04 * (1 - d / 180);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(q.x, q.y);
@@ -137,39 +140,47 @@ export default function CelestialMindMap({ loans, schedule }) {
       });
     });
 
-    // Draw nodes
+    // Draw nodes — clean, minimal obsidian aesthetic
     updated.forEach(p => {
-      const cat = CATEGORY_CONFIG[p.category] || CATEGORY_CONFIG.other;
-      const r = 8 + p.growth * 6;
+      const r = (8 + p.growth * 6) * p.breathPulse;
 
-      // Glow halo
-      const gradient = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.5);
-      gradient.addColorStop(0, cat.color + '40');
-      gradient.addColorStop(1, cat.color + '00');
+      // Breathing glow halo — very subtle
+      const haloDim = 1 + Math.sin(time * 0.01 + p.id.charCodeAt(0)) * 0.3;
+      const gradient = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.2 * haloDim);
+      gradient.addColorStop(0, 'rgba(200, 200, 220, 0.12)');
+      gradient.addColorStop(1, 'rgba(200, 200, 220, 0)');
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r * 2.5, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, r * 2.2 * haloDim, 0, Math.PI * 2);
       ctx.fill();
 
-      // Core node
-      ctx.fillStyle = cat.color;
+      // Core node — minimal color, mostly white/gray
+      const brightness = 180 + Math.sin(time * 0.015 + p.id.charCodeAt(0)) * 30;
+      ctx.fillStyle = `rgba(${brightness}, ${brightness}, ${brightness}, 0.85)`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.fill();
 
-      // Inner light
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      // Thin border in primary color (accent)
+      ctx.strokeStyle = 'rgba(140, 100, 240, 0.4)';
+      ctx.lineWidth = 0.8;
       ctx.beginPath();
-      ctx.arc(p.x - r * 0.3, p.y - r * 0.3, r * 0.4, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Inner breathing light
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.15 + Math.sin(time * 0.012) * 0.1})`;
+      ctx.beginPath();
+      ctx.arc(p.x - r * 0.25, p.y - r * 0.25, r * 0.35, 0, Math.PI * 2);
       ctx.fill();
 
       // Label (if room)
-      if (r > 6) {
-        ctx.fillStyle = 'rgba(240, 240, 240, 0.6)';
-        ctx.font = '7px monospace';
+      if (r > 5) {
+        ctx.fillStyle = `rgba(100, 100, 100, ${0.5 + Math.sin(time * 0.01) * 0.15})`;
+        ctx.font = '6px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(p.name.slice(0, 4).toUpperCase(), p.x, p.y);
+        ctx.fillText(p.name.slice(0, 3).toUpperCase(), p.x, p.y);
       }
     });
   }, [particles]);
