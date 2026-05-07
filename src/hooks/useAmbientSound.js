@@ -20,7 +20,11 @@ export function useAmbientSound() {
       try {
         n.gain.gain.cancelScheduledValues(n.ac.currentTime);
         n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 0.5);
-        n.osc.stop(n.ac.currentTime + 0.6);
+        if (!n.isLoop) {
+          n.osc.stop(n.ac.currentTime + 0.6);
+        } else {
+          n.osc.stop(n.ac.currentTime + 0.6);
+        }
       } catch (e) {}
     });
     setTimeout(() => { nodesRef.current = []; }, 700);
@@ -30,7 +34,7 @@ export function useAmbientSound() {
   const startDrift = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0.0;
-    master.gain.linearRampToValueAtTime(0.26, ac.currentTime + 4);
+    master.gain.linearRampToValueAtTime(0.32, ac.currentTime + 4);
     master.connect(ac.destination);
 
     const delay = ac.createDelay(4.0);
@@ -113,7 +117,7 @@ export function useAmbientSound() {
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
-      nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+      nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
 
     // Ambient beat layer — kick/drum pulse
@@ -160,7 +164,7 @@ export function useAmbientSound() {
       drone.connect(droneGain);
       droneGain.connect(master);
       drone.start();
-      nodesRef.current.push({ osc: drone, gain: droneGain, ac });
+      nodesRef.current.push({ osc: drone, gain: droneGain, ac, isLoop: true });
     });
 
     // Shimmer layer (upper harmonics)
@@ -174,7 +178,7 @@ export function useAmbientSound() {
       shimmer.connect(shimmerGain);
       shimmerGain.connect(master);
       shimmer.start();
-      nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
+      nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
     });
   }, []);
 
@@ -182,7 +186,7 @@ export function useAmbientSound() {
   const startFocus = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.22, ac.currentTime + 2);
+    master.gain.linearRampToValueAtTime(0.28, ac.currentTime + 2);
     master.connect(ac.destination);
 
     // Warm tight lowpass
@@ -246,7 +250,7 @@ export function useAmbientSound() {
       sub.connect(subGain);
       subGain.connect(master);
       sub.start();
-      nodesRef.current.push({ osc: sub, gain: subGain, ac });
+      nodesRef.current.push({ osc: sub, gain: subGain, ac, isLoop: true });
     });
   }, []);
 
@@ -254,7 +258,7 @@ export function useAmbientSound() {
   const startHaunted = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.24, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.30, ac.currentTime + 5);
     master.connect(ac.destination);
 
     // Tight high-pass for harpsichord bite
@@ -330,7 +334,7 @@ export function useAmbientSound() {
     subDrone.connect(subGain);
     subGain.connect(master);
     subDrone.start();
-    nodesRef.current.push({ osc: subDrone, gain: subGain, ac });
+    nodesRef.current.push({ osc: subDrone, gain: subGain, ac, isLoop: true });
 
     // Slow LFO modulation on master — breathing unease
     const lfo = ac.createOscillator();
@@ -347,7 +351,7 @@ export function useAmbientSound() {
   const startArcade = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.16, ac.currentTime + 2);
+    master.gain.linearRampToValueAtTime(0.22, ac.currentTime + 2);
     master.connect(ac.destination);
 
     // Sharp, thin sound — no bass depth
@@ -394,7 +398,7 @@ export function useAmbientSound() {
   const startDeep = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.28, ac.currentTime + 7);
+    master.gain.linearRampToValueAtTime(0.35, ac.currentTime + 7);
     master.connect(ac.destination);
 
     const lpf = ac.createBiquadFilter();
@@ -422,7 +426,7 @@ export function useAmbientSound() {
       osc.connect(gain);
       gain.connect(lpf);
       osc.start();
-      nodesRef.current.push({ osc, gain, ac });
+      nodesRef.current.push({ osc, gain, ac, isLoop: true });
     });
 
     // Slow pulse
@@ -440,7 +444,7 @@ export function useAmbientSound() {
   const startGreenwood = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.27, ac.currentTime + 6);
+    master.gain.linearRampToValueAtTime(0.33, ac.currentTime + 6);
     master.connect(ac.destination);
 
     // Warm, soulful mid-forward sound
@@ -521,7 +525,7 @@ export function useAmbientSound() {
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
-      nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+      nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
   }, []);
 
@@ -529,7 +533,7 @@ export function useAmbientSound() {
   const startUplifting = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.24, ac.currentTime + 4);
+    master.gain.linearRampToValueAtTime(0.30, ac.currentTime + 4);
     master.connect(ac.destination);
 
     // Bright, open filter
@@ -585,14 +589,14 @@ export function useAmbientSound() {
     bass.connect(bassGain);
     bassGain.connect(master);
     bass.start();
-    nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+    nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
   }, []);
 
   // ─── WESTERN MODE — pedal steel, outlaw spirit ───────────────────────────
   const startWestern = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.28, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.34, ac.currentTime + 5);
     master.connect(ac.destination);
 
     // Warm resonance with mid-presence
@@ -662,7 +666,7 @@ export function useAmbientSound() {
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
-      nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+      nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
   }, []);
 
@@ -670,7 +674,7 @@ export function useAmbientSound() {
   const startTrap = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.26, ac.currentTime + 4);
+    master.gain.linearRampToValueAtTime(0.32, ac.currentTime + 4);
     master.connect(ac.destination);
 
     // Warm, compressed sound — trap aesthetic
@@ -779,7 +783,7 @@ export function useAmbientSound() {
       sub.connect(subGain);
       subGain.connect(master);
       sub.start();
-      nodesRef.current.push({ osc: sub, gain: subGain, ac });
+      nodesRef.current.push({ osc: sub, gain: subGain, ac, isLoop: true });
     });
   }, []);
 
@@ -787,7 +791,7 @@ export function useAmbientSound() {
   const startHouse90s = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.25, ac.currentTime + 4);
+    master.gain.linearRampToValueAtTime(0.31, ac.currentTime + 4);
     master.connect(ac.destination);
 
     // Smooth, lush lowpass
@@ -900,7 +904,7 @@ export function useAmbientSound() {
     shimmer.connect(shimmerGain);
     shimmerGain.connect(lpf);
     shimmer.start();
-    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
+    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
   }, []);
 
   const start = useCallback((mode = 'drift', debtProgress = 0) => {
