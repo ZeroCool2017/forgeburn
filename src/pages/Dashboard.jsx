@@ -32,6 +32,8 @@ import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 import LoanNarrative from '@/components/forge/LoanNarrative';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
 import MindMapInsights from '@/components/forge/MindMapInsights';
+import TypingInsightPanel from '@/components/forge/TypingInsightPanel';
+import FieldEvolutionPanel from '@/components/forge/FieldEvolutionPanel';
 import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import HabitNodes from '@/components/forge/HabitNodes';
 import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
@@ -342,32 +344,17 @@ export default function Dashboard() {
             <div className="obs-divider my-6" />
             {/* Spending Habits */}
             <p className="obs-label mb-3">— your patterns</p>
-            <div className="mb-6">
+            <div className="mb-6 space-y-4">
+              <TypingInsightPanel habits={habits} loans={loans} refreshInterval={8 * 60000} />
               <HabitNodes />
             </div>
 
             <div className="obs-divider my-6" />
             {/* Field Evolution */}
             <p className="obs-label mb-3">— field evolution</p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="glass rounded-2xl p-5 mb-6"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-foreground mb-1">This field learns as you grow</p>
-                  <p className="text-xs text-muted-foreground">Your decisions, patterns, and dreams shape the momentum field. It grows smarter and more attuned to helping you excel in all areas of life, not just debt payoff.</p>
-                </div>
-                <motion.button
-                  onClick={() => setShowFieldEvolutionNote(true)}
-                  whileTap={{ scale: 0.95 }}
-                  className="shrink-0 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/40 text-primary text-xs font-semibold hover:bg-primary/30 transition-all cursor-pointer"
-                >
-                  Got it
-                </motion.button>
-              </div>
-            </motion.div>
+            <div className="mb-6">
+              <FieldEvolutionPanel habits={habits} loans={loans} refreshInterval={20 * 60000} />
+            </div>
 
             <div className="obs-divider my-6" />
             {/* Money Horoscope */}
