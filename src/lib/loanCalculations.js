@@ -217,6 +217,50 @@ export const QUOTES = [
   { text: "Doubt me, watch me work.", author: "Coco Gauff" },
   { text: "Every loss teaches you something a win never could.", author: "Coco Gauff" },
 
+  // Caddo Nation
+  { text: "Nah nah kah-ha — All things come back to where they began.", author: "Caddo Nation (traditional)" },
+  { text: "The land holds the memory. So does the ledger — know both.", author: "Caddo Nation (adapted)" },
+  { text: "A bird does not ask permission to migrate home. Neither should you.", author: "Caddo Nation (traditional)" },
+  { text: "What you carry, carry lightly. What you owe, settle honestly.", author: "Caddo Nation (traditional)" },
+  { text: "Haa'ish — it is well. And it will be well again.", author: "Caddo Nation" },
+
+  // Charly Crockett
+  { text: "I've been down so long, down don't bother me.", author: "Charly Crockett" },
+  { text: "Ain't nobody gonna save you but yourself.", author: "Charly Crockett" },
+  { text: "All I got is this song and the road I walk.", author: "Charly Crockett" },
+  { text: "Trouble comes in waves. Learn to read the water.", author: "Charly Crockett" },
+  { text: "I learned more from hard times than any classroom ever taught me.", author: "Charly Crockett" },
+  { text: "The only thing between me and broke is the music. And I choose the music every time.", author: "Charly Crockett" },
+
+  // Marfa, TX
+  { text: "Marfa taught me: the most radical thing you can do is simplify.", author: "Marfa, TX" },
+  { text: "In the high desert, everything unnecessary burns away. Only the essential remains.", author: "Marfa, TX" },
+  { text: "Donald Judd moved to the middle of nowhere and built something eternal. So can you.", author: "Marfa, TX" },
+  { text: "The Chinati Foundation exists because someone said: this matters, even if no one comes.", author: "Marfa, TX" },
+  { text: "There's a kind of clarity that only comes from distance and silence. Seek it.", author: "Marfa, TX" },
+  { text: "The Trans-Pecos doesn't negotiate. It just is. Be like that with your money.", author: "Marfa, TX" },
+
+  // Mexico City
+  { text: "Mexico City runs on creativity, chaos, and will. So can your finances.", author: "Ciudad de México" },
+  { text: "Frida Kahlo painted through more pain than most people ever know. Keep going.", author: "Ciudad de México" },
+  { text: "In Coyoacán, time moves differently. That's the energy — slow, intentional, rooted.", author: "Ciudad de México" },
+  { text: "The mercado has everything you need. So does your budget — if you know how to look.", author: "Ciudad de México" },
+  { text: "Mezcal is made from a plant that survives the harshest conditions. That's you.", author: "Oaxaca / México" },
+
+  // Tokyo
+  { text: "Tokyo: 14 million people moving with precision and purpose. You can manage a budget.", author: "Tokyo" },
+  { text: "Wabi-sabi — the beauty of imperfect, impermanent, incomplete. Embrace where you are.", author: "Tokyo / Japanese aesthetics" },
+  { text: "In Japan, a repaired thing is more beautiful for having been broken. Kintsugi.", author: "Tokyo / Kintsugi" },
+  { text: "The Shinkansen doesn't rush — it simply never wastes a second. Be efficient, not frantic.", author: "Tokyo" },
+  { text: "Konbini culture: everything you actually need, nothing you don't. Design your budget like that.", author: "Tokyo" },
+  { text: "Omotenashi — hospitality so deep it asks nothing in return. Give that to your future self.", author: "Tokyo" },
+
+  // Hot Springs / Natural thermal pools
+  { text: "The springs have been here longer than the debt. Go find them when you need perspective.", author: "Hot Springs, AR" },
+  { text: "Water doesn't fight the rock. It finds the path and keeps moving.", author: "Natural Hot Springs" },
+  { text: "There is healing that happens when you stop planning and just soak.", author: "Natural Hot Springs" },
+  { text: "Geothermal — slow heat, deep source. Sustainable. Like good financial habits.", author: "Natural Hot Springs" },
+
   // Debt & freedom classics
   { text: "The chains of debt are too light to be felt until they are too heavy to be broken.", author: "Warren Buffett" },
   { text: "A man in debt is so far a slave.", author: "Ralph Waldo Emerson" },

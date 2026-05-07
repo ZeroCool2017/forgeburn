@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Settings, User, Trash2, LogOut, ShieldAlert, Headphones } from 'lucide-react';
+import { Settings, User, Trash2, LogOut, ShieldAlert, Headphones, Globe } from 'lucide-react';
 import AmbientSoundToggle from '@/components/forge/AmbientSoundToggle';
+import PersonalizationForm from '@/components/forge/PersonalizationForm';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -71,6 +72,15 @@ export default function SettingsPage() {
                 <p className="text-xs text-muted-foreground font-mono">{user?.email}</p>
               </div>
             </div>
+          </section>
+
+          {/* Your World */}
+          <section className="glass rounded-2xl p-5">
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Globe className="w-3.5 h-3.5" />
+              Your World
+            </h2>
+            <PersonalizationForm />
           </section>
 
           {/* Sound */}
