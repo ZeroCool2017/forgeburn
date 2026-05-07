@@ -226,16 +226,8 @@ export default function CelestialMindMap({ loans, schedule }) {
     >
       {/* Header */}
       <div className="mb-6">
-        <p className="text-xs font-mono text-muted-foreground/40 mb-2 tracking-widest">Momentum Architecture</p>
-        <div className="flex items-center gap-2">
-          <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-primary"
-          />
-          <h3 className="text-sm font-semibold text-foreground">MOMENTUM FIELD</h3>
-          <p className="text-[10px] font-mono text-muted-foreground/50 ml-auto">evolving · responsive</p>
-        </div>
+        <p className="text-xs font-mono text-muted-foreground/50 mb-1 tracking-widest">Evolving Mind Map</p>
+        <h3 className="text-sm font-semibold text-foreground mb-3">Momentum Architecture</h3>
       </div>
 
       {/* Canvas */}
