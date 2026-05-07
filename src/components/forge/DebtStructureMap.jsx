@@ -1,116 +1,188 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 
 /**
- * Dot-grid canvas that draws loans as nodes connected by lines.
- * Visualizes debt as a structural map rather than a flat list.
- * Inspired by systems thinking and Obsidian node graphs.
+ * Obsidian-inspired node graph visualization of debt structure.
+ * Loans are nodes connected by edges, animated with orbital movement.
  */
 
 export default function DebtStructureMap({ loans, totalOriginal }) {
-  const canvasRef = useRef(null);
+  const [animTime, setAnimTime] = useState(0);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || !loans?.length) return;
+    const interval = setInterval(() => {
+      setAnimTime(t => t + 0.016); // ~60fps
+    }, 16);
+    return () => clearInterval(interval);
+  }, []);
 
-    const ctx = canvas.getContext('2d');
-    const W = canvas.width;
-    const H = canvas.height;
+  if (!loans?.length) {
+    return (
+      <div className="glass rounded-2xl p-5 h-80 flex items-center justify-center text-muted-foreground">
+        <p className="text-xs">Add loans to see the structural map.</p>
+      </div>
+    );
+  }
 
-    // Clear
-    ctx.fillStyle = 'hsl(260, 18%, 7%)';
-    ctx.fillRect(0, 0, W, H);
+  const W = 540;
+  const H = 320;
+  const centerX = W / 2;
+  const centerY = H / 2;
+  const radius = Math.min(W, H) * 0.35;
 
-    // Draw dot grid
-    ctx.fillStyle = 'rgba(140, 100, 240, 0.04)';
-    const dotSpacing = 16;
-    for (let x = dotSpacing; x < W; x += dotSpacing) {
-      for (let y = dotSpacing; y < H; y += dotSpacing) {
-        ctx.beginPath();
-        ctx.arc(x, y, 0.6, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+  // Calculate node positions
+  const nodes = loans.map((loan, i) => {
+    const angle = (i / loans.length) * Math.PI * 2 + animTime * 0.3;
+    const x = centerX + Math.cos(angle) * radius;
+    const y = centerY + Math.sin(angle) * radius;
+    const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
+    const original = loan.original_balance || loan.current_balance;
+    const progress = 1 - (loan.current_balance / original);
+    return { loan, x, y, cat, progress, index: i };
+  });
 
-    // Arrange loans in a loose circle around the center
-    const centerX = W / 2;
-    const centerY = H / 2;
-    const radius = Math.min(W, H) * 0.35;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="glass rounded-2xl p-5 overflow-hidden"
+    >
+      <div className="flex items-center gap-2 mb-3">
+        <motion.div
+          animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="w-2 h-2 rounded-full bg-primary"
+        />
+        <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Structural View</p>
+      </div>
 
-    const nodes = loans.map((loan, i) => {
-      const angle = (i / loans.length) * Math.PI * 2;
-      const x = centerX + Math.cos(angle) * radius;
-      const y = centerY + Math.sin(angle) * radius;
-      const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
-      const original = loan.original_balance || loan.current_balance;
-      const progress = 1 - (loan.current_balance / original);
-      return { loan, x, y, cat, progress };
-    });
+      <svg
+        ref={svgRef}
+        width={W}
+        height={H}
+        viewBox={`0 0 ${W} ${H}`}
+        className="w-full rounded-lg border border-border/20"
+        style={{ background: 'hsl(260, 18%, 7%)' }}
+      >
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
 
-    // Draw connections (lines between nearby loans)
-    ctx.strokeStyle = 'rgba(140, 100, 240, 0.15)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 6]);
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[j].x - nodes[i].x;
-        const dy = nodes[j].y - nodes[i].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        // Only connect if within reasonable distance
-        if (dist < radius * 1.5) {
-          ctx.beginPath();
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-    ctx.setLineDash([]);
+        {/* Dot grid background */}
+        {Array.from({ length: (W / 16) * (H / 16) }).map((_, i) => {
+          const x = (i % (W / 16)) * 16 + 16;
+          const y = Math.floor(i / (W / 16)) * 16 + 16;
+          return (
+            <circle key={`dot-${i}`} cx={x} cy={y} r="0.6" fill="rgba(140, 100, 240, 0.04)" />
+          );
+        })}
 
-    // Draw nodes
-    nodes.forEach(({ x, y, cat, progress, loan }) => {
-      const r = 6 + progress * 4; // Size grows with progress
+        {/* Connections */}
+        {nodes.map((node, i) => {
+          const connected = [];
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[j].x - node.x;
+            const dy = nodes[j].y - node.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < radius * 1.5) {
+              connected.push(
+                <line
+                  key={`edge-${i}-${j}`}
+                  x1={node.x}
+                  y1={node.y}
+                  x2={nodes[j].x}
+                  y2={nodes[j].y}
+                  stroke="rgba(140, 100, 240, 0.15)"
+                  strokeWidth="1"
+                  strokeDasharray="4,6"
+                />
+              );
+            }
+          }
+          return connected;
+        })}
 
-      // Glow background
-      const grad = ctx.createRadialGradient(x, y, 0, x, y, r * 2);
-      grad.addColorStop(0, cat.color + '40');
-      grad.addColorStop(1, cat.color + '00');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(x, y, r * 2, 0, Math.PI * 2);
-      ctx.fill();
+        {/* Nodes */}
+        {nodes.map(({ x, y, cat, progress, loan }) => {
+          const r = 6 + progress * 4;
+          return (
+            <motion.g
+              key={`node-${loan.id}`}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: Math.random() * 0.3 }}
+            >
+              {/* Glow halo */}
+              <circle
+                cx={x}
+                cy={y}
+                r={r * 2}
+                fill={cat.color}
+                opacity="0.15"
+                filter="url(#glow)"
+              />
 
-      // Node circle
-      ctx.fillStyle = cat.color;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
+              {/* Main node */}
+              <circle
+                cx={x}
+                cy={y}
+                r={r}
+                fill={cat.color}
+                opacity="0.9"
+              />
 
-      // Progress ring
-      if (progress > 0) {
-        ctx.strokeStyle = cat.color + '88';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(x, y, r + 2, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
-        ctx.stroke();
-      }
+              {/* Progress ring */}
+              {progress > 0 && (
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={r + 2}
+                  fill="none"
+                  stroke={cat.color}
+                  strokeWidth="1.5"
+                  strokeDasharray={`${Math.PI * 2 * (r + 2) * progress} ${Math.PI * 2 * (r + 2)}`}
+                  opacity="0.6"
+                />
+              )}
 
-      // Label
-      ctx.font = '9px monospace';
-      ctx.fillStyle = 'hsl(240, 10%, 88%)';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(loan.name.slice(0, 3).toUpperCase(), x, y);
-    });
+              {/* Label */}
+              <text
+                x={x}
+                y={y}
+                textAnchor="middle"
+                dy="0.35em"
+                fontSize="9"
+                fontFamily="monospace"
+                fill="hsl(240, 10%, 88%)"
+              >
+                {loan.name.slice(0, 3).toUpperCase()}
+              </text>
+            </motion.g>
+          );
+        })}
 
-    // Title
-    ctx.font = 'bold 11px monospace';
-    ctx.fillStyle = 'hsl(270, 80%, 65%)';
-    ctx.textAlign = 'left';
-    ctx.fillText('Debt Structure Map', 12, 20);
-  }, [loans]);
+        {/* Center dot */}
+        <circle cx={centerX} cy={centerY} r="2" fill="hsl(270, 80%, 65%)" opacity="0.4" />
+      </svg>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-[10px] text-muted-foreground mt-3 italic leading-relaxed"
+      >
+        Nodes orbit based on structure. Size and ring reflect progress. Connections show relationships.
+      </motion.p>
+    </motion.div>
+  );
 
   if (!loans?.length) {
     return (

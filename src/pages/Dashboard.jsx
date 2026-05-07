@@ -10,6 +10,7 @@ import ChainProgress from '@/components/forge/ChainProgress';
 import StatsOrb from '@/components/forge/StatsOrb';
 import BurndownChart from '@/components/forge/BurndownChart';
 import InterestBreakdown from '@/components/forge/InterestBreakdown';
+import FreedomTimeline from '@/components/forge/FreedomTimeline';
 import PaymentTimeline from '@/components/forge/PaymentTimeline';
 import StrategyCompare from '@/components/forge/StrategyCompare';
 import FreedomScore from '@/components/forge/FreedomScore';
@@ -316,6 +317,10 @@ export default function Dashboard() {
             <div className="obs-divider my-6" />
             {/* Main Charts */}
             <p className="obs-label mb-3">— analysis</p>
+            <div className="mb-6">
+              <FreedomTimeline schedule={schedule.schedule} months={schedule.months} />
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
               <BurndownChart schedule={schedule} minimumSchedule={minimumSchedule} />
               <StrategyCompare

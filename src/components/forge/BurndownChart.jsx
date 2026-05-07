@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatCurrency } from '@/lib/loanCalculations';
 
@@ -28,9 +29,18 @@ export default function BurndownChart({ schedule, minimumSchedule }) {
   })).filter((_, i) => i % Math.max(1, Math.floor(schedule.length / 60)) === 0 || i === schedule.length - 1);
 
   return (
-    <div className="glass rounded-2xl p-5">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="glass rounded-2xl p-5"
+    >
       <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
+        <motion.span
+          animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="w-2 h-2 rounded-full bg-primary"
+        />
         Debt Burndown
       </h3>
       <ResponsiveContainer width="100%" height={240}>
@@ -78,11 +88,13 @@ export default function BurndownChart({ schedule, minimumSchedule }) {
             name="Your Plan"
             stroke="hsl(270, 80%, 65%)"
             fill="url(#burnGrad)"
-            strokeWidth={2}
+            strokeWidth={2.5}
             dot={false}
+            isAnimationActive={true}
+            animationDuration={1000}
           />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
+          </AreaChart>
+          </ResponsiveContainer>
+          </motion.div>
+          );
+          }
