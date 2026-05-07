@@ -113,6 +113,34 @@ export function useAmbientSound() {
     nodesRef.current.push({ osc: bass, gain: bassGain, ac });
     timersRef.current.push(bassPulse);
 
+    // Ambient beat layer — kick/drum pulse
+    const beatGain = ac.createGain();
+    beatGain.gain.value = 0;
+    beatGain.connect(master);
+
+    const spawnBeat = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime;
+
+      // Kick drum: click + sub punch
+      const kickOsc = ac.createOscillator();
+      const kickGain = ac.createGain();
+      kickOsc.type = 'sine';
+      kickOsc.frequency.setValueAtTime(150, t);
+      kickOsc.frequency.exponentialRampToValueAtTime(40, t + 0.1);
+      kickGain.gain.setValueAtTime(0.12, t);
+      kickGain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+      kickOsc.connect(kickGain);
+      kickGain.connect(beatGain);
+      kickOsc.start(t);
+      kickOsc.stop(t + 0.2);
+
+      const nextBeat = 600; // Kick every 600ms (~100 BPM)
+      timersRef.current.push(setTimeout(spawnBeat, nextBeat));
+    };
+
+    timersRef.current.push(setTimeout(spawnBeat, 0));
+
     [0, 800, 1600, 2500, 3600, 4800].forEach(offset => {
       const tid = setTimeout(spawnTone, offset);
       timersRef.current.push(tid);

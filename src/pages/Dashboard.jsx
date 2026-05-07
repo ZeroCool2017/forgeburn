@@ -218,8 +218,11 @@ export default function Dashboard() {
                   Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
-              <p className="text-xs text-muted-foreground font-mono italic">
+              <p className="text-xs text-muted-foreground font-mono italic mb-2">
                 the glow before the break
+              </p>
+              <p className="text-sm font-mono text-primary">
+                ∑ chains = 0
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
