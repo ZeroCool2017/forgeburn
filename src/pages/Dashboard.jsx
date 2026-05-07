@@ -333,45 +333,17 @@ export default function Dashboard() {
               />
             </div>
 
-            <div className="obs-divider my-6" />
-            {/* Momentum Field */}
-            <p className="obs-label mb-3">— momentum field</p>
-            <div className="mb-6">
-              <CelestialMindMap loans={loans} schedule={schedule} />
-              {showInsight && <MindMapInsights loans={loans} habits={habits} onClose={() => setShowInsight(false)} />}
-            </div>
-
-            <div className="obs-divider my-6" />
-            {/* Spending Habits */}
-            <p className="obs-label mb-3">— your patterns</p>
-            <div className="mb-6 space-y-4">
-              <TypingInsightPanel habits={habits} loans={loans} refreshInterval={8 * 60000} />
-              <HabitNodes />
-            </div>
-
-            <div className="obs-divider my-6" />
-            {/* Money Horoscope */}
-            <p className="obs-label mb-3">— wealth astrology</p>
-            <div className="mb-6">
-              <MoneyHoroscope birthData={birthData} />
-            </div>
-
-            <div className="obs-divider my-6" />
-            {/* Habit Astrology — educational linking */}
-            <p className="obs-label mb-3">— habit patterns</p>
-            <div className="mb-6">
-              <HabitAstrologyPanel birthData={birthData} />
-            </div>
-
-            <div className="obs-divider my-6" />
-            {/* Payoff Timeline */}
-            <p className="obs-label mb-3">— your timeline</p>
-            <div className="mb-6">
+            {/* PAYOFF TIMELINE — museum moment */}
+            <div className="obs-divider my-8" />
+            <p className="obs-label mb-4">— your freedom timeline</p>
+            <div className="mb-12">
               <FreedomTimeline schedule={schedule.schedule} months={schedule.months} />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              <BurndownChart schedule={schedule} minimumSchedule={minimumSchedule} />
+            {/* STRATEGY ARENA */}
+            <div className="obs-divider my-8" />
+            <p className="obs-label mb-4">— strategy arena</p>
+            <div className="mb-12">
               <StrategyCompare
                 loans={loans}
                 extraBudget={extraBudget}
@@ -380,17 +352,23 @@ export default function Dashboard() {
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              <PaymentTimeline schedule={schedule} />
-              <InterestBreakdown loans={loans} schedule={schedule} />
-            </div>
-
-            <div className="mb-6">
+            {/* INTERACTIVE INTEREST MAP */}
+            <div className="obs-divider my-8" />
+            <p className="obs-label mb-4">— interactive interest map</p>
+            <div className="mb-12">
               <InteractiveHeatmap 
                 schedule={schedule.schedule} 
-                title="Interactive Interest Map"
+                title="Click months to explore"
                 habitImpact={totalHabitSpending}
               />
+            </div>
+
+            {/* MOMENTUM FIELD */}
+            <div className="obs-divider my-8" />
+            <p className="obs-label mb-4">— living mind map</p>
+            <div className="mb-12">
+              <CelestialMindMap loans={loans} schedule={schedule} />
+              {showInsight && <MindMapInsights loans={loans} habits={habits} onClose={() => setShowInsight(false)} />}
             </div>
 
             <div className="obs-divider my-6" />
