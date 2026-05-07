@@ -351,7 +351,7 @@ export default function Dashboard() {
             {/* Money Horoscope */}
             <p className="obs-label mb-3">— astrology & prophecy</p>
             <div className="mb-6">
-              <MoneyHoroscope />
+              <MoneyHoroscope birthData={null} />
             </div>
 
             <div className="obs-divider my-6" />
