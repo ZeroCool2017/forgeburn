@@ -5,14 +5,14 @@ import { Sparkles } from 'lucide-react';
 
 export default function QuoteBar() {
   const [quotes] = useState(() => getAllActiveQuotes());
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(Math.floor(Math.random() * quotes.length));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prev => (prev + 1) % quotes.length);
-    }, 12000);
+      setIndex(prev => (prev + 1) % Math.max(1, quotes.length));
+    }, 14000);
     return () => clearInterval(interval);
-  }, [quotes]);
+  }, [quotes.length]);
 
   const quote = quotes[index];
 

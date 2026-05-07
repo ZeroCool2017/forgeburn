@@ -231,6 +231,12 @@ export const QUOTES = [
   { text: "The oil derricks are gone. The architecture remains. Build things that last.", author: "Tulsa, Oklahoma" },
   { text: "Sunburst patterns in terrazzo floors — every detail in an Art Deco building was intentional. Be intentional.", author: "Tulsa Art Deco" },
   { text: "Oklahoma has always been about starting over on hard ground. That's not a weakness. That's a skill.", author: "Tulsa, Oklahoma" },
+  { text: "The prairies teach patience. The red earth teaches roots. Tulsa teaches both.", author: "Tulsa, Oklahoma" },
+  { text: "We didn't ask to be in the middle. We built monuments anyway.", author: "Tulsa (cultural)" },
+  { text: "Cain's Ballroom was built to last. So was the people who danced there. So can your financial future.", author: "Cain's Ballroom, Tulsa" },
+  { text: "The Brady Theater still stands. The music is still there if you listen.", author: "Tulsa (cultural)" },
+  { text: "Woody Guthrie knew: this land is your land, but first you have to own yourself.", author: "Woody Guthrie, Tulsa (adapted)" },
+  { text: "The Gilcrease Museum holds the story. The story is: we persisted.", author: "Tulsa (cultural)" },
 
   // Caddo Nation — words, phrases, and adapted wisdom
   { text: "Nah nah kah-ha — All things come back to where they began.", author: "Caddo Nation (traditional)" },
@@ -248,6 +254,11 @@ export const QUOTES = [
   { text: "The cedars at Binger have stood through drought and flood. So will you.", author: "Caddo Nation (Anadarko, Oklahoma)" },
   { text: "Wíčhoni — to live fully is to have no debt to your own spirit.", author: "Caddo Nation (adapted)" },
   { text: "When you clear your debts, you clear the path for those who walk behind you.", author: "Caddo Nation (elder wisdom)" },
+  { text: "The Caddos knew: a man with his own land is a man with his own story.", author: "Caddo Nation (historical)" },
+  { text: "Haa nah — the people. Us. Together. Building.", author: "Caddo Nation (traditional)" },
+  { text: "The circle is complete when the debt is settled and the spirit is free.", author: "Caddo Nation (adapted)" },
+  { text: "Listen to the water. It knows about patience and persistence.", author: "Caddo Nation (water wisdom)" },
+  { text: "We are still here. We will still be here. Make decisions that prove it.", author: "Caddo Nation (resilience)" },
 
   // Greenwood District / Black Wall Street — Tulsa, Oklahoma
   { text: "Black Wall Street was not a miracle. It was what happens when a community decides to own its economy.", author: "Greenwood District, Tulsa" },
@@ -440,6 +451,16 @@ export const QUOTES = [
   { text: "When we show our respect for other living things, they respond with respect for us.", author: "Arapaho Nation" },
   { text: "A nation is not conquered until the hearts of its women are on the ground.", author: "Cheyenne Nation" },
   { text: "If you talk to the animals they will talk with you and you will know each other.", author: "Chief Dan George, Tsleil-Waututh Nation" },
+  { text: "The land does not belong to us. We belong to the land. Remember that with your money.", author: "Native American Principle (adapted)" },
+  { text: "Seven generations: think seven generations ahead in your debt payoff too.", author: "Haudenosaunee Principle" },
+  { text: "The hoop of the people is broken. Rebuild it by rebuilding yourself.", author: "Native American Wisdom" },
+  { text: "Take only what you need. Leave the rest for the next person. Same with debt — clear it.", author: "Native American Principle (adapted)" },
+  { text: "The spirits are watching. So are your future selves. Act accordingly.", author: "Native American Wisdom" },
+  { text: "We are all related. The debt you carry affects everyone. Clear it for all.", author: "Mitakuye Oyasin (We Are All Related)" },
+  { text: "The buffalo knew: move together or fall separately. Same with financial responsibility.", author: "Plains Nation (adapted)" },
+  { text: "Listen to the elders. They know the pattern. The pattern is: pay back what you owe.", author: "Native American Elder Wisdom" },
+  { text: "Sovereignty is not given. It is taken, day by day, payment by payment.", author: "Native American Principle (adapted)" },
+  { text: "The fire was nearly extinguished. But we kept it alive. Keep your financial freedom alive the same way.", author: "Native American Resilience" },
 
   // Indian business leaders
   { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
@@ -522,6 +543,11 @@ export const QUOTES = [
   { text: "The whole idea of a corner of anything is that it is a limit — define it, then exceed it.", author: "Donald Judd" },
   { text: "Space is made by the artist or architect. It is not found or packaged.", author: "Donald Judd" },
   { text: "Everything exists in a specific space. Know where you are.", author: "Donald Judd" },
+  { text: "A simple form can be thought of in the same way as a simple substance like salt or sugar.", author: "Donald Judd" },
+  { text: "Actual space is intrinsically more powerful and specific than paint on a flat surface.", author: "Donald Judd" },
+  { text: "The main thing is to make something specific. Any specific thing.", author: "Donald Judd" },
+  { text: "If the thing is made, it is there. The specificity is unavoidable.", author: "Donald Judd" },
+  { text: "Material, form, color, surface — all literal. All real. Not metaphor.", author: "Donald Judd" },
 
   // Moneyball — film & book (expanded)
   { text: "Adapt or die.", author: "Billy Beane, Moneyball" },
@@ -1014,6 +1040,13 @@ export const QUOTES = [
   { text: "Prophylaxis: prevent your opponent's threat before they execute it. Prevent debt before it grows.", author: "Aron Nimzowitsch, Chess Strategy (adapted)" },
   { text: "Magnus Carlsen plays boring chess because he understands the fundamentals. Master yours.", author: "Magnus Carlsen (adapted)" },
   { text: "Capablanca said: a master should play like a book. Your debt payoff should be systematic.", author: "José Raúl Capablanca (adapted)" },
+  { text: "The position dictates the move. Your balance sheet dictates your strategy.", author: "Chess Principle (adapted)" },
+  { text: "Endgames are about precision. Convert your advantage into zero balance.", author: "Chess Master (adapted)" },
+  { text: "Control the center of the board. Control the center of your finances.", author: "Chess Fundamentals (adapted)" },
+  { text: "Exchange pieces when you're better. Exchange debt when you're able.", author: "Chess Principle (adapted)" },
+  { text: "The quiet move is often the strongest. The boring payment plan works.", author: "Chess Wisdom (adapted)" },
+  { text: "A passed pawn must be pushed. A payment plan must be followed.", author: "Chess Principle (adapted)" },
+  { text: "Calculate precisely. Don't rely on intuition when money is on the line.", author: "Chess Master (adapted)" },
 
   // Daria Characters
   { text: "Fashion club rule #1: Never let them see you sweat. Financial rule #1: Same.", author: "Quinn Morgendorffer, Daria" },

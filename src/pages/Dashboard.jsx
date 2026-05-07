@@ -213,13 +213,13 @@ export default function Dashboard() {
             <div>
               <p className="obs-label mb-2">carry-the-zero / forge</p>
               <div className="flex items-center gap-3 mb-1">
-                <Zap className="w-5 h-5 text-primary" />
+                <span className="text-3xl">⛓️</span>
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
                   Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
-              <p className="text-xs text-muted-foreground font-mono">
-                The work is the work.
+              <p className="text-xs text-muted-foreground font-mono italic">
+                slowly, then all at once.
               </p>
             </div>
             <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />

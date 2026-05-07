@@ -296,12 +296,12 @@ export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved
     const t = setInterval(() => {
       setPanelIndex(p => {
         const next = (p + 1) % PANELS.length;
-        if (PANELS[next] === 'quote') setQuoteIdx(q => (q + 1) % activeQuotes.length);
+        if (PANELS[next] === 'quote') setQuoteIdx(q => (q + 1) % Math.max(1, activeQuotes.length));
         return next;
       });
-    }, 9000);
+    }, 10000);
     return () => clearInterval(t);
-  }, [activeQuotes]);
+  }, [activeQuotes.length]);
 
   const panel = PANELS[panelIndex];
 
