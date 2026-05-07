@@ -60,7 +60,7 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
 
       <div className="space-y-3">
         {/* 12-month grid */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
           {months.map((month, idx) => {
             const value = month.totalInterest || 0;
             const normalized = maxValue > 0 ? (value - minValue) / (maxValue - minValue) : 0;
@@ -90,10 +90,10 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
               >
                 {/* Month label + value */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-                  <p className="text-[11px] font-mono font-bold text-white/90">
+                  <p className="text-[9px] font-mono font-bold text-white/90">
                     M{month.month}
                   </p>
-                  <p className="text-[9px] text-white/70 font-semibold">
+                  <p className="text-[7px] text-white/70 font-semibold">
                     ${(value).toFixed(0)}
                   </p>
                 </div>
