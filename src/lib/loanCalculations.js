@@ -534,9 +534,7 @@ export const QUOTES = [
   // Little Women
   { text: "I want to do something splendid — something heroic or wonderful that won't be forgotten after I'm dead.", author: "Jo March, Little Women (Winona Ryder)" },
   { text: "I find it poor logic to say that because women are good, women should vote. Men do not vote because they are good; they vote because they are men, and women should vote, not because we are angels, but because we are human.", author: "Jo March, Little Women" },
-  // Heathers
-  { text: "Dear Diary: I believe I'm a good person. I think there's good in everyone. But here we are, first week of senior year — and I'm crossing paths with people who are making it hard to remember that.", author: "Veronica, Heathers" },
-  { text: "I want to be a real person, not a loan you keep rolling over.", author: "Veronica, Heathers (adapted)" },
+
 
   // Donald Judd
   { text: "Design has to work. Art does not.", author: "Donald Judd" },
