@@ -9,12 +9,15 @@ import HeatmapNoteModal from './HeatmapNoteModal';
  * Gradient: purple (low) → red (high interest).
  */
 
-export default function InteractiveHeatmap({ schedule, title = 'Interactive Interest Map' }) {
+export default function InteractiveHeatmap({ schedule, title = 'Interactive Interest Map', habitImpact = 0 }) {
   const [hoveredCell, setHoveredCell] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedInterest, setSelectedInterest] = useState(null);
 
   if (!schedule?.length) return null;
+
+  // Show subtle feedback about habit impact
+  const showHabitNote = habitImpact > 0;
 
   const months = schedule.slice(0, 12);
   const maxValue = Math.max(...months.map(m => m.totalInterest || 0));
@@ -56,6 +59,15 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-foreground mb-1">{title}</h3>
         <p className="text-xs text-muted-foreground/70">Click any month to explore and record your financial observations.</p>
+        {showHabitNote && (
+          <motion.p
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-[10px] text-primary/80 mt-2 border-l border-primary/40 pl-2"
+          >
+            Your spending habits are reducing available budget — manage them to free up extra payoff power.
+          </motion.p>
+        )}
       </div>
 
       <div className="space-y-3">

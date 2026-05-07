@@ -75,6 +75,15 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Loan.list(),
   });
 
+  // Load spending habits to calculate their impact on available budget
+  const { data: habits = [] } = useQuery({
+    queryKey: ['spending_habits'],
+    queryFn: () => base44.entities.SpendingHabit.list(),
+  });
+
+  // Calculate total monthly spending from habits
+  const totalHabitSpending = habits.reduce((sum, h) => sum + (h.monthly_average || 0), 0);
+
   const createLoan = useMutation({
     mutationFn: (data) => base44.entities.Loan.create(data),
     onMutate: async (newLoan) => {
@@ -149,9 +158,12 @@ export default function Dashboard() {
     setTimeout(() => recordPayment.mutate({ loan, amount }), 100);
   }, [recordPayment]);
 
+  // Adjust extra budget based on habit spending reduction (tangible connection)
+  const adjustedExtraBudget = Math.max(0, extraBudget - (totalHabitSpending * 0.1)); // Habits reduce available extra by 10% of their value
+  
   const schedule = useMemo(
-    () => calculatePayoffSchedule(loans, extraBudget, strategy),
-    [loans, extraBudget, strategy]
+    () => calculatePayoffSchedule(loans, adjustedExtraBudget, strategy),
+    [loans, adjustedExtraBudget, strategy]
   );
 
   const minimumSchedule = useMemo(
@@ -400,7 +412,11 @@ export default function Dashboard() {
             </div>
 
             <div className="mb-6">
-              <InteractiveHeatmap schedule={schedule.schedule} title="Interactive Interest Map" />
+              <InteractiveHeatmap 
+                schedule={schedule.schedule} 
+                title="Interactive Interest Map"
+                habitImpact={totalHabitSpending}
+              />
             </div>
 
             <div className="obs-divider my-6" />

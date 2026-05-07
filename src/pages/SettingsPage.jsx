@@ -9,6 +9,7 @@ import {
 import QuoteManager from '@/components/forge/QuoteManager';
 import SoundModePanel from '@/components/forge/SoundModePanel';
 import PersonalizationForm from '@/components/forge/PersonalizationForm';
+import SpendingHabitManager from '@/components/forge/SpendingHabitManager';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -103,8 +104,16 @@ export default function SettingsPage() {
             </div>
           </section>
 
+          {/* Spending Habits */}
+          <Section icon={Headphones} label="Spending Habits" defaultOpen={true}>
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed border-l-2 border-primary/30 pl-3">
+              Track your daily spending patterns. Reducing these directly accelerates your debt payoff by freeing up extra budget.
+            </p>
+            <SpendingHabitManager />
+          </Section>
+
           {/* Sound & Music */}
-          <Section icon={Headphones} label="Sound & Music" defaultOpen={true}>
+          <Section icon={Headphones} label="Sound & Music" defaultOpen={false}>
             <div className="mb-3 border-l-2 border-primary/30 pl-3">
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Three generative soundscapes — no loops, no files. Synthesized live in your browser using the Web Audio API.
