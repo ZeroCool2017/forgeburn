@@ -194,10 +194,10 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
               key={i}
               animate={
                 isNewlyBroken
-                  ? { scale: [1, 1.5, 0], opacity: [1, 0.7, 0], rotate: [0, 45, 90] }
-                  : { opacity: isBroken ? 0.2 : 1, scale: isBroken ? 0.7 : 1 }
+                  ? { scaleY: [1, 0.6, 1.1, 0.4], opacity: [1, 1, 0.6, 0] }
+                  : { opacity: isBroken ? 0.2 : 1, scaleY: isBroken ? 0.6 : 1 }
               }
-              transition={isNewlyBroken ? { duration: 0.35, times: [0, 0.4, 1], ease: 'easeIn' } : { duration: 0.12 }}
+              transition={isNewlyBroken ? { duration: 0.4, times: [0, 0.2, 0.5, 1], ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.15 }}
               className="flex-1 h-1.5 rounded-full relative overflow-hidden"
               style={{
                 background: isBroken
@@ -206,17 +206,15 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
               }}
             >
               {isBroken && (
-                <motion.div
-                  className="absolute inset-0"
+                <div className="absolute inset-0 opacity-40"
                   style={{
                     background: `repeating-linear-gradient(
                       45deg,
-                      ${cat.color}20,
-                      ${cat.color}20 1px,
+                      ${cat.color}30,
+                      ${cat.color}30 1px,
                       transparent 1px,
-                      transparent 4px
+                      transparent 3px
                     )`,
-                    opacity: 0.4,
                   }}
                 />
               )}
