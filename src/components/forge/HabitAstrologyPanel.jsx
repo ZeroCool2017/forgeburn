@@ -18,7 +18,26 @@ export default function HabitAstrologyPanel({ birthData }) {
     queryFn: () => base44.entities.SpendingHabit.list(),
   });
 
-  if (!birthData || !habits.length) return null;
+  if (!birthData) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+        className="glass rounded-2xl p-5"
+      >
+        <div className="flex items-center gap-3 mb-3">
+          <Sparkles className="w-4 h-4 text-accent" />
+          <h3 className="text-sm font-semibold text-foreground">HABIT ASTROLOGY</h3>
+        </div>
+        <p className="text-xs text-muted-foreground/80 leading-relaxed">
+          Your spending patterns aren't random—they're encoded in your chart. Once you add your birth data, we'll show you how your astrological profile explains your financial choices.
+        </p>
+      </motion.div>
+    );
+  }
+
+  if (!habits.length) return null;
 
   const analysis = analyzeHabitVsChart(habits, birthData);
   if (!analysis) return null;

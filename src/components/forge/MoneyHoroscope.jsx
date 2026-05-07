@@ -86,7 +86,20 @@ Be poetic, wise, and genuinely helpful. Sound like you're reading their financia
       </div>
 
       <AnimatePresence mode="wait">
-        {!horoscope ? (
+        {!horoscope && !birthData ? (
+          <motion.div
+            key="default"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-3 py-4"
+          >
+            <div className="rounded-lg p-3 bg-primary/5 border border-primary/20">
+              <p className="text-xs text-foreground/80 italic">
+                Your birth chart holds the key to understanding your financial psychology. Add your birth date and time in Settings to unlock personalized wealth insights aligned with your astrological profile.
+              </p>
+            </div>
+          </motion.div>
+        ) : !horoscope ? (
           <motion.div
             key="loading"
             initial={{ opacity: 0 }}
