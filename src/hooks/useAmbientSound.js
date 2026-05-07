@@ -51,27 +51,27 @@ export function useAmbientSound() {
     warmFilter.connect(master);
     warmFilter.connect(delay);
 
+    // Extended harmonic palette — more richness
     const harmonics = [
-      65.4, 130.8, 196.0, 261.6, 293.7,
-      329.6, 392.0, 440.0, 523.3, 587.3,
-      659.3, 783.9, 880.0, 1046.5,
+      32.7, 49.0, 65.4, 82.4, 110.0, 130.8, 164.8, 196.0, 246.9, 261.6, 293.7,
+      329.6, 392.0, 440.0, 493.9, 523.3, 587.3, 659.3, 783.9, 880.0, 987.8, 1046.5, 1174.7,
     ];
 
     const spawnTone = () => {
       if (!playingRef.current) return;
       const t = ac.currentTime + 0.05;
       const freq = harmonics[Math.floor(Math.random() * harmonics.length)];
-      const detune = (Math.random() - 0.5) * 8;
-      const duration = 4 + Math.random() * 9;
-      const peakVol = 0.04 + Math.random() * 0.06;
-      const type = Math.random() > 0.7 ? 'triangle' : 'sine';
+      const detune = (Math.random() - 0.5) * 12;
+      const duration = 3 + Math.random() * 10;
+      const peakVol = 0.03 + Math.random() * 0.07;
+      const type = Math.random() > 0.6 ? 'triangle' : 'sine';
 
       const osc = ac.createOscillator();
       const gain = ac.createGain();
       const vib = ac.createOscillator();
       const vibGain = ac.createGain();
-      vib.frequency.value = 0.05 + Math.random() * 0.2;
-      vibGain.gain.value = freq * 0.003;
+      vib.frequency.value = 0.04 + Math.random() * 0.25;
+      vibGain.gain.value = freq * 0.004;
       vib.connect(vibGain);
       vibGain.connect(osc.frequency);
 
@@ -79,8 +79,9 @@ export function useAmbientSound() {
       osc.frequency.value = freq;
       osc.detune.value = detune;
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.35);
-      gain.gain.setValueAtTime(peakVol, t + duration * 0.55);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.4, t + duration * 0.15);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
+      gain.gain.setValueAtTime(peakVol, t + duration * 0.6);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
       osc.connect(gain);
       gain.connect(warmFilter);
@@ -88,39 +89,43 @@ export function useAmbientSound() {
       osc.stop(t + duration + 0.1); vib.stop(t + duration + 0.1);
       nodesRef.current.push({ osc, gain, ac });
 
-      const nextIn = 600 + Math.random() * 2800;
+      const nextIn = 500 + Math.random() * 3200;
       const tid = setTimeout(spawnTone, nextIn);
       timersRef.current.push(tid);
     };
 
-    [0, 900, 1800, 2700, 3800].forEach(offset => {
+    [0, 800, 1600, 2500, 3600, 4800].forEach(offset => {
       const tid = setTimeout(spawnTone, offset);
       timersRef.current.push(tid);
     });
 
-    // Ocean-floor drone
-    const drone = ac.createOscillator();
-    const droneGain = ac.createGain();
-    drone.type = 'sine';
-    drone.frequency.value = 32.7;
-    droneGain.gain.setValueAtTime(0, ac.currentTime);
-    droneGain.gain.linearRampToValueAtTime(0.07, ac.currentTime + 6);
-    drone.connect(droneGain);
-    droneGain.connect(master);
-    drone.start();
-    nodesRef.current.push({ osc: drone, gain: droneGain, ac });
+    // Multi-layer drone foundation
+    [32.7, 49.0, 65.4].forEach((droneFreq, i) => {
+      const drone = ac.createOscillator();
+      const droneGain = ac.createGain();
+      drone.type = 'sine';
+      drone.frequency.value = droneFreq;
+      droneGain.gain.setValueAtTime(0, ac.currentTime);
+      droneGain.gain.linearRampToValueAtTime(0.04 + i * 0.015, ac.currentTime + 5 + i);
+      drone.connect(droneGain);
+      droneGain.connect(master);
+      drone.start();
+      nodesRef.current.push({ osc: drone, gain: droneGain, ac });
+    });
 
-    // Surface shimmer
-    const shimmer = ac.createOscillator();
-    const shimmerGain = ac.createGain();
-    shimmer.type = 'sine';
-    shimmer.frequency.value = 2093;
-    shimmerGain.gain.setValueAtTime(0, ac.currentTime);
-    shimmerGain.gain.linearRampToValueAtTime(0.012, ac.currentTime + 5);
-    shimmer.connect(shimmerGain);
-    shimmerGain.connect(master);
-    shimmer.start();
-    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
+    // Shimmer layer (upper harmonics)
+    [2093, 2637, 3136].forEach((shimmerFreq, i) => {
+      const shimmer = ac.createOscillator();
+      const shimmerGain = ac.createGain();
+      shimmer.type = 'sine';
+      shimmer.frequency.value = shimmerFreq;
+      shimmerGain.gain.setValueAtTime(0, ac.currentTime);
+      shimmerGain.gain.linearRampToValueAtTime(0.008 - i * 0.002, ac.currentTime + 4 + i * 0.5);
+      shimmer.connect(shimmerGain);
+      shimmerGain.connect(master);
+      shimmer.start();
+      nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
+    });
   }, []);
 
   // ─── ENDER MODE — sparse, cold, tactical ─────────────────────────────────

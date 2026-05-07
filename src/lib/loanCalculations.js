@@ -150,6 +150,11 @@ export const QUOTES = [
   { text: "Rainbow — after all, it's been a long time coming.", author: "Kacey Musgraves" },
   { text: "Golden hour. That's what freedom feels like when you finally get there.", author: "Kacey Musgraves" },
   { text: "Same trailer, different park. Your zip code doesn't define your worth.", author: "Kacey Musgraves" },
+  { text: "There's a light that shines in the darkness. Find it.", author: "Kacey Musgraves" },
+  { text: "Space and time mean nothing when you're together. But they mean everything when you're paying debt.", author: "Kacey Musgraves (adapted)" },
+  { text: "Oh, what a sight for sore eyes — a zero balance.", author: "Kacey Musgraves (adapted)" },
+  { text: "High time — that's what patience and compound interest give you.", author: "Kacey Musgraves (adapted)" },
+  { text: "These dreams are real. Make them debt-free.", author: "Kacey Musgraves (adapted)" },
 
   // Tracy Chapman
   { text: "All that you have is your soul.", author: "Tracy Chapman" },

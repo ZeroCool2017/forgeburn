@@ -161,10 +161,11 @@ function StoryPanel({ totalDebt, interestSaved, months }) {
     { label: 'Total to reclaim', value: formatCurrency(totalDebt), sub: 'the full weight' },
     { label: 'Interest you avoid', value: interestSaved > 0 ? formatCurrency(interestSaved) : '—', sub: 'by acting now' },
     { label: 'Months to freedom', value: `${months}`, sub: 'on current plan' },
+    { label: 'System leverage', value: interestSaved > 0 ? `${Math.round((interestSaved / Math.max(1, totalDebt)) * 100)}%` : '—', sub: 'interest eliminated' },
   ];
   return (
     <div className="flex flex-col h-full">
-      <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">The Numbers, Simply</p>
+      <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">Systems View</p>
       <div className="flex-1 flex flex-col justify-center gap-4">
         {lines.map((l, i) => (
           <motion.div
