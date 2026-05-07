@@ -207,20 +207,19 @@ export default function CelestialMindMap({ loans, schedule }) {
         });
       });
 
-      // Draw nodes — Obsidian-like neural network
-      const globalBreath = 1 + Math.sin(currentTime * 0.008) * 0.18;
+      // Draw nodes — Obsidian-like neural network (minimal, breathing)
+      const globalBreath = 1 + Math.sin(currentTime * 0.006) * 0.12;
 
       currentParticles.forEach(p => {
         let r;
 
         if (p.type === 'loan') {
           const progress = 1 - (p.balance / p.original);
-          const payoffSize = 6 + progress * 12;
-          const baseSize = 10 + p.growth * 8;
+          const payoffSize = 5 + progress * 10;
+          const baseSize = 8 + p.growth * 6;
           r = (baseSize + payoffSize) * globalBreath;
         } else {
-          // Habit nodes are smaller, fixed size
-          r = (p.baseRadius + p.growth * 4) * (1 + Math.sin(currentTime * 0.012) * 0.15);
+          r = (p.baseRadius + p.growth * 3) * (1 + Math.sin(currentTime * 0.01) * 0.1);
         }
 
         const rgbColor = parseInt(p.color.slice(1), 16);
@@ -228,51 +227,44 @@ export default function CelestialMindMap({ loans, schedule }) {
         const gVal = (rgbColor >> 8) & 255;
         const bVal = rgbColor & 255;
 
-        // Subtle outer glow
-        const glowGrad = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.5);
-        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.18)`);
+        // Soft, ethereal outer glow (life-like breathing)
+        const glowGrad = ctx.createRadialGradient(p.x, p.y, r * 0.5, p.x, p.y, r * 3);
+        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.25)`);
+        glowGrad.addColorStop(0.5, `rgba(${rVal}, ${gVal}, ${bVal}, 0.08)`);
         glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0)`);
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 2.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, r * 3, 0, Math.PI * 2);
         ctx.fill();
 
-        // Core node — clean, solid
-        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.95)`;
+        // Core node — minimal, soft
+        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.85)`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fill();
 
-        // Bright border — indicates activity
-        const borderAlpha = 0.6 + globalBreath * 0.2;
-        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${borderAlpha})`;
-        ctx.lineWidth = p.type === 'habit' ? 0.8 : 1.5;
+        // Subtle shimmer border
+        const shimmer = 0.3 + Math.sin(currentTime * 0.015 + p.id.charCodeAt(0)) * 0.2;
+        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${shimmer * 0.4})`;
+        ctx.lineWidth = 0.6;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Progress ring — shows learning/payoff (loans only)
+        // Progress ring — subtle (loans only)
         if (p.type === 'loan') {
           const progress = 1 - (p.balance / p.original);
           if (progress > 0.02) {
-            const ringRadius = r + 4;
+            const ringRadius = r + 3.5;
             const startAngle = -Math.PI / 2;
             const endAngle = startAngle + progress * 2 * Math.PI;
-            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.75)`;
-            ctx.lineWidth = 1.8;
+            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.5)`;
+            ctx.lineWidth = 1;
             ctx.lineCap = 'round';
             ctx.beginPath();
             ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
             ctx.stroke();
           }
-        }
-
-        // Emoji label
-        if (p.emoji) {
-          ctx.font = `${Math.round(r * 1.2)}px Arial`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(p.emoji, p.x, p.y);
         }
       });
 
@@ -299,9 +291,8 @@ export default function CelestialMindMap({ loans, schedule }) {
       className="glass rounded-2xl p-5 relative overflow-hidden"
     >
       {/* Header */}
-      <div className="mb-6">
-        <p className="text-xs font-mono text-muted-foreground/50 mb-1 tracking-widest">Evolving Mind Map</p>
-        <h3 className="text-sm font-semibold text-foreground mb-3">Momentum Architecture</h3>
+      <div className="mb-4">
+        <h3 className="text-sm font-semibold text-foreground mb-2">Living Mind Map</h3>
       </div>
 
       {/* Canvas */}
@@ -322,7 +313,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Large nodes: your loans. Small nodes: spending habits. Solid lines connect loans; dashed lines show how habits flow into debt growth. Watch how your spending patterns influence your journey to zero.
+        Living mind map. Nodes breathe as your debt shifts. Larger nodes are your chains; smaller are your patterns. Lines show influence. Watch them evolve.
       </motion.p>
     </motion.div>
   );
