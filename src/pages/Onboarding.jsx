@@ -15,100 +15,60 @@ const QUESTIONS = [
     placeholder: 'e.g., Maya, Alex, Jordan',
   },
   {
-    id: 'money_origin',
-    category: 'psychology',
-    title: 'Where does your relationship with money come from?',
-    subtitle: 'How did your family or upbringing shape how you think about debt?',
-    type: 'textarea',
-    placeholder: 'Share what comes to mind...',
-  },
-  {
     id: 'biggest_fear',
-    category: 'psychology',
-    title: 'What\'s your biggest fear around money right now?',
+    category: 'truth',
+    title: 'What\'s your biggest fear around money?',
     subtitle: 'Be honest. This is just for you.',
     type: 'textarea',
     placeholder: 'e.g., being trapped, failure, judgment...',
   },
   {
     id: 'freedom_looks_like',
-    category: 'goals',
+    category: 'vision',
     title: 'What does freedom look like to you?',
-    subtitle: 'Not just debt-free. What does your life look like when you\'re free?',
+    subtitle: 'Not just debt-free. Paint the picture.',
     type: 'textarea',
-    placeholder: 'Paint the picture...',
+    placeholder: 'Travel? Rest? Create? Build?',
   },
   {
     id: 'admire_who',
-    category: 'psychology',
-    title: 'Who do you admire?',
-    subtitle: 'Could be anyone — historical figure, family, artist, activist. Who inspires you?',
+    category: 'inspiration',
+    title: 'Who inspires you?',
+    subtitle: 'Historical figure, family, artist, activist — anyone.',
     type: 'textarea',
     placeholder: 'e.g., Oprah, your grandma, Kendrick Lamar, Malala...',
-  },
-  {
-    id: 'admire_why',
-    category: 'psychology',
-    title: 'Why do you admire them?',
-    subtitle: 'What qualities do they have that resonate with you?',
-    type: 'textarea',
-    placeholder: 'Resilience, creativity, integrity, courage...',
-  },
-  {
-    id: 'songs_that_move',
-    category: 'culture',
-    title: 'What songs move you?',
-    subtitle: 'Music that gets you through. Could be any genre.',
-    type: 'textarea',
-    placeholder: 'e.g., Nina Simone - Feeling Good, Kendrick - PRIDE., Radiohead - Pyramid Song...',
-  },
-  {
-    id: 'books_or_stories',
-    category: 'culture',
-    title: 'Are there books, podcasts, or stories that shaped you?',
-    subtitle: 'Anything from Twitter threads to novels.',
-    type: 'textarea',
-    placeholder: 'Share what comes to mind...',
   },
   {
     id: 'hobbies_passions',
     category: 'identity',
     title: 'What do you do when no one\'s watching?',
-    subtitle: 'Your hobbies, passions, the things that make you feel alive.',
+    subtitle: 'Your hobbies, passions, what makes you feel alive.',
     type: 'textarea',
     placeholder: 'e.g., painting, coding, gardening, gaming, writing...',
   },
   {
-    id: 'colors_drawn_to',
-    category: 'aesthetic',
-    title: 'What colors do you feel drawn to?',
-    subtitle: 'Colors that represent how you want to feel.',
-    type: 'text',
-    placeholder: 'e.g., deep purple, gold, forest green, burnt orange',
-  },
-  {
-    id: 'current_struggle',
-    category: 'reality',
-    title: 'What\'s your biggest struggle right now?',
-    subtitle: 'Beyond debt. What keeps you up at night?',
+    id: 'songs_that_move',
+    category: 'culture',
+    title: 'What songs move you?',
+    subtitle: 'Music that gets you through.',
     type: 'textarea',
-    placeholder: 'Share what\'s real for you...',
+    placeholder: 'e.g., Nina Simone - Feeling Good, Kendrick - PRIDE...',
   },
   {
     id: 'small_win',
     category: 'momentum',
     title: 'What\'s one small win you\'ve had recently?',
-    subtitle: 'Could be anything. We celebrate progress.',
+    subtitle: 'We celebrate every step forward.',
     type: 'textarea',
     placeholder: 'e.g., made a payment, read a book, had a hard conversation...',
   },
   {
     id: 'dream_impossible',
     category: 'vision',
-    title: 'If money wasn\'t a constraint, what would you do?',
-    subtitle: 'Dream big. The impossible dream.',
+    title: 'If money wasn\'t a constraint, what would you create?',
+    subtitle: 'Dream big. No limits.',
     type: 'textarea',
-    placeholder: 'Travel? Create? Rest? Teach? Revolution?',
+    placeholder: 'Travel? Build? Rest? Teach? Revolution?',
   },
 ];
 
@@ -168,17 +128,17 @@ export default function Onboarding() {
         </motion.div>
 
         {/* Progress */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-mono text-muted-foreground">Question {step + 1} of {QUESTIONS.length}</p>
-            <p className="text-xs font-mono text-muted-foreground">{Math.round(progress)}%</p>
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-mono text-muted-foreground tracking-widest">STEP {step + 1} of {QUESTIONS.length}</p>
+            <p className="text-xs font-mono text-primary font-semibold">{Math.round(progress)}%</p>
           </div>
-          <div className="h-1 bg-border rounded-full overflow-hidden">
+          <div className="h-1.5 bg-border/30 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-primary"
+              className="h-full bg-gradient-to-r from-primary to-chart-3"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             />
           </div>
         </div>
@@ -206,35 +166,46 @@ export default function Onboarding() {
             </div>
 
             {/* Input */}
-            <div className="mb-6">
+            <div className="mb-8">
               {currentQuestion.type === 'text' ? (
-                <input
+                <motion.input
                   type="text"
                   placeholder={currentQuestion.placeholder}
                   value={answers[currentQuestion.id] || ''}
                   onChange={(e) => handleAnswer(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                   autoFocus
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
                 />
               ) : (
-                <textarea
+                <motion.textarea
                   placeholder={currentQuestion.placeholder}
                   value={answers[currentQuestion.id] || ''}
                   onChange={(e) => handleAnswer(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary min-h-[120px] resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary min-h-[140px] resize-none transition-all"
                   autoFocus
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
                 />
               )}
             </div>
 
             {/* Navigation */}
-            <div className="flex gap-3 items-center justify-between">
+            <motion.div
+              className="flex gap-3 items-center justify-between"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
               <button
                 onClick={() => setStep(Math.max(0, step - 1))}
                 disabled={step === 0}
-                className="text-sm font-mono text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
+                className="text-xs font-mono text-muted-foreground hover:text-foreground disabled:opacity-20 transition-colors"
               >
-                ← Back
+                ← BACK
               </button>
               <Button
                 onClick={handleNext}
@@ -242,17 +213,22 @@ export default function Onboarding() {
                 loading={isLoading}
                 className="flex items-center gap-2"
               >
-                {step === QUESTIONS.length - 1 ? 'Create Dashboard' : 'Continue'}
+                {step === QUESTIONS.length - 1 ? 'Enter Dashboard' : 'Next'}
                 <ChevronRight className="w-4 h-4" />
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
 
         {/* Footer */}
-        <p className="text-[10px] text-muted-foreground/50 text-center mt-12 font-mono">
-          Your answers help us craft a personalized experience just for you.
-        </p>
+        <motion.p
+          className="text-[10px] text-muted-foreground/60 text-center mt-14 font-mono tracking-wider"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          This is for you. No data sells. Just personalization.
+        </motion.p>
       </div>
     </div>
   );

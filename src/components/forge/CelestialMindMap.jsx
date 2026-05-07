@@ -78,35 +78,37 @@ export default function CelestialMindMap({ loans, schedule }) {
       // Breathing pulse based on time
       const breathPulse = 1 + Math.sin(time * 0.02 + p.id.charCodeAt(0)) * 0.15;
 
-      // Soft attraction to center
+      // Soft, smooth attraction to center (lower force, more gradual)
       const toCenterX = CX - p.x;
       const toCenterY = CY - p.y;
       const dist = Math.sqrt(toCenterX * toCenterX + toCenterY * toCenterY);
       
-      if (dist > 1) {
-        const force = Math.min(0.003, 200 / (dist * dist)) * 0.5;
+      if (dist > 2) {
+        // Smoother falloff — inverse distance with lower power
+        const force = Math.min(0.0012, 80 / (dist * 1.3)) * 0.6;
         p.vx += (toCenterX / dist) * force;
         p.vy += (toCenterY / dist) * force;
       }
 
-      // Soft collision avoidance
+      // Gentle collision avoidance with smooth falloff
       particles.forEach(other => {
         if (other.id === p.id) return;
         const dx = other.x - p.x;
         const dy = other.y - p.y;
         const d = Math.sqrt(dx * dx + dy * dy);
-        const minDist = 30 + (newGrowth + other.growth) * 5;
+        const minDist = 35 + (newGrowth + other.growth) * 6;
         
         if (d < minDist && d > 0.5) {
-          const repel = (minDist - d) * 0.08;
+          // Smoother repulsion curve
+          const repel = Math.pow(minDist - d, 1.5) * 0.05;
           p.vx -= (dx / d) * repel;
           p.vy -= (dy / d) * repel;
         }
       });
 
-      // Damping
-      p.vx *= 0.92;
-      p.vy *= 0.92;
+      // Higher damping for smoother, more relaxed movement
+      p.vx *= 0.94;
+      p.vy *= 0.94;
 
       // Update position
       p.x += p.vx;
