@@ -32,6 +32,7 @@ import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 import LoanNarrative from '@/components/forge/LoanNarrative';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
 import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
+import HabitNodes from '@/components/forge/HabitNodes';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -313,6 +314,13 @@ export default function Dashboard() {
             <p className="obs-label mb-3">— momentum field</p>
             <div className="mb-6">
               <CelestialMindMap loans={loans} schedule={schedule} />
+            </div>
+
+            <div className="obs-divider my-6" />
+            {/* Spending Habits */}
+            <p className="obs-label mb-3">— your patterns</p>
+            <div className="mb-6">
+              <HabitNodes />
             </div>
 
             <div className="obs-divider my-6" />

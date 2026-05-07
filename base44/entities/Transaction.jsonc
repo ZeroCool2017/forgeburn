@@ -1,0 +1,33 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount in dollars"
+    },
+    "description": {
+      "type": "string",
+      "description": "What you spent on"
+    },
+    "habit_id": {
+      "type": "string",
+      "description": "Reference to the SpendingHabit this belongs to"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of transaction"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Personal reflection on this transaction"
+    }
+  },
+  "required": [
+    "amount",
+    "description",
+    "habit_id",
+    "date"
+  ]
+}
