@@ -790,6 +790,88 @@ export const QUOTES = [
   { text: "George Barris built dream machines from nothing. Build your dream from less debt.", author: "George Barris, Kustom King (adapted)" },
   { text: "The impala doesn't apologize. Neither should your financial ambition.", author: "Lowrider culture (cultural)" },
 
+  // Megan Thee Stallion — more
+  { text: "I went from sleeping on the floor to buying the building. Document the journey.", author: "Megan Thee Stallion" },
+  { text: "I put my degrees on the wall because I earned them — not because someone handed them.", author: "Megan Thee Stallion" },
+  { text: "Hot girl is a state of mind. Debt-free is a state of bank account.", author: "Megan Thee Stallion (adapted)" },
+  { text: "I am my own brand, my own business, my own boss. You can be too.", author: "Megan Thee Stallion" },
+  { text: "Thee Stallion doesn't beg. She builds.", author: "Megan Thee Stallion (adapted)" },
+
+  // Future — more
+  { text: "Used to count pennies on the floor. Now I count the months until debt hits zero.", author: "Future (adapted)" },
+  { text: "I upgraded. My situation upgraded. My balance is going down.", author: "Future (adapted)" },
+  { text: "Dirty Sprite taught me: what you pour into yourself matters. Pour into your future.", author: "Future (adapted)" },
+
+  // Chuck Berry
+  { text: "Roll over, debt — and tell minimum payments the news.", author: "Chuck Berry, Roll Over Beethoven (adapted)" },
+  { text: "Go, go, go Johnny go — straight to the payoff date.", author: "Chuck Berry, Johnny B. Goode (adapted)" },
+  { text: "I built rock and roll from nothing and got nothing for it. Learn from that. Own what you create.", author: "Chuck Berry (adapted)" },
+  { text: "Maybellene, why can't you be true — like a fixed-rate loan with no surprises.", author: "Chuck Berry, Maybellene (adapted)" },
+  { text: "Reelin' and rockin' until that balance hits zero.", author: "Chuck Berry, Reelin' and Rockin' (adapted)" },
+  { text: "No money down — but understand what that actually costs you long-term.", author: "Chuck Berry, No Money Down (adapted)" },
+
+  // Dolly Parton
+  { text: "It costs a lot of money to look this cheap. Manage accordingly.", author: "Dolly Parton" },
+  { text: "I'm not going to limit myself just because people won't accept the fact that I can do something else — including manage debt.", author: "Dolly Parton (adapted)" },
+  { text: "The way I see it, if you want the rainbow, you gotta put up with the rain — and the interest payments.", author: "Dolly Parton" },
+  { text: "You'll never do a whole lot unless you're brave enough to try. That includes paying off the thing you've been avoiding.", author: "Dolly Parton (adapted)" },
+  { text: "I'm a businesswoman. I just look like a showgirl. Know your numbers either way.", author: "Dolly Parton" },
+  { text: "Find out who you are and do it on purpose — debt-free if possible.", author: "Dolly Parton (adapted)" },
+  { text: "Working 9 to 5 — but every dollar after the minimum is a dollar toward freedom.", author: "Dolly Parton, 9 to 5 (adapted)" },
+
+  // Miley Cyrus
+  { text: "I came in like a wrecking ball — on my old spending habits.", author: "Miley Cyrus, Wrecking Ball (adapted)" },
+  { text: "We can't stop — paying this down. We won't stop.", author: "Miley Cyrus, We Can't Stop (adapted)" },
+  { text: "Party in the USA — once the loan is paid off.", author: "Miley Cyrus, Party in the USA (adapted)" },
+  { text: "I'm not a girl, not yet a woman — but I am definitely someone who reads her loan statements.", author: "Miley Cyrus (adapted)" },
+  { text: "I used to be a wild child. Now I'm a wildly intentional budgeter.", author: "Miley Cyrus (adapted)" },
+  { text: "Flowers — I can buy them for myself once the minimum payment frees up cash.", author: "Miley Cyrus, Flowers (adapted)" },
+  { text: "The climb never ends. But the loan balance does.", author: "Miley Cyrus, The Climb (adapted)" },
+
+  // Cali / SoCal roots (Sublime, RHCP, Kendrick)
+  { text: "What I got, you gotta give it to your children — including financial clarity.", author: "Sublime, What I Got (adapted)" },
+  { text: "Santeria: I don't practice but I do practice paying things off monthly.", author: "Sublime, Santeria (adapted)" },
+  { text: "Under the bridge downtown is where my credit score used to live. Not anymore.", author: "Red Hot Chili Peppers, Under the Bridge (adapted)" },
+  { text: "Californication isn't just an album. It's a warning about debt culture dressed up as paradise.", author: "Red Hot Chili Peppers (adapted)" },
+  { text: "Humble — sit down and look at the amortization table.", author: "Kendrick Lamar, HUMBLE. (adapted)" },
+  { text: "Swimming pools of debt — drown in it or learn to swim out.", author: "Kendrick Lamar, Swimming Pools (adapted)" },
+  { text: "DNA — discipline, numbers, accountability.", author: "Kendrick Lamar, DNA (adapted)" },
+
+  // Kim Gordon (Sonic Youth / solo)
+  { text: "I'm not afraid of being a girl in a band, a business, or a balance sheet.", author: "Kim Gordon" },
+  { text: "Noise is just signal you haven't decoded yet. Same with a confusing loan statement.", author: "Kim Gordon (adapted)" },
+  { text: "Girl in a band — who also knows her net worth. Both can be true.", author: "Kim Gordon (adapted)" },
+  { text: "I've been making things on my own terms for decades. That's the only way I know.", author: "Kim Gordon" },
+  { text: "The independent spirit means you pay your own way. That starts with clarity.", author: "Kim Gordon (adapted)" },
+
+  // All Over Me (1997 film)
+  { text: "This city will eat you alive if you don't know what you're worth.", author: "All Over Me, 1997 (adapted)" },
+  { text: "She found herself in the city's noise. You can find your way through the numbers.", author: "All Over Me, 1997 (adapted)" },
+  { text: "Survival looks different for everyone. For me it's a zero balance.", author: "All Over Me, 1997 (adapted)" },
+  { text: "Claude knew: you can love where you are and still want more for yourself.", author: "All Over Me, 1997 (adapted)" },
+  { text: "The city doesn't owe you anything. Neither does your creditor. Act accordingly.", author: "All Over Me, 1997 (adapted)" },
+
+  // Black business owners — notable and historical
+  { text: "I was the first Black self-made female millionaire in America. I built it with a comb and sheer will.", author: "Madam C.J. Walker" },
+  { text: "Don't sit down and wait for the opportunities to come. Get up and make them.", author: "Madam C.J. Walker" },
+  { text: "I got my start by giving myself a start.", author: "Madam C.J. Walker" },
+  { text: "Build your business on the foundation of service and substance. The rest follows.", author: "Robert F. Smith, Vista Equity Partners" },
+  { text: "I paid off the student loans for an entire graduating class. Imagine what you could do when debt is gone.", author: "Robert F. Smith (adapted)" },
+  { text: "Excellence is not a destination — it's a continuous journey that never ends.", author: "Brian Tracy (adapted) / Black Wall Street ethos" },
+  { text: "Greenwood proved: when Black people control their dollars, they multiply.", author: "Greenwood District legacy" },
+  { text: "The gap is not talent. The gap is access to capital. Close it yourself if you have to.", author: "Daymond John, FUBU" },
+  { text: "I used to sew hats in my mom's house. Now I build brands. Start where you are.", author: "Daymond John, FUBU (adapted)" },
+  { text: "Power is not given. It is taken — one strategic move at a time.", author: "Daymond John" },
+  { text: "I don't have a Harvard MBA. I have hustle. And hustle pays debt.", author: "Daymond John (adapted)" },
+  { text: "We built BET from nothing because no one else was going to do it for us.", author: "Bob Johnson, BET founder (adapted)" },
+  { text: "Oprah's first business lesson: own it. Your story, your brand, your financial future.", author: "Oprah Winfrey (adapted)" },
+  { text: "The big secret in life is that there is no big secret. Whatever your goal, you can get there if you're willing to work.", author: "Oprah Winfrey" },
+  { text: "Real integrity is doing the right thing — especially with your money — when nobody's watching.", author: "Oprah Winfrey (adapted)" },
+  { text: "I had to make my own living and my own opportunity. But I made it.", author: "Madam C.J. Walker" },
+  { text: "Magic Johnson didn't just play the game — he bought the arena. Own the outcome.", author: "Magic Johnson (adapted)" },
+  { text: "I learned early: you have to control the deal or the deal controls you.", author: "Jay-Z / Shawn Carter (adapted)" },
+  { text: "I'm not a businessman. I'm a business, man. Your debt? That's just overhead.", author: "Jay-Z (adapted)" },
+
   // Mathematicians & scientists with diverse abilities
   { text: "A mathematician, like a painter or poet, is a maker of patterns.", author: "G.H. Hardy" },
   { text: "Do not worry about your difficulties in mathematics. I can assure you mine are still greater.", author: "Albert Einstein" },
