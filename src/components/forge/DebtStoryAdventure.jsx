@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Sparkles, Brain, Heart, Shield, Users } from 'lucide-react';
+import { analyzeDbtProfile, generateDbtNarrative, generateDbtActions } from '@/lib/dbtAnalysis';
 
 /**
  * Interactive debt narrative — choose-your-own-adventure storytelling.
@@ -30,6 +31,15 @@ const DEBT_STORIES = {
           { text: 'Regret and resentment', tag: 'regret', value: 2 },
         ],
       },
+      {
+        id: 'pause',
+        text: 'Did you pause to consider alternatives before borrowing?',
+        choices: [
+          { text: 'Yes, I weighed options carefully', tag: 'planned', value: 0 },
+          { text: 'Somewhat, but felt pressured', tag: 'social', value: 1 },
+          { text: 'No, it felt like the only way forward', tag: 'impulsive', value: 2 },
+        ],
+      },
     ],
   },
   credit_card: {
@@ -37,20 +47,29 @@ const DEBT_STORIES = {
     questions: [
       {
         id: 'trigger',
-        text: 'What triggered your credit card debt spiral?',
+        text: 'What emotional state triggered the spending?',
         choices: [
-          { text: 'Emergency or crisis', tag: 'emergency', value: 0 },
-          { text: 'Reward seeking or comfort', tag: 'self_soothing', value: 1 },
-          { text: 'Lifestyle creep', tag: 'lifestyle', value: 2 },
+          { text: 'Handling a crisis or unexpected event', tag: 'emergency', value: 0 },
+          { text: 'Seeking comfort or relief from difficult emotions', tag: 'self_soothing', value: 1 },
+          { text: 'Keeping up with others or wanting what they had', tag: 'social', value: 2 },
+        ],
+      },
+      {
+        id: 'awareness',
+        text: 'How aware were you of your emotions during spending?',
+        choices: [
+          { text: 'Very aware—I was trying to feel better', tag: 'emotional', value: 0 },
+          { text: 'Somewhat—I noticed but didn\'t think to stop', tag: 'impulsive', value: 1 },
+          { text: 'Not aware—it just happened', tag: 'unplanned', value: 2 },
         ],
       },
       {
         id: 'pattern',
-        text: 'What pattern do you notice in your spending?',
+        text: 'Did you have ways to cope with emotions besides spending?',
         choices: [
-          { text: 'Impulsive splurges', tag: 'impulsive', value: 0 },
-          { text: 'Steady accumulation', tag: 'gradual', value: 1 },
-          { text: 'Emotional spending', tag: 'emotional', value: 2 },
+          { text: 'Yes, but spending felt easier', tag: 'avoidance', value: 0 },
+          { text: 'Not really—I didn\'t know what else to do', tag: 'distress_tolerance', value: 1 },
+          { text: 'No, and I wasn\'t looking for alternatives', tag: 'unplanned', value: 2 },
         ],
       },
     ],
@@ -63,17 +82,26 @@ const DEBT_STORIES = {
         text: 'Was this vehicle a need or a want?',
         choices: [
           { text: 'Essential necessity', tag: 'necessity', value: 0 },
-          { text: 'Justified upgrade', tag: 'justified', value: 1 },
-          { text: 'Emotional purchase', tag: 'emotional', value: 2 },
+          { text: 'Justified upgrade—needed features', tag: 'justified', value: 1 },
+          { text: 'Wanted emotionally or for status', tag: 'emotional', value: 2 },
         ],
       },
       {
         id: 'decision',
         text: 'How was the purchase decision made?',
         choices: [
-          { text: 'Careful planning', tag: 'planned', value: 0 },
-          { text: 'Influenced by others', tag: 'social', value: 1 },
-          { text: 'Impulsive or pressured', tag: 'impulsive', value: 2 },
+          { text: 'Research, comparison, deliberate choice', tag: 'planned', value: 0 },
+          { text: 'Influenced by friends, family, or salesperson', tag: 'social', value: 1 },
+          { text: 'Impulsive, felt right in the moment', tag: 'impulsive', value: 2 },
+        ],
+      },
+      {
+        id: 'pause_time',
+        text: 'Did you give yourself time to reflect before committing?',
+        choices: [
+          { text: 'Yes—I waited and reconsidered', tag: 'planned', value: 0 },
+          { text: 'A little—felt some pressure to decide', tag: 'social', value: 1 },
+          { text: 'No—I signed that day or very quickly', tag: 'impulsive', value: 2 },
         ],
       },
     ],
@@ -85,74 +113,129 @@ const DEBT_STORIES = {
         id: 'origin',
         text: 'What led to this debt?',
         choices: [
-          { text: 'Investment in something', tag: 'investment', value: 0 },
-          { text: 'Unexpected circumstance', tag: 'unexpected', value: 1 },
-          { text: 'Spending without planning', tag: 'unplanned', value: 2 },
+          { text: 'Intentional investment in your future', tag: 'investment', value: 0 },
+          { text: 'Unexpected circumstance or crisis', tag: 'emergency', value: 1 },
+          { text: 'Gradual spending without full awareness', tag: 'unplanned', value: 2 },
+        ],
+      },
+      {
+        id: 'emotion_then',
+        text: 'What emotions were present when this debt started?',
+        choices: [
+          { text: 'Optimism and purpose', tag: 'growth', value: 0 },
+          { text: 'Stress, anxiety, or overwhelm', tag: 'distress_tolerance', value: 1 },
+          { text: 'Numbness, impulse, or avoidance', tag: 'emotional', value: 2 },
         ],
       },
       {
         id: 'meaning',
         text: 'What does paying this off mean to you?',
         choices: [
-          { text: 'Freedom and relief', tag: 'freedom', value: 0 },
-          { text: 'Responsibility and duty', tag: 'responsibility', value: 1 },
-          { text: 'Reclaiming control', tag: 'control', value: 2 },
+          { text: 'Freedom and capability to pursue what matters', tag: 'freedom', value: 0 },
+          { text: 'Responsibility fulfilled and duty met', tag: 'responsibility', value: 1 },
+          { text: 'Reclaiming control over my own choices', tag: 'control', value: 2 },
         ],
       },
     ],
   },
 };
 
-function StoryChapter({ debt, answers, onComplete }) {
-  const tags = Object.values(answers);
-  const hasEmotional = tags.includes('emotional') || tags.includes('self_soothing') || tags.includes('avoidance');
-  const hasImpulsive = tags.includes('impulsive');
-  const hasPlanning = tags.includes('planned') || tags.includes('growth');
+// DBT module icons
+const DBT_ICONS = {
+  mindfulness: { icon: Brain, color: 'text-primary', bg: 'bg-primary/10' },
+  distress_tolerance: { icon: Shield, color: 'text-accent', bg: 'bg-accent/10' },
+  emotion_regulation: { icon: Heart, color: 'text-chart-3', bg: 'bg-chart-3/10' },
+  interpersonal_effectiveness: { icon: Users, color: 'text-chart-4', bg: 'bg-chart-4/10' },
+};
 
-  const storyTexts = {
-    beginning: `You accumulated $${debt.current_balance.toLocaleString()} in ${debt.category} debt. This wasn't an accident. Something in your life—a need, a dream, a moment of escape—led you here. Every dollar tells part of your story.`,
-    
-    middle_emotional: hasEmotional 
-      ? `You were seeking something beyond the transaction. Maybe safety. Maybe relief. Maybe a version of yourself you weren't ready to be. Spending felt like control when everything else wasn't.`
-      : hasImpulsive
-      ? `Your decisions came fast. There was momentum, excitement, sometimes pressure. You acted before you thought through the long game.`
-      : `You made calculated choices. Whether they worked out or not, you were trying to move forward, to build, to improve.`,
-    
-    end: `Now you're here, facing this debt directly. The story isn't over. Every payment is a new chapter. Every choice to understand why is a choice to write a different future.`,
-  };
+function StoryChapter({ debt, answers, onComplete }) {
+  const profile = analyzeDbtProfile(answers, debt);
+  const narrative = generateDbtNarrative(answers, debt, profile);
+  const actions = generateDbtActions(profile.primaryChallenge);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-4"
     >
       {/* Beginning */}
       <div className="p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg border border-primary/20">
-        <p className="text-sm text-foreground/90 leading-relaxed italic">{storyTexts.beginning}</p>
+        <h3 className="text-xs font-mono text-primary/70 uppercase mb-2">Beginning</h3>
+        <p className="text-sm text-foreground/90 leading-relaxed">{narrative.beginning.content}</p>
       </div>
 
-      {/* Middle */}
+      {/* Middle with DBT insight */}
       <div className="p-4 bg-gradient-to-r from-accent/10 to-chart-3/10 rounded-lg border border-accent/20">
-        <p className="text-sm text-foreground/90 leading-relaxed italic">{storyTexts.middle_emotional}</p>
+        <h3 className="text-xs font-mono text-accent/70 uppercase mb-2">Middle</h3>
+        <p className="text-sm text-foreground/90 leading-relaxed mb-3">{narrative.middle.content}</p>
+        {profile.reflectionQuestions && Object.entries(profile.reflectionQuestions).length > 0 && (
+          <div className="mt-3 p-2 bg-background/40 rounded border border-border/20">
+            <p className="text-xs text-muted-foreground italic">
+              {Object.entries(profile.reflectionQuestions)[0]?.[1] || ''}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* End */}
       <div className="p-4 bg-gradient-to-r from-chart-3/10 to-primary/10 rounded-lg border border-chart-3/20">
-        <p className="text-sm text-foreground/90 leading-relaxed italic">{storyTexts.end}</p>
+        <h3 className="text-xs font-mono text-chart-3/70 uppercase mb-2">End</h3>
+        <p className="text-sm text-foreground/90 leading-relaxed">{narrative.end.content}</p>
       </div>
 
-      {/* Data reflection */}
-      <div className="p-3 bg-background/50 rounded-lg border border-border/20">
-        <p className="text-xs font-mono text-muted-foreground/70 mb-2">Your patterns revealed:</p>
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag, idx) => (
-            <span key={idx} className="text-xs px-2 py-1 bg-primary/20 text-primary rounded-full">
-              {tag}
-            </span>
-          ))}
-        </div>
+      {/* DBT Profile */}
+      <div className="p-4 bg-background/50 rounded-lg border border-border/20 space-y-3">
+        <p className="text-xs font-mono text-muted-foreground/70 uppercase">Your DBT Profile</p>
+        
+        {profile.primaryChallenge && (() => {
+          const dbtIcon = DBT_ICONS[profile.primaryChallenge];
+          const Icon = dbtIcon?.icon;
+          return (
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold text-muted-foreground">Primary Focus Area</p>
+              <div className={`p-3 rounded-lg ${dbtIcon?.bg}`}>
+                <div className="flex items-start gap-2">
+                  {Icon && <Icon className={`w-4 h-4 mt-0.5 ${dbtIcon?.color}`} />}
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{profile.primaryChallenge.replace('_', ' ').toUpperCase()}</p>
+                    <p className="text-xs text-foreground/70 mt-1">{actions[0]}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* All modules involved */}
+        {profile.modules.length > 0 && (
+          <div>
+            <p className="text-[10px] font-semibold text-muted-foreground mb-2">Modules Involved</p>
+            <div className="flex flex-wrap gap-2">
+              {profile.modules.map(module => (
+                <span key={module} className={`text-xs px-2 py-1 rounded-full ${DBT_ICONS[module]?.bg} ${DBT_ICONS[module]?.color}`}>
+                  {module.replace('_', ' ')}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Growth Actions */}
+      {actions.length > 0 && (
+        <div className="p-4 bg-primary/5 rounded-lg border border-primary/20 space-y-2">
+          <p className="text-xs font-mono text-primary/70 uppercase">Targeted Growth</p>
+          <ul className="space-y-1.5">
+            {actions.map((action, idx) => (
+              <li key={idx} className="text-xs text-foreground/80 flex gap-2">
+                <span className="text-primary">→</span>
+                <span>{action}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <motion.button
         whileHover={{ scale: 1.05 }}
@@ -160,7 +243,7 @@ function StoryChapter({ debt, answers, onComplete }) {
         onClick={onComplete}
         className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-semibold transition-colors"
       >
-        Continue Your Journey
+        Acknowledge Your Story
       </motion.button>
     </motion.div>
   );
