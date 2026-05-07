@@ -140,43 +140,49 @@ export default function CelestialMindMap({ loans, schedule }) {
       });
     });
 
-    // Draw nodes — clean, minimal obsidian aesthetic
+    // Draw nodes — clean, minimal obsidian aesthetic with synchronized breathing
+    // Global synchronized breath (all nodes pulse together)
+    const globalBreath = 1 + Math.sin(time * 0.008) * 0.22;
+    
     updated.forEach(p => {
-      const r = (8 + p.growth * 6) * p.breathPulse;
+      // Synchronized breathing + individual subtle variation
+      const individualWave = 1 + Math.sin(time * 0.006 + p.id.charCodeAt(0) * 0.3) * 0.08;
+      const r = (8 + p.growth * 6) * globalBreath * individualWave;
 
-      // Breathing glow halo — very subtle
-      const haloDim = 1 + Math.sin(time * 0.01 + p.id.charCodeAt(0)) * 0.3;
-      const gradient = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.2 * haloDim);
-      gradient.addColorStop(0, 'rgba(200, 200, 220, 0.12)');
+      // Breathing glow halo — very subtle, synchronized
+      const haloBreath = globalBreath + 0.15;
+      const gradient = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.2 * haloBreath);
+      gradient.addColorStop(0, 'rgba(200, 200, 220, 0.15)');
       gradient.addColorStop(1, 'rgba(200, 200, 220, 0)');
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r * 2.2 * haloDim, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, r * 2.2 * haloBreath, 0, Math.PI * 2);
       ctx.fill();
 
-      // Core node — minimal color, mostly white/gray
-      const brightness = 180 + Math.sin(time * 0.015 + p.id.charCodeAt(0)) * 30;
-      ctx.fillStyle = `rgba(${brightness}, ${brightness}, ${brightness}, 0.85)`;
+      // Core node — minimal color, mostly white/gray, breathing in sync
+      const brightness = 175 + (globalBreath - 1) * 60;
+      ctx.fillStyle = `rgba(${brightness}, ${brightness}, ${brightness}, 0.88)`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.fill();
 
-      // Thin border in primary color (accent)
-      ctx.strokeStyle = 'rgba(140, 100, 240, 0.4)';
-      ctx.lineWidth = 0.8;
+      // Thin border in primary color (accent) — subtle breathing
+      const borderAlpha = 0.35 + (globalBreath - 1) * 0.15;
+      ctx.strokeStyle = `rgba(140, 100, 240, ${borderAlpha})`;
+      ctx.lineWidth = 0.85;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Inner breathing light
-      ctx.fillStyle = `rgba(255, 255, 255, ${0.15 + Math.sin(time * 0.012) * 0.1})`;
+      // Inner breathing light — sync with expansion
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.12 + (globalBreath - 1) * 0.2})`;
       ctx.beginPath();
       ctx.arc(p.x - r * 0.25, p.y - r * 0.25, r * 0.35, 0, Math.PI * 2);
       ctx.fill();
 
-      // Label (if room)
+      // Label (if room) — stable text, doesn't scale
       if (r > 5) {
-        ctx.fillStyle = `rgba(100, 100, 100, ${0.5 + Math.sin(time * 0.01) * 0.15})`;
+        ctx.fillStyle = `rgba(100, 100, 100, 0.6)`;
         ctx.font = '6px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';

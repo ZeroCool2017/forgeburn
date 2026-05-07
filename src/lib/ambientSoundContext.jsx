@@ -29,11 +29,11 @@ export const SOUND_MODES = [
     description: 'Faster precision pulse, tactical rhythms with strong sub-bass foundation. Cold, clear, intentional.',
   },
   {
-    id: 'harpsichord',
+    id: 'haunted',
     label: 'Haunted',
-    sub: 'Creepy harpsichord · dark',
+    sub: 'Harpsichord plucks · harmonic minor',
     icon: '🎹',
-    description: 'Unsettling harpsichord clicks and spectral tones. Eerie, introspective, haunting.',
+    description: 'True harpsichord with metallic plucks in harmonic minor. Creepy, unsettling, deeply eerie.',
   },
   {
     id: 'arcade',
@@ -76,6 +76,13 @@ export const SOUND_MODES = [
     sub: 'Deep house · euphoria',
     icon: '🕺',
     description: 'Classic 90s deep house. Soulful loops, warm pads, and hypnotic beats.',
+  },
+  {
+    id: 'trap',
+    label: 'Southern Trap',
+    sub: '808 bass · boom bap soul',
+    icon: '🎛️',
+    description: 'Dark trap with southern soul blues scale, heavy 808 sub-bass, and syncopated rhythms.',
   },
 ];
 

@@ -248,65 +248,97 @@ export function useAmbientSound() {
     });
   }, []);
 
-  // ─── HARPSICHORD MODE — creepy, unsettling ─────────────────────────────────
-  const startHarpsichord = useCallback((ac) => {
+  // ─── HAUNTED MODE — true harpsichord, creepy & eerie ─────────────────────
+  const startHaunted = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.2, ac.currentTime + 4);
+    master.gain.linearRampToValueAtTime(0.24, ac.currentTime + 5);
     master.connect(ac.destination);
 
-    // Spectral high-pass — thin, ghostly
+    // Tight high-pass for harpsichord bite
     const hpf = ac.createBiquadFilter();
     hpf.type = 'highpass';
-    hpf.frequency.value = 800;
-    hpf.Q.value = 2;
-    hpf.connect(master);
+    hpf.frequency.value = 1200;
+    hpf.Q.value = 1.2;
+    
+    // Resonant peak around 3kHz for that plucked quality
+    const resonance = ac.createBiquadFilter();
+    resonance.type = 'peaking';
+    resonance.frequency.value = 2800;
+    resonance.gain.value = 5;
+    resonance.Q.value = 3;
+    
+    hpf.connect(resonance);
+    resonance.connect(master);
 
-    // Harpsichord-like clicks — sharp attack, quick decay
-    const harpTones = [
-      261.6, 293.7, 329.6, 392.0, 440.0, 523.3, 587.3, 659.3, 783.9,
-      880.0, 987.8, 1046.5, 1174.7, 1319.5, 1479.9
-    ];
+    // Harmonic minor scale (C) — naturally creepy/dark
+    // C-D-Eb-F-G-Ab-B — perfect for haunted vibes
+    const harmoMinor = [130.8, 146.8, 155.6, 174.6, 196.0, 207.7, 246.9, 261.6, 329.6, 392.0, 523.3, 659.3, 783.9];
 
-    const spawnClick = () => {
+    const spawnPluck = () => {
       if (!playingRef.current) return;
-      const t = ac.currentTime;
-      const freq = harpTones[Math.floor(Math.random() * harpTones.length)];
-      
-      // Harsh metallic click
+      const t = ac.currentTime + 0.02;
+      const freq = harmoMinor[Math.floor(Math.random() * harmoMinor.length)];
+      const duration = 0.35 + Math.random() * 0.45;
+
+      // Plucked sound — square -> sine for metallic harpsichord effect
       const osc = ac.createOscillator();
       const gain = ac.createGain();
+      const vibrato = ac.createOscillator();
+      const vibratoGain = ac.createGain();
+      
       osc.type = 'square';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.08, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+      
+      // Subtle vibrato — adds shimmer
+      vibrato.frequency.value = 6.5 + Math.random() * 2;
+      vibratoGain.gain.value = freq * 0.005;
+      vibrato.connect(vibratoGain);
+      vibratoGain.connect(osc.frequency);
+
+      // Sharp attack, quick decay (harpsichord pluck)
+      gain.gain.setValueAtTime(0.11, t);
+      gain.gain.exponentialRampToValueAtTime(0.0005, t + duration);
+      
       osc.connect(gain);
       gain.connect(hpf);
+      vibrato.start(t);
       osc.start(t);
-      osc.stop(t + 0.16);
+      osc.stop(t + duration);
+      vibrato.stop(t + duration);
       nodesRef.current.push({ osc, gain, ac });
 
-      // Sparse, eerie timing
-      const nextIn = 1200 + Math.random() * 3000;
-      const tid = setTimeout(spawnClick, nextIn);
+      // Irregular timing — unsettling rhythm
+      const nextIn = 800 + Math.random() * 2800;
+      const tid = setTimeout(spawnPluck, nextIn);
       timersRef.current.push(tid);
     };
 
-    [0, 2400, 4800].forEach(offset => {
-      timersRef.current.push(setTimeout(spawnClick, offset));
+    [0, 1800, 3600].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnPluck, offset));
     });
 
-    // Creepy low drone
-    const drone = ac.createOscillator();
-    const droneGain = ac.createGain();
-    drone.type = 'sine';
-    drone.frequency.value = 65.4;
-    droneGain.gain.setValueAtTime(0, ac.currentTime);
-    droneGain.gain.linearRampToValueAtTime(0.08, ac.currentTime + 5);
-    drone.connect(droneGain);
-    droneGain.connect(master);
-    drone.start();
-    nodesRef.current.push({ osc: drone, gain: droneGain, ac });
+    // Deep, unnerving sub-drone
+    const subDrone = ac.createOscillator();
+    const subGain = ac.createGain();
+    subDrone.type = 'sine';
+    subDrone.frequency.value = 54.6; // Just below C2 — ominous
+    subGain.gain.setValueAtTime(0, ac.currentTime);
+    subGain.gain.linearRampToValueAtTime(0.12, ac.currentTime + 6);
+    subDrone.connect(subGain);
+    subGain.connect(master);
+    subDrone.start();
+    nodesRef.current.push({ osc: subDrone, gain: subGain, ac });
+
+    // Slow LFO modulation on master — breathing unease
+    const lfo = ac.createOscillator();
+    const lfoGain = ac.createGain();
+    lfo.frequency.value = 0.3;
+    lfoGain.gain.value = 0.08;
+    lfo.connect(lfoGain);
+    lfoGain.connect(master.gain);
+    lfo.start();
+    nodesRef.current.push({ osc: lfo, gain: lfoGain, ac });
   }, []);
 
   // ─── ARCADE MODE — retro 8-bit chiptune ─────────────────────────────────
@@ -632,6 +664,123 @@ export function useAmbientSound() {
     });
   }, []);
 
+  // ─── SOUTHERN TRAP MODE — hip hop, boom bap, dark southern soul ───────────
+  const startTrap = useCallback((ac) => {
+    const master = ac.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.26, ac.currentTime + 4);
+    master.connect(ac.destination);
+
+    // Warm, compressed sound — trap aesthetic
+    const warmFilter = ac.createBiquadFilter();
+    warmFilter.type = 'lowpass';
+    warmFilter.frequency.value = 2600;
+    warmFilter.Q.value = 0.7;
+    
+    const trapBoost = ac.createBiquadFilter();
+    trapBoost.type = 'peaking';
+    trapBoost.frequency.value = 200;
+    trapBoost.gain.value = 4;
+    trapBoost.Q.value = 1;
+    
+    warmFilter.connect(trapBoost);
+    trapBoost.connect(master);
+
+    // Southern blues scale + minor pentatonic — soulful, dark
+    // Dm: D-E-F-G-A-Bb-C
+    const trapScale = [73.4, 82.4, 87.3, 98.0, 110.0, 116.5, 130.8, 146.8, 175.0, 196.0, 220.0, 246.9, 293.7, 349.2, 392.0, 440.0, 587.3];
+
+    // Trap beat: 808 sub-bass kick
+    const spawnKick = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime;
+
+      // 808-style sub punch
+      const kickOsc = ac.createOscillator();
+      const kickGain = ac.createGain();
+      kickOsc.type = 'sine';
+      kickOsc.frequency.setValueAtTime(160, t);
+      kickOsc.frequency.exponentialRampToValueAtTime(50, t + 0.12);
+      kickGain.gain.setValueAtTime(0.18, t);
+      kickGain.gain.exponentialRampToValueAtTime(0.02, t + 0.25);
+      kickOsc.connect(kickGain);
+      kickGain.connect(master);
+      kickOsc.start(t);
+      kickOsc.stop(t + 0.3);
+      nodesRef.current.push({ osc: kickOsc, gain: kickGain, ac });
+
+      // Trap hi-hat layer (sparse, syncopated)
+      if (Math.random() > 0.4) {
+        const hatOsc = ac.createOscillator();
+        const hatGain = ac.createGain();
+        hatOsc.type = 'square';
+        hatOsc.frequency.value = 12000;
+        hatGain.gain.setValueAtTime(0.05, t + 0.05);
+        hatGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+        hatOsc.connect(hatGain);
+        hatGain.connect(master);
+        hatOsc.start(t + 0.05);
+        hatOsc.stop(t + 0.15);
+        nodesRef.current.push({ osc: hatOsc, gain: hatGain, ac });
+      }
+
+      // Trap timing: off-beat, syncopated
+      const nextKick = 300 + Math.random() * 400;
+      const tid = setTimeout(spawnKick, nextKick);
+      timersRef.current.push(tid);
+    };
+
+    timersRef.current.push(setTimeout(spawnKick, 0));
+
+    // Melodic layer — soulful southern strings
+    const spawnMelody = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime + 0.1;
+      const freq = trapScale[Math.floor(Math.random() * trapScale.length)];
+      const duration = 2 + Math.random() * 4;
+      const peakVol = 0.045 + Math.random() * 0.055;
+
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'triangle'; // Warm, vocal-like
+      osc.frequency.value = freq;
+      osc.detune.value = (Math.random() - 0.5) * 8;
+
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.6, t + duration * 0.2);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+
+      osc.connect(gain);
+      gain.connect(warmFilter);
+      osc.start(t);
+      osc.stop(t + duration);
+      nodesRef.current.push({ osc, gain, ac });
+
+      const nextIn = 2000 + Math.random() * 3500;
+      const tid = setTimeout(spawnMelody, nextIn);
+      timersRef.current.push(tid);
+    };
+
+    [0, 1200, 2800, 4200].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnMelody, offset));
+    });
+
+    // Heavy sub-bass foundation (trap essential)
+    [36.7, 55.0].forEach((freq, i) => {
+      const sub = ac.createOscillator();
+      const subGain = ac.createGain();
+      sub.type = 'sine';
+      sub.frequency.value = freq;
+      subGain.gain.setValueAtTime(0, ac.currentTime);
+      subGain.gain.linearRampToValueAtTime(0.16 - i * 0.02, ac.currentTime + 5);
+      sub.connect(subGain);
+      subGain.connect(master);
+      sub.start();
+      nodesRef.current.push({ osc: sub, gain: subGain, ac });
+    });
+  }, []);
+
   // ─── 90s HOUSE MODE — deep house euphoria ───────────────────────────────
   const startHouse90s = useCallback((ac) => {
     const master = ac.createGain();
@@ -748,15 +897,16 @@ export function useAmbientSound() {
 
       if (mode === 'drift') startDrift(ac);
       else if (mode === 'focus') startFocus(ac);
-      else if (mode === 'harpsichord') startHarpsichord(ac);
+      else if (mode === 'haunted') startHaunted(ac);
       else if (mode === 'arcade') startArcade(ac);
       else if (mode === 'deep') startDeep(ac);
       else if (mode === 'tulsa') startGreenwood(ac);
       else if (mode === 'uplifting') startUplifting(ac);
       else if (mode === 'western') startWestern(ac);
       else if (mode === 'house90s') startHouse90s(ac);
+      else if (mode === 'trap') startTrap(ac);
     } catch (e) {}
-  }, [startDrift, startFocus, startHarpsichord, startArcade, startDeep, startGreenwood, startUplifting, startWestern, startHouse90s]);
+  }, [startDrift, startFocus, startHaunted, startArcade, startDeep, startGreenwood, startUplifting, startWestern, startHouse90s, startTrap]);
 
   const updateProgress = useCallback((debtProgress) => {
     // Modulate organism spawn rate and complexity based on progress (0-1)
