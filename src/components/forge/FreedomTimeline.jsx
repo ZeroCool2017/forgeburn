@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceDot } from 'recharts';
 
 export default function FreedomTimeline({ schedule, months }) {
   // Build a timeline from now to payoff with milestone markers
@@ -38,107 +38,154 @@ export default function FreedomTimeline({ schedule, months }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className="glass rounded-2xl p-5"
+      className="relative overflow-hidden rounded-2xl p-5"
+      style={{
+        background: 'hsl(260, 18%, 8%)',
+        border: '1px solid hsl(260, 15%, 20%)',
+        backgroundImage: 'radial-gradient(hsl(258, 80%, 68%, 0.05) 1px, transparent 1px)',
+        backgroundSize: '20px 20px',
+      }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+      {/* Zig-zag accent top */}
+      <div className="absolute top-0 left-0 right-0 h-px opacity-40"
+        style={{
+          background: 'repeating-linear-gradient(90deg, hsl(258, 80%, 68%) 0px, hsl(258, 80%, 68%) 2px, transparent 2px, transparent 8px)',
+        }}
+      />
+
+      <div className="relative z-10 flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
           <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-chart-4"
+            animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+            className="w-2.5 h-2.5 rounded-full"
+            style={{ background: 'hsl(180, 60%, 55%)' }}
           />
-          <h3 className="text-sm font-semibold text-foreground">Debt-Free Projection</h3>
+          <div>
+            <h3 className="text-sm font-semibold text-foreground tracking-wide">FREEDOM PROJECTION</h3>
+            <p className="text-[10px] font-mono text-muted-foreground/60 tracking-widest">debt → zero</p>
+          </div>
         </div>
         <motion.div
-          initial={{ opacity: 0, x: -10 }}
+          initial={{ opacity: 0, x: -15 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-right"
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="text-right px-4 py-2 rounded-lg"
+          style={{ 
+            background: 'hsl(180, 60%, 55%, 0.08)',
+            border: '1px solid hsl(180, 60%, 55%, 0.2)'
+          }}
         >
-          <p className="text-xs font-mono text-muted-foreground">freedom date</p>
-          <p className="text-lg font-black font-mono text-chart-4">
+          <p className="text-[10px] font-mono text-muted-foreground/70">FREEDOM DATE</p>
+          <motion.p
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+            className="text-base font-black font-mono"
+            style={{ color: 'hsl(180, 60%, 55%)' }}
+          >
             {payoffDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-          </p>
+          </motion.p>
         </motion.div>
       </div>
 
-      <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={timelineData} margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
+      <ResponsiveContainer width="100%" height={220}>
+        <LineChart data={timelineData} margin={{ top: 15, right: 30, bottom: 15, left: 10 }}>
           <defs>
             <linearGradient id="timelineGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="hsl(270, 80%, 65%)" />
-              <stop offset="100%" stopColor="hsl(180, 60%, 55%)" />
+              <stop offset="0%" stopColor="hsl(270, 80%, 65%)" stopOpacity={1} />
+              <stop offset="100%" stopColor="hsl(180, 60%, 55%)" stopOpacity={1} />
             </linearGradient>
+            <filter id="timelineGlow">
+              <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(260, 15%, 16%)" />
+          <CartesianGrid strokeDasharray="4 4" stroke="hsl(260, 15%, 18%)" vertical={true} />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 9, fill: 'hsl(260, 8%, 55%)' }}
+            tick={{ fontSize: 9, fill: 'hsl(260, 8%, 60%)', fontFamily: 'monospace' }}
             tickLine={false}
-            axisLine={{ stroke: 'hsl(260, 15%, 16%)' }}
+            axisLine={{ stroke: 'hsl(260, 15%, 20%)', strokeWidth: 1 }}
             interval={Math.max(0, Math.floor(timelineData.length / 8))}
           />
           <YAxis
             yAxisId="left"
-            tick={{ fontSize: 9, fill: 'hsl(260, 8%, 55%)' }}
+            tick={{ fontSize: 9, fill: 'hsl(260, 8%, 60%)', fontFamily: 'monospace' }}
             tickLine={false}
             axisLine={false}
             tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+            width={40}
           />
           <YAxis
             yAxisId="right"
             orientation="right"
-            tick={{ fontSize: 9, fill: 'hsl(260, 8%, 55%)' }}
+            tick={{ fontSize: 9, fill: 'hsl(260, 8%, 60%)', fontFamily: 'monospace' }}
             tickLine={false}
             axisLine={false}
             domain={[0, 100]}
             tickFormatter={(v) => `${v}%`}
+            width={40}
           />
           <Tooltip
             contentStyle={{
-              background: 'hsl(260, 18%, 12%)',
-              border: '1px solid hsl(260, 15%, 25%)',
-              borderRadius: '8px',
+              background: 'hsl(260, 18%, 10%)',
+              border: '1px solid hsl(258, 80%, 68%, 0.3)',
+              borderRadius: '6px',
+              boxShadow: '0 0 12px hsl(258, 80%, 68%, 0.2)',
             }}
-            labelStyle={{ color: 'hsl(240, 10%, 88%)' }}
+            labelStyle={{ color: 'hsl(240, 10%, 88%)', fontFamily: 'monospace', fontSize: '11px' }}
             formatter={(value, name) => [
               name === 'balance' ? `$${(value / 1000).toFixed(1)}k` : `${value.toFixed(1)}%`,
               name === 'balance' ? 'Balance' : 'Progress'
             ]}
           />
+          <ReferenceDot x={payoffMonth} y={0} r={4} fill="hsl(180, 60%, 55%)" opacity={0.5} />
           <Line
             yAxisId="left"
-            type="monotone"
+            type="natural"
             dataKey="balance"
             stroke="url(#timelineGrad)"
-            strokeWidth={2.5}
+            strokeWidth={3}
             dot={false}
             isAnimationActive={true}
-            animationDuration={1200}
+            animationDuration={1400}
+            filter="url(#timelineGlow)"
           />
           <Line
             yAxisId="right"
-            type="monotone"
+            type="natural"
             dataKey="progress"
             stroke="hsl(100, 70%, 50%)"
-            strokeWidth={1.5}
+            strokeWidth={2}
             dot={false}
-            strokeDasharray="5 5"
+            strokeDasharray="6 3"
             isAnimationActive={true}
-            animationDuration={1200}
-            animationDelay={100}
+            animationDuration={1400}
+            animationDelay={150}
+            opacity={0.75}
           />
         </LineChart>
       </ResponsiveContainer>
 
+      {/* Zig-zag accent bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-px opacity-30"
+        style={{
+          background: 'repeating-linear-gradient(90deg, hsl(258, 80%, 68%) 0px, hsl(258, 80%, 68%) 2px, transparent 2px, transparent 8px)',
+        }}
+      />
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="mt-4 pt-3 border-t border-border/20"
+        transition={{ delay: 0.5 }}
+        className="relative z-10 mt-5 pt-4 border-t"
+        style={{ borderColor: 'hsl(260, 15%, 20%)' }}
       >
-        <p className="text-[10px] font-mono text-muted-foreground italic leading-relaxed">
-          Timeline shows your debt balance declining to zero. Green line tracks progress percentage. At current pace, freedom arrives in {months} months.
+        <p className="text-[10px] font-mono text-muted-foreground/70 leading-relaxed tracking-wide">
+          <span className="text-chart-4">↓ BALANCE</span> · <span className="text-green-500">↑ PROGRESS</span> · Freedom marker at month {months}
         </p>
       </motion.div>
     </motion.div>
