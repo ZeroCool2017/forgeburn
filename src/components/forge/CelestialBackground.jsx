@@ -9,6 +9,19 @@ import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
 export default function CelestialBackground() {
   const canvasRef = useRef(null);
   const { mode } = useAmbientSoundContext();
+  const seedRef = useRef(null);
+
+  // Generate unique seed per page (from pathname) for reproducible unique patterns
+  if (!seedRef.current) {
+    const hash = window.location.pathname.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    seedRef.current = hash % 10000;
+  }
+
+  // Seeded random for consistent but unique patterns
+  const seededRandom = (seed, index) => {
+    const x = Math.sin(seed + index * 12.9898) * 43758.5453;
+    return x - Math.floor(x);
+  };
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -26,21 +39,26 @@ export default function CelestialBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Generate multiple layers of stars with different depths
-    const starLayers = Array.from({ length: 4 }).map((_, layer) => {
-      const depth = (layer + 1) / 4; // 0.25 to 1
-      const starCount = Math.floor(150 * depth);
-      const stars = Array.from({ length: starCount }).map(() => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        brightness: 0.3 + Math.random() * 0.7,
-        twinkleDuration: 2000 + Math.random() * 3000,
-        twinklePhase: Math.random() * Math.PI * 2,
-        size: depth * (0.5 + Math.random() * 1),
-        color: ['hsl(200, 100%, 70%)', 'hsl(210, 80%, 65%)', 'hsl(220, 90%, 75%)', 'hsl(240, 70%, 70%)'][
-          Math.floor(Math.random() * 4)
-        ],
-      }));
+    // Generate multiple layers of stars with different depths using seeded randomness
+    const starLayers = Array.from({ length: 5 }).map((_, layer) => {
+      const depth = (layer + 1) / 5; // 0.2 to 1
+      const baseCount = layer === 0 ? 300 : layer === 1 ? 250 : layer === 2 ? 180 : layer === 3 ? 120 : 60;
+      const starCount = Math.floor(baseCount * depth);
+      const stars = Array.from({ length: starCount }).map((_, idx) => {
+        const seed = seedRef.current + layer * 1000 + idx;
+        return {
+          x: (seededRandom(seed, 0) * canvas.width) % canvas.width,
+          y: (seededRandom(seed, 1) * canvas.height) % canvas.height,
+          brightness: 0.2 + seededRandom(seed, 2) * 0.8,
+          twinkleDuration: 1500 + seededRandom(seed, 3) * 3500,
+          twinklePhase: seededRandom(seed, 4) * Math.PI * 2,
+          twinkleActive: seededRandom(seed, 5) > 0.5, // 50% of stars twinkle
+          size: depth * (0.4 + seededRandom(seed, 6) * 1.2),
+          color: ['hsl(200, 100%, 70%)', 'hsl(210, 80%, 65%)', 'hsl(220, 90%, 75%)', 'hsl(240, 70%, 70%)', 'hsl(195, 95%, 72%)'][
+            Math.floor(seededRandom(seed, 7) * 5)
+          ],
+        };
+      });
       return { depth, stars };
     });
 
@@ -82,20 +100,30 @@ export default function CelestialBackground() {
         ctx.globalAlpha = 1;
       });
 
-      // Draw star layers with parallax effect
-      starLayers.forEach((layer) => {
-        layer.stars.forEach((star) => {
-          // Subtle twinkling based on layer depth
-          const twinkle = Math.sin(time / layer.stars[0]?.twinkleDuration + star.twinklePhase) * 0.3 + 0.7;
-          const opacity = star.brightness * twinkle * (0.4 + layer.depth * 0.6);
+      // Draw star layers with individual twinkling control
+       starLayers.forEach((layer) => {
+         layer.stars.forEach((star) => {
+           // Each star has own twinkling duration for variety
+           const twinkle = star.twinkleActive 
+             ? Math.sin(time / star.twinkleDuration + star.twinklePhase) * 0.35 + 0.65
+             : 1; // Static stars stay bright
+           const opacity = star.brightness * twinkle * (0.35 + layer.depth * 0.65);
 
-          ctx.fillStyle = star.color;
-          ctx.globalAlpha = opacity;
-          ctx.beginPath();
-          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      });
+           ctx.fillStyle = star.color;
+           ctx.globalAlpha = opacity;
+           ctx.beginPath();
+           ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+           ctx.fill();
+
+           // Subtle glow for brighter stars
+           if (star.brightness > 0.7 && star.size > 0.6) {
+             ctx.globalAlpha = opacity * 0.15;
+             ctx.beginPath();
+             ctx.arc(star.x, star.y, star.size * 1.8, 0, Math.PI * 2);
+             ctx.fill();
+           }
+         });
+       });
 
       ctx.globalAlpha = 1;
 
