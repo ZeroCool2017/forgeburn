@@ -4,8 +4,9 @@ import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { Sparkles } from 'lucide-react';
 
 /**
- * Celestial Obsidian Mind Map — living, breathing debt visualization
- * Nodes grow, move, and learn from user patterns
+ * Momentum Field — evolving, responsive system that grows smarter
+ * Nodes represent loans, breathing and moving as progress is made
+ * As you interact, this field learns and helps you excel in all life areas
  */
 
 export default function CelestialMindMap({ loans, schedule }) {
@@ -25,23 +26,26 @@ export default function CelestialMindMap({ loans, schedule }) {
     
     const newParticles = loans.map((loan, i) => {
       const angle = (i / loans.length) * Math.PI * 2;
-      const r = 80 + i * 15;
+      const r = 70 + i * 18;
+      const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
       return {
         id: loan.id,
         x: CX + r * Math.cos(angle),
         y: CY + r * Math.sin(angle),
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
         balance: loan.current_balance,
         original: loan.original_balance || loan.current_balance,
         category: loan.category,
         name: loan.name,
-        growth: 1,
+        emoji: cat.emoji,
+        color: cat.color,
+        growth: 0.6,
       };
     });
     
     setParticles(newParticles);
-  }, [loans.length]);
+  }, [loans]);
 
   // Animate time
   useEffect(() => {
@@ -142,53 +146,70 @@ export default function CelestialMindMap({ loans, schedule }) {
       });
     });
 
-    // Draw nodes — clean, minimal obsidian aesthetic with synchronized breathing
+    // Draw nodes — living, breathing momentum indicators
     // Global synchronized breath (all nodes pulse together)
-    const globalBreath = 1 + Math.sin(time * 0.008) * 0.22;
+    const globalBreath = 1 + Math.sin(time * 0.008) * 0.24;
     
     updated.forEach(p => {
       // Synchronized breathing + individual subtle variation
-      const individualWave = 1 + Math.sin(time * 0.006 + p.id.charCodeAt(0) * 0.3) * 0.08;
-      const r = (8 + p.growth * 6) * globalBreath * individualWave;
+      const individualWave = 1 + Math.sin(time * 0.006 + p.id.charCodeAt(0) * 0.3) * 0.1;
+      const r = (12 + p.growth * 10) * globalBreath * individualWave;
 
-      // Breathing glow halo — very subtle, synchronized
-      const haloBreath = globalBreath + 0.15;
-      const gradient = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 2.2 * haloBreath);
-      gradient.addColorStop(0, 'rgba(200, 200, 220, 0.15)');
-      gradient.addColorStop(1, 'rgba(200, 200, 220, 0)');
-      ctx.fillStyle = gradient;
+      // Outer glow halo — color-coded by loan type, breathing
+      const rgbColor = parseInt(p.color.slice(1), 16);
+      const rVal = (rgbColor >> 16) & 255;
+      const gVal = (rgbColor >> 8) & 255;
+      const bVal = rgbColor & 255;
+      
+      const haloBreath = globalBreath + 0.2;
+      const glowGrad = ctx.createRadialGradient(p.x, p.y, r, p.x, p.y, r * 3 * haloBreath);
+      glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.25)`);
+      glowGrad.addColorStop(0.6, `rgba(${rVal}, ${gVal}, ${bVal}, 0.08)`);
+      glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0)`);
+      ctx.fillStyle = glowGrad;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r * 2.2 * haloBreath, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, r * 3 * haloBreath, 0, Math.PI * 2);
       ctx.fill();
 
-      // Core node — minimal color, mostly white/gray, breathing in sync
-      const brightness = 175 + (globalBreath - 1) * 60;
-      ctx.fillStyle = `rgba(${brightness}, ${brightness}, ${brightness}, 0.88)`;
+      // Core node circle — color-coded
+      ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.92)`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.fill();
 
-      // Thin border in primary color (accent) — subtle breathing
-      const borderAlpha = 0.35 + (globalBreath - 1) * 0.15;
-      ctx.strokeStyle = `rgba(140, 100, 240, ${borderAlpha})`;
-      ctx.lineWidth = 0.85;
+      // Breathing border — tighter, more defined
+      const borderAlpha = 0.5 + (globalBreath - 1) * 0.25;
+      ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${borderAlpha})`;
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Inner breathing light — sync with expansion
-      ctx.fillStyle = `rgba(255, 255, 255, ${0.12 + (globalBreath - 1) * 0.2})`;
+      // Inner light reflection — breathing
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.2 + (globalBreath - 1) * 0.3})`;
       ctx.beginPath();
-      ctx.arc(p.x - r * 0.25, p.y - r * 0.25, r * 0.35, 0, Math.PI * 2);
+      ctx.arc(p.x - r * 0.3, p.y - r * 0.3, r * 0.4, 0, Math.PI * 2);
       ctx.fill();
 
-      // Label (if room) — stable text, doesn't scale
-      if (r > 5) {
-        ctx.fillStyle = `rgba(100, 100, 100, 0.6)`;
-        ctx.font = '6px monospace';
+      // Progress ring — shows debt payoff progress
+      const progress = 1 - (p.balance / p.original);
+      if (progress > 0.01) {
+        const ringRadius = r + 3;
+        const startAngle = -Math.PI / 2;
+        const endAngle = startAngle + progress * 2 * Math.PI;
+        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.6)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
+        ctx.stroke();
+      }
+
+      // Emoji label (centered on node)
+      if (p.emoji) {
+        ctx.font = `${Math.round(r * 1.4)}px Arial`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(p.name.slice(0, 3).toUpperCase(), p.x, p.y);
+        ctx.fillText(p.emoji, p.x, p.y);
       }
     });
   }, [particles]);
@@ -196,7 +217,7 @@ export default function CelestialMindMap({ loans, schedule }) {
   if (!loans.length) {
     return (
       <div className="glass rounded-2xl p-5 h-96 flex items-center justify-center text-muted-foreground">
-        <p className="text-xs">Mind map will appear once you add loans.</p>
+        <p className="text-xs">Momentum field will manifest once you add loans.</p>
       </div>
     );
   }
@@ -215,8 +236,8 @@ export default function CelestialMindMap({ loans, schedule }) {
           transition={{ duration: 3, repeat: Infinity }}
           className="w-2 h-2 rounded-full bg-primary"
         />
-        <h3 className="text-sm font-semibold text-foreground">CELESTIAL MIND MAP</h3>
-        <p className="text-[10px] font-mono text-muted-foreground/50 ml-auto">living · learning</p>
+        <h3 className="text-sm font-semibold text-foreground">MOMENTUM FIELD</h3>
+        <p className="text-[10px] font-mono text-muted-foreground/50 ml-auto">evolving · responsive</p>
       </div>
 
       {/* Canvas */}
@@ -237,7 +258,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Nodes grow and move as you progress. The system learns your patterns and adapts.
+        Each node grows as you pay down debt. The field learns from your choices and helps you excel across all areas of life.
       </motion.p>
     </motion.div>
   );

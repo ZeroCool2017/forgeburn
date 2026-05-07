@@ -309,11 +309,30 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Celestial Mind Map */}
-            <p className="obs-label mb-3">— living mind map</p>
+            {/* Momentum Field */}
+            <p className="obs-label mb-3">— momentum field</p>
             <div className="mb-6">
               <CelestialMindMap loans={loans} schedule={schedule} />
             </div>
+
+            <div className="obs-divider my-6" />
+            {/* Learning & Growth */}
+            <p className="obs-label mb-3">— learning consent</p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="glass rounded-2xl p-5 mb-6"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-foreground mb-1">Let this field learn from you</p>
+                  <p className="text-xs text-muted-foreground">As you interact with this app — your decisions, patterns, dreams — the momentum field grows smarter and more attuned to helping you excel in all areas of life, not just debt payoff.</p>
+                </div>
+                <button className="shrink-0 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/40 text-primary text-xs font-semibold hover:bg-primary/30 transition-all">
+                  Allow Learning
+                </button>
+              </div>
+            </motion.div>
 
             <div className="obs-divider my-6" />
             {/* Money Horoscope */}
