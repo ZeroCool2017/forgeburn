@@ -1,31 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { playHarmonicChord } from '@/lib/musicalInterface';
+import HeatmapNoteModal from './HeatmapNoteModal';
 
 /**
  * Interactive interest heatmap — beautiful gradient grid.
- * Click cells to trigger lush synth chords based on interest intensity.
- * No popups. Just pure visual + sonic exploration.
+ * Click cells to open note modal + trigger synth chords.
+ * Gradient: purple (low) → red (high interest).
  */
-
-const INTEREST_DESCRIPTIONS = [
-  "The silent tax of time. Interest accrues whether you notice or not.",
-  "Money you'll never see, paying for money you borrowed. The game's design.",
-  "Each month, the bank collects their cut. Compound interest is compounding cruelty.",
-  "This is the cost of impatience. Or circumstance. Or both.",
-  "Interest: the penalty for needing money now instead of later.",
-  "The system extracts its due. Slowly. Relentlessly.",
-  "You're paying the future to own the present. The interest is the price of that trade.",
-  "This month, part of your payment feeds the bank's existence, not your freedom.",
-  "Interest calculates itself while you sleep. It never stops working.",
-  "The mathematical expression of opportunity cost. What this money could have been.",
-  "Each dollar of interest is a choice—theirs. To extract. From you.",
-  "Time becomes money, and money becomes more money. The cycle spirals.",
-];
 
 export default function InteractiveHeatmap({ schedule, title = 'Interactive Interest Map' }) {
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [descriptionIndex, setDescriptionIndex] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedInterest, setSelectedInterest] = useState(null);
 
   if (!schedule?.length) return null;
 
@@ -34,22 +21,26 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
   const minValue = Math.min(...months.map(m => m.totalInterest || 0));
 
   const handleCellClick = (monthIndex, value) => {
-    // Play chord based on interest intensity (0-1)
+    // Open modal for this month
+    setSelectedMonth(months[monthIndex].month);
+    setSelectedInterest(value);
+
+    // Play chord based on interest intensity
     const normalized = (value - minValue) / (maxValue - minValue || 1);
-    
-    // Map to chord types: low = minor/dark, mid = major/balanced, high = complex/rich
     let chordType = 0;
     if (normalized < 0.33) chordType = 0; // Minor
     else if (normalized < 0.66) chordType = 1; // Major
-    else chordType = 2; // Augmented/complex
-    
+    else chordType = 2; // Complex
     playHarmonicChord(chordType);
     
-    // Cycle description
-    setDescriptionIndex((prev) => (prev + 1) % INTEREST_DESCRIPTIONS.length);
-    
-    // Haptic
     if (navigator.vibrate) navigator.vibrate(40);
+  };
+
+  const handleSaveNote = (data) => {
+    // In a real app, save to database
+    console.log('Note saved:', data);
+    setSelectedMonth(null);
+    setSelectedInterest(null);
   };
 
   return (
@@ -61,16 +52,8 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
     >
       {/* Header */}
       <div className="mb-4">
-        <h3 className="text-sm font-semibold text-foreground mb-2">{title}</h3>
-        <motion.p
-          key={descriptionIndex}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-xs text-foreground/75 italic leading-relaxed mb-3 h-10 flex items-center"
-        >
-          {INTEREST_DESCRIPTIONS[descriptionIndex]}
-        </motion.p>
+        <h3 className="text-sm font-semibold text-foreground mb-1">{title}</h3>
+        <p className="text-xs text-muted-foreground/70">Click any month to explore and record your financial observations.</p>
       </div>
 
       <div className="space-y-3">
@@ -150,16 +133,16 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
           <p className="font-mono text-xs">High</p>
         </div>
 
-        {/* Interaction hint */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
-          transition={{ delay: 0.8 }}
-          className="text-[9px] text-muted-foreground/60 italic mt-3 text-center"
-        >
-          Click any cell. The chords reveal the weight of interest.
-        </motion.p>
       </div>
+
+      {/* Note modal */}
+      <HeatmapNoteModal
+        month={selectedMonth}
+        interest={selectedInterest || 0}
+        open={selectedMonth !== null}
+        onClose={() => setSelectedMonth(null)}
+        onSave={handleSaveNote}
+      />
     </motion.div>
   );
 }
