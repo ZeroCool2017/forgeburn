@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen } from 'lucide-react';
-import { playNoteFromData, playHarmonicChord } from '@/lib/musicalInterface';
+import { playNoteFromData, playHarmonicChord, playShimmerChime } from '@/lib/musicalInterface';
 
 /**
  * Narrative context for loans — ironic, intelligent storytelling + audio.
@@ -49,11 +49,8 @@ export default function LoanNarrative({ loan }) {
   const handleHover = (entering) => {
     setIsHovered(entering);
     if (entering) {
-      if (isComplete) {
-        playHarmonicChord(1); // Completion chord
-      } else {
-        playNoteFromData(progress); // Progress-based note
-      }
+      // Electroplankton-like shimmer on scroll/appearance
+      playShimmerChime(Math.random() * 0.6 - 0.3);
     }
   };
 

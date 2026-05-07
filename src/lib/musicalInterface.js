@@ -125,3 +125,65 @@ export function playResolutionChord() {
   setTimeout(() => playHarmonicNote(root + 3, 0.4), 100);
   setTimeout(() => playHarmonicNote(root + 4, 0.5), 200);
 }
+
+// Electroplankton-like shimmer — delicate, magical leaf-touch sound
+export function playShimmerChime(pitchVariation = 0) {
+  try {
+    const ac = getAudioContext();
+    if (ac.state === 'suspended') ac.resume();
+
+    const t = ac.currentTime;
+    const baseFreq = 800 + pitchVariation * 200; // Gentle high frequency
+
+    // Create shimmering effect with multiple layers
+    const oscillators = [];
+    const gains = [];
+
+    // Main tone
+    const osc1 = ac.createOscillator();
+    const gain1 = ac.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.value = baseFreq;
+    gain1.gain.setValueAtTime(0, t);
+    gain1.gain.linearRampToValueAtTime(0.06, t + 0.02);
+    gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    osc1.connect(gain1);
+    gain1.connect(ac.destination);
+    oscillators.push(osc1);
+    gains.push(gain1);
+
+    // Harmonic shimmer (octave higher, slightly detuned for shimmer)
+    const osc2 = ac.createOscillator();
+    const gain2 = ac.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = baseFreq * 2 + 3; // Slight detuning for shimmer
+    gain2.gain.setValueAtTime(0, t);
+    gain2.gain.linearRampToValueAtTime(0.04, t + 0.03);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+    osc2.connect(gain2);
+    gain2.connect(ac.destination);
+    oscillators.push(osc2);
+    gains.push(gain2);
+
+    // Sub-harmonic warmth
+    const osc3 = ac.createOscillator();
+    const gain3 = ac.createGain();
+    osc3.type = 'triangle';
+    osc3.frequency.value = baseFreq * 0.5;
+    gain3.gain.setValueAtTime(0, t);
+    gain3.gain.linearRampToValueAtTime(0.02, t + 0.05);
+    gain3.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+    osc3.connect(gain3);
+    gain3.connect(ac.destination);
+    oscillators.push(osc3);
+    gains.push(gain3);
+
+    // Start all oscillators
+    oscillators.forEach(osc => {
+      osc.start(t);
+      osc.stop(t + 0.6);
+    });
+  } catch (e) {
+    // Fail silently if audio context unavailable
+  }
+}
