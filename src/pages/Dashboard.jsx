@@ -183,20 +183,24 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4"
+          className="mb-8"
         >
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <Hammer className="w-6 h-6 text-primary" />
-              <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight font-display">
-                Chain<span className="text-primary">Forge</span>
-              </h1>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="obs-label mb-2">chainforge / forge</p>
+              <div className="flex items-center gap-3 mb-1">
+                <Hammer className="w-5 h-5 text-primary" />
+                <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
+                  Chain<span className="text-primary">Forge</span>
+                </h1>
+              </div>
+              <p className="text-xs text-muted-foreground font-mono">
+                Break every chain. Forge your freedom.
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Break every chain. Forge your freedom.
-            </p>
+            <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
           </div>
-          <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
+          <div className="obs-divider mt-6" />
         </motion.div>
 
         {/* Quote */}
@@ -209,6 +213,7 @@ export default function Dashboard() {
         ) : (
           <>
             {/* Stats Row */}
+            <p className="obs-label mb-3">— overview</p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
               <StatsOrb label="Total Debt" value={formatCurrency(totalDebt)} sublabel={`of ${formatCurrency(totalOriginal)}`} delay={0} />
               <StatsOrb label="Free In" value={formatMonths(schedule.months)} sublabel={`${monthsSaved > 0 ? monthsSaved + ' months saved' : 'vs minimum'}`} delay={0.1} />
@@ -216,7 +221,9 @@ export default function Dashboard() {
               <StatsOrb label="Chains" value={loans.length} sublabel={`${loans.filter(l => l.current_balance <= 0).length} broken`} delay={0.3} />
             </div>
 
+            <div className="obs-divider my-6" />
             {/* Visualize Value panel */}
+            <p className="obs-label mb-3">— data story</p>
             <div className="mb-6">
               <VisualizeValue
                 totalDebt={totalDebt}
@@ -226,7 +233,9 @@ export default function Dashboard() {
               />
             </div>
 
+            <div className="obs-divider my-6" />
             {/* Systems-thinking: compound curve widget */}
+            <p className="obs-label mb-3">— compound effect</p>
             <div className="mb-6">
               <CompoundCurveWidget
                 loans={loans}
@@ -235,7 +244,9 @@ export default function Dashboard() {
               />
             </div>
 
+            <div className="obs-divider my-6" />
             {/* Extra Budget + Freedom Score */}
+            <p className="obs-label mb-3">— forge controls</p>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
               <div className="lg:col-span-2">
                 <ExtraBudgetSlider value={extraBudget} onChange={setExtraBudget} />
@@ -243,7 +254,9 @@ export default function Dashboard() {
               <FreedomScore loans={loans} />
             </div>
 
+            <div className="obs-divider my-6" />
             {/* Debt Reduction Progress */}
+            <p className="obs-label mb-3">— reduction trajectory</p>
             <div className="mb-6">
               <DebtReductionChart
                 schedule={schedule}
@@ -252,7 +265,9 @@ export default function Dashboard() {
               />
             </div>
 
+            <div className="obs-divider my-6" />
             {/* Main Charts */}
+            <p className="obs-label mb-3">— analysis</p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
               <BurndownChart schedule={schedule} minimumSchedule={minimumSchedule} />
               <StrategyCompare
@@ -272,12 +287,10 @@ export default function Dashboard() {
               <MonthlyHeatmap schedule={schedule} />
             </div>
 
+            <div className="obs-divider my-6" />
             {/* Loan Cards */}
             <div className="mb-6">
-              <h2 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-primary" />
-                Your Chains
-              </h2>
+              <p className="obs-label mb-3">— your chains</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {loans.map(loan => (
                   <div

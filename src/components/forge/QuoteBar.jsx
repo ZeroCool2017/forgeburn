@@ -17,26 +17,32 @@ export default function QuoteBar() {
   const quote = quotes[index];
 
   return (
-    <div className="relative overflow-hidden rounded-xl glass glow-purple px-6 py-4">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
-      <div className="flex items-start gap-3 relative">
-        <Sparkles className="w-4 h-4 text-primary mt-1 shrink-0 animate-pulse-glow" />
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-sm font-light text-foreground/80 italic leading-relaxed">
-              "{quote.text}"
-            </p>
-            <p className="text-xs text-muted-foreground mt-1 font-mono">
-              — {quote.author}
-            </p>
-          </motion.div>
-        </AnimatePresence>
+    <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-card/40 backdrop-blur-sm">
+      {/* Left callout accent bar */}
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary/60 via-primary/30 to-transparent rounded-l-xl" />
+      <div className="pl-6 pr-5 py-4">
+        <div className="flex items-start gap-3">
+          <Sparkles className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0 animate-pulse-glow" />
+          <div className="flex-1 min-w-0">
+            <p className="obs-label mb-2">note</p>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.45 }}
+              >
+                <p className="text-sm font-display italic text-foreground/85 leading-relaxed">
+                  "{quote.text}"
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-2 font-mono">
+                  — {quote.author}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </div>
   );

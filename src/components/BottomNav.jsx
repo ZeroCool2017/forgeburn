@@ -25,8 +25,8 @@ export default function BottomNav() {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed left-0 right-0 z-40 glass border-t border-border/50"
-      style={{ bottom: 0, paddingBottom: 'env(safe-area-inset-bottom)' }}
+      className="fixed left-0 right-0 z-40 border-t border-border/30"
+      style={{ bottom: 0, paddingBottom: 'env(safe-area-inset-bottom)', background: 'hsl(0,0%,6%/0.92)', backdropFilter: 'blur(20px)' }}
     >
       <div className="flex items-stretch h-16">
         {TABS.map(({ to, label, icon: Icon }) => {

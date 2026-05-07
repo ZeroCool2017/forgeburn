@@ -105,7 +105,25 @@
 
 @layer utilities {
   .glass {
-    @apply bg-card/60 backdrop-blur-xl border border-border/50;
+    @apply bg-card/70 backdrop-blur-xl border border-border/40;
+  }
+  /* Obsidian grid texture — very subtle dot grid like Obsidian canvas */
+  .obsidian-grid {
+    background-image:
+      radial-gradient(circle, hsl(258 80% 68% / 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  /* Horizontal rule dividers */
+  .obs-divider {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
+  }
+  /* Section label style — Obsidian property key look */
+  .obs-label {
+    @apply text-[10px] font-mono text-muted-foreground uppercase tracking-[0.18em];
+  }
+  /* Callout block left-accent */
+  .obs-callout {
+    @apply border-l-2 border-primary/40 pl-4;
   }
   .glow-purple {
     box-shadow: 0 0 24px rgba(140, 100, 240, 0.22), 0 0 64px rgba(140, 100, 240, 0.08);

@@ -227,12 +227,22 @@ export const QUOTES = [
   { text: "Sunburst patterns in terrazzo floors — every detail in an Art Deco building was intentional. Be intentional.", author: "Tulsa Art Deco" },
   { text: "Oklahoma has always been about starting over on hard ground. That's not a weakness. That's a skill.", author: "Tulsa, Oklahoma" },
 
-  // Caddo Nation
+  // Caddo Nation — words, phrases, and adapted wisdom
   { text: "Nah nah kah-ha — All things come back to where they began.", author: "Caddo Nation (traditional)" },
   { text: "The land holds the memory. So does the ledger — know both.", author: "Caddo Nation (adapted)" },
   { text: "A bird does not ask permission to migrate home. Neither should you.", author: "Caddo Nation (traditional)" },
   { text: "What you carry, carry lightly. What you owe, settle honestly.", author: "Caddo Nation (traditional)" },
   { text: "Haa'ish — it is well. And it will be well again.", author: "Caddo Nation" },
+  { text: "Kuhti' — stand up. You are not done yet.", author: "Caddo Nation (traditional)" },
+  { text: "Nah wi' — we are together. No debt is carried alone.", author: "Caddo Nation (traditional)" },
+  { text: "Sáa'ni — be strong. The river bends but does not break.", author: "Caddo Nation (traditional)" },
+  { text: "Hayhu — hello, future self. I have been working for you.", author: "Caddo Nation (adapted)" },
+  { text: "Dáhsini — keep going forward. The trail is still there.", author: "Caddo Nation (traditional)" },
+  { text: "The Red River does not ask if it is tired. It moves.", author: "Caddo Nation (Caddo Homeland)" },
+  { text: "Borrow nothing from tomorrow that you cannot repay with today's action.", author: "Caddo Nation (elder saying)" },
+  { text: "The cedars at Binger have stood through drought and flood. So will you.", author: "Caddo Nation (Anadarko, Oklahoma)" },
+  { text: "Wíčhoni — to live fully is to have no debt to your own spirit.", author: "Caddo Nation (adapted)" },
+  { text: "When you clear your debts, you clear the path for those who walk behind you.", author: "Caddo Nation (elder wisdom)" },
 
   // Charly Crockett
   { text: "I've been down so long, down don't bother me.", author: "Charly Crockett" },

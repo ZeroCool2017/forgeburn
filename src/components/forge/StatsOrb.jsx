@@ -6,23 +6,23 @@ export default function StatsOrb({ label, value, sublabel, delay = 0, color = 'p
   const isForge = !!accent;
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay, type: 'spring', stiffness: 200 }}
-      className={`glass rounded-2xl p-5 relative overflow-hidden group transition-all ${isForge ? 'hover:border-chart-3/40' : 'hover:border-primary/30'}`}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.3 }}
+      className={`rounded-xl border bg-card/50 p-4 relative overflow-hidden group transition-all ${
+        isForge ? 'border-border/30 hover:border-chart-3/30' : 'border-border/30 hover:border-primary/25'
+      }`}
     >
-      <div 
-        className="absolute -top-8 -right-8 w-24 h-24 rounded-full opacity-10 group-hover:opacity-20 transition-opacity"
-        style={{ background: `radial-gradient(circle, hsl(var(--${resolvedColor})), transparent)` }}
-      />
-      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">{label}</p>
+      {/* Top accent line */}
+      <div className={`absolute top-0 left-4 right-4 h-px ${isForge ? 'bg-chart-3/30' : 'bg-primary/20'}`} />
+      <p className="obs-label mb-2">{label}</p>
       <p
-        className="text-2xl font-bold font-mono"
-        style={isForge ? { color: 'hsl(var(--chart-3))' } : undefined}
+        className="text-2xl font-black font-mono tracking-tight"
+        style={isForge ? { color: 'hsl(var(--chart-3))' } : { color: 'hsl(var(--foreground))' }}
       >
         {value}
       </p>
-      {sublabel && <p className="text-xs text-muted-foreground mt-1">{sublabel}</p>}
+      {sublabel && <p className="text-[11px] text-muted-foreground mt-1 font-mono">{sublabel}</p>}
     </motion.div>
   );
 }
