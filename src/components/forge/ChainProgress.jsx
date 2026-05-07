@@ -1,14 +1,15 @@
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
-import { Link2Off, Link2, Zap } from 'lucide-react';
+import { Link2Off, Link2, Zap, MoreHorizontal, Trash2 } from 'lucide-react';
 
-export default function ChainProgress({ loan, totalOriginal, onPay, isShattering }) {
+export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, isShattering }) {
   const original = loan.original_balance || loan.current_balance;
   const progress = Math.max(0, Math.min(1, 1 - (loan.current_balance / original)));
   const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
   const links = 20;
   const brokenLinks = Math.floor(progress * links);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <motion.div
@@ -40,17 +41,53 @@ export default function ChainProgress({ loan, totalOriginal, onPay, isShattering
             <p className="text-xs text-muted-foreground font-mono">{loan.interest_rate}% APR</p>
           </div>
         </div>
-        <div className="text-right">
-          <motion.p
-            key={loan.current_balance}
-            initial={isShattering ? { scale: 1.2, color: cat.color } : false}
-            animate={{ scale: 1, color: 'hsl(var(--foreground))' }}
-            transition={{ duration: 0.4 }}
-            className="text-sm font-bold font-mono"
-          >
-            {formatCurrency(loan.current_balance)}
-          </motion.p>
-          <p className="text-xs text-muted-foreground">of {formatCurrency(original)}</p>
+        <div className="flex items-start gap-2">
+          <div className="text-right">
+            <motion.p
+              key={loan.current_balance}
+              initial={isShattering ? { scale: 1.2, color: cat.color } : false}
+              animate={{ scale: 1, color: 'hsl(var(--foreground))' }}
+              transition={{ duration: 0.4 }}
+              className="text-sm font-bold font-mono"
+            >
+              {formatCurrency(loan.current_balance)}
+            </motion.p>
+            <p className="text-xs text-muted-foreground">of {formatCurrency(original)}</p>
+          </div>
+
+          {/* Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              aria-label="Chain options"
+              className="w-6 h-6 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all"
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+            <AnimatePresence>
+              {menuOpen && (
+                <>
+                  {/* Backdrop */}
+                  <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: -4 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -4 }}
+                    transition={{ duration: 0.12 }}
+                    className="absolute right-0 top-7 z-20 glass border border-border/50 rounded-xl shadow-xl overflow-hidden min-w-[130px]"
+                  >
+                    <button
+                      onClick={() => { setMenuOpen(false); onDelete?.(); }}
+                      className="flex items-center gap-2 w-full px-3 py-2.5 text-xs text-destructive hover:bg-destructive/10 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      Delete chain
+                    </button>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
 
@@ -101,7 +138,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, isShattering
         {onPay && (
           <button
             onClick={onPay}
-            className="flex items-center gap-1 text-xs font-semibold font-mono px-2.5 py-1 rounded-lg border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:border-primary/60 transition-all opacity-0 group-hover:opacity-100"
+            className="flex items-center gap-1 text-xs font-semibold font-mono px-2.5 py-1 rounded-lg border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:border-primary/60 transition-all"
           >
             <Zap className="w-3 h-3" />
             Strike

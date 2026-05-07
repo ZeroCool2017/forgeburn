@@ -2,8 +2,7 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, Hammer } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Hammer } from 'lucide-react';
 
 import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import QuoteBar from '@/components/forge/QuoteBar';
@@ -259,24 +258,15 @@ export default function Dashboard() {
                 {loans.map(loan => (
                   <div
                     key={loan.id}
-                    className="relative group"
                     ref={el => cardRefs.current[loan.id] = el}
                   >
                     <ChainProgress
                       loan={loan}
                       totalOriginal={totalOriginal}
                       onPay={() => setPayingLoan(loan)}
+                      onDelete={() => deleteLoan.mutate(loan.id)}
                       isShattering={shatteringLoanId === loan.id}
                     />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteLoan.mutate(loan.id)}
-                      aria-label={`Delete ${loan.name}`}
-                      className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10 w-7 h-7 hidden sm:flex"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
                   </div>
                 ))}
               </div>
