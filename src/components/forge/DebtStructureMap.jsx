@@ -8,6 +8,7 @@ import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
  */
 
 export default function DebtStructureMap({ loans, totalOriginal }) {
+  const svgRef = useRef(null);
   const [animTime, setAnimTime] = useState(0);
 
   useEffect(() => {
@@ -181,38 +182,6 @@ export default function DebtStructureMap({ loans, totalOriginal }) {
       >
         Nodes orbit based on structure. Size and ring reflect progress. Connections show relationships.
       </motion.p>
-    </motion.div>
-  );
-
-  if (!loans?.length) {
-    return (
-      <div className="glass rounded-2xl p-5 h-64 flex items-center justify-center text-muted-foreground">
-        <p className="text-xs">Add loans to see the structural map.</p>
-      </div>
-    );
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="glass rounded-2xl p-5 overflow-hidden"
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-        <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Systems View</p>
-      </div>
-      <canvas
-        ref={canvasRef}
-        width={540}
-        height={320}
-        className="w-full rounded-lg border border-border/20"
-        style={{ display: 'block', background: 'hsl(260, 18%, 7%)' }}
-      />
-      <p className="text-[10px] text-muted-foreground mt-3 italic leading-relaxed">
-        Each circle is a loan. Size and glow indicate progress. Lines show structural connections — your debt as a network, not a list.
-      </p>
     </motion.div>
   );
 }

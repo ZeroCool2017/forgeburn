@@ -28,7 +28,7 @@ import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
 import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
 import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
-import DebtStructureMap from '@/components/forge/DebtStructureMap';
+
 import LoanNarrative from '@/components/forge/LoanNarrative';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
@@ -298,13 +298,6 @@ export default function Dashboard() {
               {loans.map(loan => (
                 <LoanNarrative key={loan.id} loan={loan} />
               ))}
-            </div>
-
-            <div className="obs-divider my-6" />
-            {/* Debt Structure Map */}
-            <p className="obs-label mb-3">— structural view</p>
-            <div className="mb-6">
-              <DebtStructureMap loans={loans} totalOriginal={totalOriginal} />
             </div>
 
             <div className="obs-divider my-6" />
