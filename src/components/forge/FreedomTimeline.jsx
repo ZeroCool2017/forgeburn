@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceDot } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 export default function FreedomTimeline({ schedule, months }) {
   // Build a timeline from now to payoff with milestone markers
@@ -142,7 +142,6 @@ export default function FreedomTimeline({ schedule, months }) {
               name === 'balance' ? 'Balance' : 'Progress'
             ]}
           />
-          <ReferenceDot x={payoffMonth} y={0} r={4} fill="hsl(180, 60%, 55%)" opacity={0.5} />
           <Line
             yAxisId="left"
             type="natural"
