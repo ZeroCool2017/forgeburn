@@ -21,6 +21,7 @@ import EmptyState from '@/components/forge/EmptyState';
 import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
 import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
 import MilestoneOverlay from '@/components/forge/MilestoneOverlay';
+import FloatingOrganisms from '@/components/forge/FloatingOrganisms';
 import { detectMilestone } from '@/lib/milestones';
 import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
@@ -163,6 +164,9 @@ export default function Dashboard() {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div>
+      {/* Floating Electroplankton organisms */}
+      <FloatingOrganisms debtProgress={totalDebt > 0 ? (totalOriginal - totalDebt) / totalOriginal : 0} />
+
       {/* Background gradient orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />

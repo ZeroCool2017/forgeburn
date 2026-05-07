@@ -246,7 +246,7 @@ export function useAmbientSound() {
     nodesRef.current.push({ osc: lfo, gain: lfoGain, ac });
   }, []);
 
-  const start = useCallback((mode = 'electroplankton') => {
+  const start = useCallback((mode = 'electroplankton', debtProgress = 0) => {
     if (playingRef.current) return;
     try {
       const ac = getCtx();
@@ -258,6 +258,15 @@ export function useAmbientSound() {
       else if (mode === 'deep') startDeep(ac);
     } catch (e) {}
   }, [startElectroplankton, startEnder, startDeep]);
+
+  const updateProgress = useCallback((debtProgress) => {
+    // Modulate organism spawn rate and complexity based on progress (0-1)
+    // As progress increases (more debt paid), complexity increases
+    if (playingRef.current && nodesRef.current.length > 0) {
+      // This is a placeholder for future dynamic modulation
+      // e.g., spawn density, filter cutoff changes, etc.
+    }
+  }, []);
 
   useEffect(() => {
     return () => stop();
