@@ -98,17 +98,20 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <AmbientSoundProvider>
-          {/* Global celestial background */}
-          <div className="fixed inset-0 pointer-events-none z-0">
+          {/* Global celestial background — always visible, full viewport */}
+          <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
             <CelestialBackground />
           </div>
           
           {/* Vignette overlay */}
-          <div className="fixed inset-0 pointer-events-none z-10 opacity-70"
-            style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)' }} />
+          <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ 
+            zIndex: 5,
+            opacity: 0.7,
+            background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)'
+          }} />
           
           {/* App content */}
-          <div className="relative z-20">
+          <div className="relative" style={{ zIndex: 10 }}>
             <Router>
               <AuthenticatedApp />
             </Router>

@@ -102,8 +102,8 @@ export function analyzeDbtProfile(answers, debt) {
 
   // Identify primary challenges (areas needing most support)
   const sortedModules = Object.entries(moduleCounts)
-    .filter(([_, count]) => count > 0)
-    .sort(([_, a], [_, b]) => b - a);
+    .filter(([, count]) => count > 0)
+    .sort(([, countA], [, countB]) => countB - countA);
 
   const primaryChallenge = sortedModules[0]?.[0];
   const secondaryChallenge = sortedModules[1]?.[0];
