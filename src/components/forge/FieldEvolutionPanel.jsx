@@ -33,23 +33,23 @@ export default function FieldEvolutionPanel({ habits, loans, refreshInterval = 2
 
         const historicalContext = previousInsights.slice(-3).map((i, idx) => `[Gen ${idx}]: ${i}`).join('\n');
 
-        const prompt = `You are a behavioral psychologist using machine learning to understand this person's evolving relationship with money.
+        const prompt = `Reflect on what's changing in how this person understands themselves through their financial choices.
 
 CURRENT DATA:
 - Debt repaid: ${Math.round(payoffProgress * 100)}%
 - Habits: ${habits.map(h => h.name).join(', ')}
-- Field generation: ${generation}
+- Observation: Generation ${generation}
 
-${previousInsights.length > 0 ? `PREVIOUS INSIGHTS (to show evolution):\n${historicalContext}` : ''}
+${previousInsights.length > 0 ? `PREVIOUS REALIZATIONS:\n${historicalContext}` : ''}
 
-Generate a SHORT (2-3 sentences) EVOLVED insight that:
-1. Shows psychological growth/deepening from previous insights (if available)
-2. Connects dopamine, motivation, and identity to their specific spending patterns
-3. Reveals what their debt payoff journey is teaching them about themselves
-4. Be progressively more existential/profound as generation increases
-5. For later generations: reference the evolution itself ("You've moved from X understanding to Y realization")
+Generate a 2-3 sentence insight that:
+1. Shows what they might be learning about themselves as they progress
+2. Connect their choices to what they actually want, not what they think they should want
+3. Sound like watching someone slowly understand their own pattern
+4. Be gentle but honest
+5. If generation > 1: reference how their thinking seems to be evolving
 
-Make it feel like the field is learning WITH them, not AT them.
+Make it feel like patient observation, not analysis.
 Write ONLY the insight, nothing else.`;
 
         const result = await base44.integrations.Core.InvokeLLM({

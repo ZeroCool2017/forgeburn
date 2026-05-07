@@ -24,7 +24,7 @@ export default function TypingInsightPanel({ habits, loans }) {
         const totalDebt = loans.reduce((s, l) => s + l.current_balance, 0);
         const payoffProgress = loans.length ? 1 - (totalDebt / loans.reduce((s, l) => s + (l.original_balance || l.current_balance), 0)) : 0;
 
-        const prompt = `Analyze these spending habits and reveal what they genuinely show about this person's values, fears, or coping mechanisms. Be direct and psychological—not mystical.
+        const prompt = `Reflect on what these spending patterns reveal about how this person relates to themselves, their time, and what they value most.
 
 HABITS:
 ${habitSummary}
@@ -32,10 +32,10 @@ ${habitSummary}
 Debt repaid: ${Math.round(payoffProgress * 100)}%
 
 Write 2-3 sentences that:
-- Connect specific habits to underlying needs (security, control, connection, escape)
-- Reveal what they might be avoiding or seeking through spending
-- Sound like a therapist's observation, not a fortune teller
-- Be honest but compassionate
+- Identify what this person seems to be seeking or protecting through these choices
+- Show the logic behind their spending (not judgment, understanding)
+- Sound like quiet realization, something they already sensed but never put into words
+- Be thoughtful and true
 
 Write ONLY the insight, nothing else.`;
 
@@ -68,7 +68,7 @@ Write ONLY the insight, nothing else.`;
         setIsTyping(false);
         clearInterval(typeInterval);
       }
-    }, 45); // Slow typing speed
+    }, 80); // Contemplative pace
 
     return () => clearInterval(typeInterval);
   }, [fullInsight]);
