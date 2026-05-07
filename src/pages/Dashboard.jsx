@@ -33,6 +33,7 @@ import LoanNarrative from '@/components/forge/LoanNarrative';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
 import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import HabitNodes from '@/components/forge/HabitNodes';
+import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -350,6 +351,14 @@ export default function Dashboard() {
             <p className="obs-label mb-3">— astrology & prophecy</p>
             <div className="mb-6">
               <MoneyHoroscope />
+            </div>
+
+            <div className="obs-divider my-6" />
+            {/* Habit Astrology — educational linking */}
+            <p className="obs-label mb-3">— habit patterns</p>
+            <div className="mb-6">
+              {/* Note: birthData would come from saved user preferences in the future */}
+              <HabitAstrologyPanel birthData={null} />
             </div>
 
             <div className="obs-divider my-6" />
