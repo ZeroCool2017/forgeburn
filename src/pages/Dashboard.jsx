@@ -188,7 +188,7 @@ export default function Dashboard() {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <Hammer className="w-6 h-6 text-primary" />
-              <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight font-display">
                 Chain<span className="text-primary">Forge</span>
               </h1>
             </div>

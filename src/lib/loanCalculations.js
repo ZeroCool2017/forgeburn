@@ -217,6 +217,16 @@ export const QUOTES = [
   { text: "Doubt me, watch me work.", author: "Coco Gauff" },
   { text: "Every loss teaches you something a win never could.", author: "Coco Gauff" },
 
+  // Tulsa Art Deco
+  { text: "Tulsa built skyscrapers in the middle of the prairie and called it civilization. Build your future the same way.", author: "Tulsa, Oklahoma" },
+  { text: "The Boston Avenue Methodist Church doesn't ask permission to be magnificent. Neither should you.", author: "Tulsa Art Deco" },
+  { text: "The Philtower was built during the oil boom — proof that vision outlasts the boom itself.", author: "Tulsa, Oklahoma" },
+  { text: "Art Deco said: geometry is beauty, and repetition is rhythm. Apply that to your payment plan.", author: "Tulsa Art Deco" },
+  { text: "Greenwood District rebuilt from ash. If an entire community can do that, you can rebuild your finances.", author: "Tulsa, Oklahoma — Greenwood" },
+  { text: "The oil derricks are gone. The architecture remains. Build things that last.", author: "Tulsa, Oklahoma" },
+  { text: "Sunburst patterns in terrazzo floors — every detail in an Art Deco building was intentional. Be intentional.", author: "Tulsa Art Deco" },
+  { text: "Oklahoma has always been about starting over on hard ground. That's not a weakness. That's a skill.", author: "Tulsa, Oklahoma" },
+
   // Caddo Nation
   { text: "Nah nah kah-ha — All things come back to where they began.", author: "Caddo Nation (traditional)" },
   { text: "The land holds the memory. So does the ledger — know both.", author: "Caddo Nation (adapted)" },
