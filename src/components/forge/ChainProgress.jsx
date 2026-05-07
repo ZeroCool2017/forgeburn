@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
-import { Link2Off, Link2, Zap, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
+import DebtStoryAdventure from './DebtStoryAdventure';
 
 // Dot-grid canvas that draws the payoff connection line from current balance → zero
 function PayoffCanvas({ progress, color }) {
@@ -98,6 +99,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const links = 20;
   const brokenLinks = Math.floor(progress * links);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
   const { playStrike } = useForgeSound();
   const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
   const formatPayoffDate = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -166,6 +168,13 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
                     transition={{ duration: 0.12 }}
                     className="absolute right-0 top-7 z-20 glass border border-border/50 rounded-xl shadow-xl overflow-hidden min-w-[130px]"
                   >
+                    <button
+                      onClick={() => { setMenuOpen(false); setStoryOpen(true); }}
+                      className="flex items-center gap-2 w-full px-3 py-2.5 text-xs text-accent hover:bg-accent/10 transition-colors"
+                    >
+                      <Book className="w-3.5 h-3.5" />
+                      Read story
+                    </button>
                     <button
                       onClick={() => { setMenuOpen(false); onDelete?.(); }}
                       className="flex items-center gap-2 w-full px-3 py-2.5 text-xs text-destructive hover:bg-destructive/10 transition-colors"
@@ -252,6 +261,9 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
           </button>
         )}
       </div>
+
+      {/* Story adventure modal */}
+      <DebtStoryAdventure debt={loan} open={storyOpen} onOpenChange={setStoryOpen} />
     </motion.div>
   );
 }
