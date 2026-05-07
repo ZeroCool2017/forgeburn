@@ -40,7 +40,8 @@ export function getAllActiveQuotes() {
 // Groups for the manager UI
 export const QUOTE_GROUPS = [
   { id: 'caddo', label: 'Caddo Nation', filter: q => q.author?.includes('Caddo') },
-  { id: 'tulsa', label: 'Tulsa Art Deco', filter: q => q.author?.includes('Tulsa') || q.author?.includes('Oklahoma') || q.author?.includes('Art Deco') },
+  { id: 'greenwood', label: 'Greenwood / Black Wall Street', filter: q => q.author?.includes('Greenwood') || q.author?.includes('O.W. Gurley') || q.author?.includes('Stradford') || q.author?.includes('Mabel Little') || q.author?.includes('A.C. Jackson') || q.author?.includes('Dreamland') },
+  { id: 'tulsa', label: 'Tulsa Art Deco', filter: q => (q.author?.includes('Tulsa') || q.author?.includes('Oklahoma') || q.author?.includes('Art Deco')) && !q.author?.includes('Greenwood') },
   { id: 'charly', label: 'Charly Crockett', filter: q => q.author?.includes('Crockett') },
   { id: 'marfa', label: 'Marfa / West Texas', filter: q => q.author?.includes('Marfa') || q.author?.includes('Trans-Pecos') },
   { id: 'mexico', label: 'Mexico City / Oaxaca', filter: q => q.author?.includes('México') || q.author?.includes('Mexico') || q.author?.includes('Oaxaca') },

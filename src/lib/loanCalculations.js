@@ -222,7 +222,7 @@ export const QUOTES = [
   { text: "The Boston Avenue Methodist Church doesn't ask permission to be magnificent. Neither should you.", author: "Tulsa Art Deco" },
   { text: "The Philtower was built during the oil boom — proof that vision outlasts the boom itself.", author: "Tulsa, Oklahoma" },
   { text: "Art Deco said: geometry is beauty, and repetition is rhythm. Apply that to your payment plan.", author: "Tulsa Art Deco" },
-  { text: "Greenwood District rebuilt from ash. If an entire community can do that, you can rebuild your finances.", author: "Tulsa, Oklahoma — Greenwood" },
+  { text: "Greenwood rebuilt from ash and became Black Wall Street again — not by waiting, but by working.", author: "Greenwood District, Tulsa" },
   { text: "The oil derricks are gone. The architecture remains. Build things that last.", author: "Tulsa, Oklahoma" },
   { text: "Sunburst patterns in terrazzo floors — every detail in an Art Deco building was intentional. Be intentional.", author: "Tulsa Art Deco" },
   { text: "Oklahoma has always been about starting over on hard ground. That's not a weakness. That's a skill.", author: "Tulsa, Oklahoma" },
@@ -243,6 +243,24 @@ export const QUOTES = [
   { text: "The cedars at Binger have stood through drought and flood. So will you.", author: "Caddo Nation (Anadarko, Oklahoma)" },
   { text: "Wíčhoni — to live fully is to have no debt to your own spirit.", author: "Caddo Nation (adapted)" },
   { text: "When you clear your debts, you clear the path for those who walk behind you.", author: "Caddo Nation (elder wisdom)" },
+
+  // Greenwood District / Black Wall Street — Tulsa, Oklahoma
+  { text: "Black Wall Street was not a miracle. It was what happens when a community decides to own its economy.", author: "Greenwood District, Tulsa" },
+  { text: "They burned it down in 1921. By 1922 they were rebuilding. That is what economic resilience looks like.", author: "Greenwood District, Tulsa" },
+  { text: "Ownership is the foundation of freedom. Greenwood knew this before it was fashionable.", author: "Greenwood District, Tulsa" },
+  { text: "The people of Greenwood built banks, hospitals, law offices, and schools — not because it was easy, but because it was necessary.", author: "Greenwood District, Tulsa" },
+  { text: "What Greenwood built in one generation tells us what is possible in one generation. Including yours.", author: "Greenwood District, Tulsa" },
+  { text: "Destruction is loud. Rebuilding is quiet, daily, and deliberate. Like paying off a loan.", author: "Greenwood District, Tulsa" },
+  { text: "Greenwood Avenue did not wait for permission to prosper. Neither should you.", author: "Greenwood District, Tulsa" },
+  { text: "O.W. Gurley bought land on Greenwood Avenue with one intention: to sell only to Black families, so the wealth would stay in the community.", author: "O.W. Gurley, Greenwood founder" },
+  { text: "The Stradford Hotel stood six stories tall and employed Black workers exclusively. Build something that tall with your own hands.", author: "J.B. Stradford, Greenwood District" },
+  { text: "Mabel Little ran a beauty salon that became a community anchor on Greenwood Ave. Small business is not small.", author: "Mabel Little, Greenwood District" },
+  { text: "After the massacre, residents filed for reparations, rebuilt anyway, and kept going. The audacity of that is the point.", author: "Greenwood District, Tulsa" },
+  { text: "Dr. A.C. Jackson was described as the most able Negro surgeon in America — and Greenwood was his home. Excellence doesn't wait for a perfect environment.", author: "Dr. A.C. Jackson, Greenwood District" },
+  { text: "The Dreamland Theatre on Greenwood Ave screened films for the community when the rest of Tulsa wouldn't. Build your own stage.", author: "Greenwood District, Tulsa" },
+  { text: "Greenwood was a closed economic loop: the dollar circulated within the community 36 times before leaving. Stack your loops.", author: "Greenwood District, Tulsa" },
+  { text: "They called it Black Wall Street because wealth concentrated there through intention, not accident.", author: "Greenwood District, Tulsa" },
+  { text: "The lesson of 1921 isn't only tragedy — it's that they built it once, so you know it's buildable.", author: "Greenwood District, Tulsa" },
 
   // Charly Crockett
   { text: "I've been down so long, down don't bother me.", author: "Charly Crockett" },
