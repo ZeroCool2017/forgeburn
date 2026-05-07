@@ -16,13 +16,14 @@ function Organism({ index, progress }) {
     const interval = setInterval(() => {
       x.set(Math.random() * 100);
       y.set(Math.random() * 100);
-    }, 3000 + Math.random() * 2000);
+    }, 5000 + Math.random() * 4000);
 
     return () => clearInterval(interval);
   }, [x, y]);
 
-  const baseSize = 6 + Math.random() * 10;
+  const baseSize = 8 + Math.random() * 12;
   const seed = index * 1234;
+  const breatheDuration = 5 + (seed % 2000) / 1000;
 
   return (
     <motion.div
@@ -30,83 +31,81 @@ function Organism({ index, progress }) {
         x: useTransform(x, (value) => `${value}vw`),
         y: useTransform(y, (value) => `${value}vh`),
       }}
-      transition={{ duration: 4 + Math.random() * 3, ease: 'easeInOut' }}
+      transition={{ duration: 6 + Math.random() * 4, ease: 'easeInOut' }}
       className="fixed pointer-events-none"
       animate={{
-        scale: [1, 1.4, 0.9, 1.2, 1],
-        opacity: [0.4, 0.8, 0.5, 0.7, 0.4],
+        scale: [1, 1.15, 0.95, 1.08, 1],
+        opacity: [0.35, 0.65, 0.4, 0.6, 0.35],
       }}
       transition={{
-        duration: 4 + (seed % 1000) / 1000,
+        duration: breatheDuration,
         repeat: Infinity,
         ease: 'easeInOut',
       }}
     >
-      {/* Outer morphing ring */}
+      {/* Outer morphing halo */}
       <motion.div
-        className="absolute inset-0 rounded-full border"
+        className="absolute inset-0 rounded-full blur-sm"
         style={{
-          width: `${baseSize * 1.5}px`,
-          height: `${baseSize * 1.5}px`,
-          borderColor: `hsl(200, 80%, ${55 + progress * 25}%)`,
-          borderWidth: '1px',
-          left: `${-baseSize * 0.75}px`,
-          top: `${-baseSize * 0.75}px`,
+          width: `${baseSize * 2}px`,
+          height: `${baseSize * 2}px`,
+          background: `radial-gradient(circle, hsl(200, 85%, ${50 + progress * 30}%), transparent)`,
+          left: `${-baseSize * 0.5}px`,
+          top: `${-baseSize * 0.5}px`,
         }}
         animate={{
-          scale: [1, 1.3, 0.8, 1.1, 1],
-          opacity: [0.3, 0.6, 0.2, 0.5, 0.3],
-          borderRadius: ['50%', '40%', '60%', '45%', '50%'],
+          scale: [0.8, 1.3, 0.9, 1.2, 0.8],
+          opacity: [0.15, 0.4, 0.1, 0.3, 0.15],
         }}
         transition={{
-          duration: 4.5 + (seed % 1000) / 1000,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 0.1,
-        }}
-      />
-
-      {/* Core orb */}
-      <motion.div
-        className="absolute rounded-full blur-lg"
-        style={{
-          width: `${baseSize}px`,
-          height: `${baseSize}px`,
-          background: `radial-gradient(circle, hsl(200, 90%, ${60 + progress * 25}%), hsl(200, 70%, ${45 + progress * 20}%))`,
-          boxShadow: `0 0 ${baseSize * 2.5}px hsl(200, 85%, ${55 + progress * 20}%), inset 0 0 ${baseSize}px hsl(200, 100%, 70%)`,
-        }}
-        animate={{
-          scale: [1, 1.2, 0.95, 1.1, 1],
-          x: [0, 2, -2, 1, 0],
-          y: [0, -2, 2, -1, 0],
-        }}
-        transition={{
-          duration: 4 + (seed % 1000) / 1000,
+          duration: breatheDuration + 1,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Inner shimmer */}
+      {/* Core breathing orb */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          width: `${baseSize * 0.4}px`,
-          height: `${baseSize * 0.4}px`,
-          background: `hsl(200, 100%, 85%)`,
-          filter: 'blur(2px)',
-          left: `${baseSize * 0.3}px`,
-          top: `${baseSize * 0.3}px`,
+          width: `${baseSize}px`,
+          height: `${baseSize}px`,
+          background: `radial-gradient(circle at 30% 30%, hsl(200, 95%, ${65 + progress * 20}%), hsl(200, 75%, ${48 + progress * 22}%))`,
+          boxShadow: `0 0 ${baseSize * 3}px hsl(200, 90%, ${58 + progress * 22}%), inset 0 0 ${baseSize * 0.8}px hsl(200, 100%, 80%)`,
+          filter: 'blur(0.5px)',
         }}
         animate={{
-          opacity: [0.2, 1, 0.3, 0.8, 0.2],
-          scale: [0.8, 1.2, 0.9, 1.1, 0.8],
+          scale: [1, 1.12, 0.98, 1.1, 1],
         }}
         transition={{
-          duration: 3 + (seed % 1000) / 1000,
+          duration: breatheDuration,
           repeat: Infinity,
           ease: 'easeInOut',
-          delay: 0.2,
+        }}
+      />
+
+      {/* Gentle shimmer that moves */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: `${baseSize * 0.35}px`,
+          height: `${baseSize * 0.35}px`,
+          background: `hsl(200, 100%, 90%)`,
+          filter: 'blur(1.5px)',
+          left: `${baseSize * 0.25}px`,
+          top: `${baseSize * 0.2}px`,
+        }}
+        animate={{
+          opacity: [0.15, 0.8, 0.2, 0.7, 0.15],
+          scale: [0.9, 1.3, 0.85, 1.2, 0.9],
+          x: [0, 1.5, -1, 1, 0],
+          y: [0, -1.5, 1, -1, 0],
+        }}
+        transition={{
+          duration: breatheDuration * 0.8,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 0.3,
         }}
       />
     </motion.div>
@@ -125,7 +124,7 @@ export default function FloatingOrganisms({ debtProgress = 0 }) {
       className="fixed inset-0 pointer-events-none overflow-hidden"
       style={{ 
         zIndex: 5, 
-        opacity: isVisible ? 0.6 : 0,
+        opacity: isVisible ? 0.5 : 0,
         transition: 'opacity 0.6s ease',
         mixBlendMode: 'screen',
       }}
