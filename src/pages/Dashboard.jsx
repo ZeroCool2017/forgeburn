@@ -300,16 +300,6 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Extra Budget + Freedom Score — CONTROL POINT */}
-            <p className="obs-label mb-3">— forge controls</p>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
-              <div className="lg:col-span-2">
-                <ExtraBudgetSlider value={extraBudget} onChange={setExtraBudget} />
-              </div>
-              <FreedomScore loans={loans} />
-            </div>
-
-            <div className="obs-divider my-6" />
             {/* Systems-thinking: compound curve widget */}
             <p className="obs-label mb-3">— compound effect</p>
             <div className="mb-6">
@@ -318,6 +308,16 @@ export default function Dashboard() {
                 schedule={schedule}
                 minimumSchedule={minimumSchedule}
               />
+            </div>
+
+            <div className="obs-divider my-6" />
+            {/* Extra Budget + Freedom Score — CONTROL POINT */}
+            <p className="obs-label mb-3">— forge controls</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+              <div className="lg:col-span-2">
+                <ExtraBudgetSlider value={extraBudget} onChange={setExtraBudget} />
+              </div>
+              <FreedomScore loans={loans} />
             </div>
 
             <div className="obs-divider my-6" />
