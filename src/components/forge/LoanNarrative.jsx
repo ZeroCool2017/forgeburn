@@ -9,32 +9,32 @@ import { BookOpen } from 'lucide-react';
 
 const NARRATIVES = {
   student: {
-    intro: 'The education you invested in.',
-    zero: 'Your knowledge is yours. The debt is gone.',
+    intro: 'They told you it was an investment. They were right. Just not how they meant.',
+    zero: 'The degree stays. The debt leaves. Net gain.',
   },
   auto: {
-    intro: 'The freedom you bought on wheels.',
-    zero: 'The car is paid for. The road is open.',
+    intro: 'A car is freedom. Until the bank owns the freedom.',
+    zero: 'Paid in full. Now you actually own the roads.',
   },
   mortgage: {
-    intro: 'The roof over your head.',
-    zero: 'The house is yours. No bank claim.',
+    intro: 'You bought a house. The house bought you.',
+    zero: 'It\'s yours now. The bank is just a memory.',
   },
   credit_card: {
-    intro: 'The emergency fund that turned into a trap.',
-    zero: 'The credit card is paid. Freedom tastes like relief.',
+    intro: 'Born from convenience. Weaponized by compounding.',
+    zero: 'The card works again. This time, you do too.',
   },
   personal: {
-    intro: 'A loan for life. A loan that lived.',
-    zero: 'You paid it back. You kept your word.',
+    intro: 'Someone believed in you enough to lend. Prove them right.',
+    zero: 'You proved them right. And yourself.',
   },
   medical: {
-    intro: 'The cost of staying alive.',
-    zero: 'You paid for your health. Now keep it.',
+    intro: 'Medicine doesn\'t negotiate. Neither should you.',
+    zero: 'You paid for your life. That\'s not negotiable either.',
   },
   other: {
-    intro: 'Debt, in its raw form.',
-    zero: 'One less thing to owe.',
+    intro: 'Debt obscured. But math is honest.',
+    zero: 'Balance: zero. Clarity: infinite.',
   },
 };
 
