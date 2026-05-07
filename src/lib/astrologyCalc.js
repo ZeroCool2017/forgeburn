@@ -54,24 +54,43 @@ export function getRisingSignApprox(hour, minute, latitude) {
 }
 
 export function getAstroInsight(sunSign, moonSign, risingSign) {
-  const elements = {
-    Fire: { vibe: 'action-oriented, bold, passionate', financial: 'risk-taking, growth-focused' },
-    Earth: { vibe: 'practical, grounded, material', financial: 'stability-seeking, methodical' },
-    Air: { vibe: 'intellectual, communicative, detached', financial: 'analytical, opportunity-aware' },
-    Water: { vibe: 'intuitive, emotional, deep', financial: 'protective, legacy-focused' },
+  const elementInsights = {
+    Fire: {
+      vibe: 'You burn through caution like fuel. Good for ambition. Dangerous for debt.',
+      financial: 'Your hunger for growth is matched only by your tolerance for risk. The market loves you until it doesn\'t.',
+      dark: 'Fire consumes. So do interest rates when you\'re not paying attention.'
+    },
+    Earth: {
+      vibe: 'You build slowly. This is your actual superpower, though the world never told you that.',
+      financial: 'You understand compound interest in your bones. The slow accumulation of advantage is your domain.',
+      dark: 'Patience is survival. You know this. Everyone else learns it too late.'
+    },
+    Air: {
+      vibe: 'Your mind moves faster than your money. You\'ve calculated seventeen exit strategies already.',
+      financial: 'Analysis is your weapon. The problem: overthinking is also your prison.',
+      dark: 'Intelligence is a burden when the system isn\'t designed for you to win anyway.'
+    },
+    Water: {
+      vibe: 'You feel the weight of money like a physical force. Most don\'t. That\'s why you\'re ahead.',
+      financial: 'Intuition guides you. Sometimes toward protection. Sometimes into the depths.',
+      dark: 'Your emotions about debt are legitimate. So is the math. Both are trying to tell you something.'
+    },
   };
 
-  const sunElement = elements[sunSign.element];
-  const moonElement = elements[moonSign.element];
-  const risingElement = elements[risingSign.element];
+  const sun = elementInsights[sunSign.element];
+  const moon = elementInsights[moonSign.element];
+  const rising = elementInsights[risingSign.element];
 
   return {
     sun: sunSign,
     moon: moonSign,
     rising: risingSign,
-    vibe: `${sunSign.name} energy (Sun) meets ${moonSign.name} intuition (Moon), presenting as ${risingSign.name} (Rising)`,
-    financialType: `${sunElement.financial} instinct tempered by ${moonElement.financial} protection`,
-    overall: `${sunSign.element}/${moonSign.element}/${risingSign.element}`,
+    vibe: `${sunSign.name} core identity masked by ${risingSign.name} presentation, driven by ${moonSign.name} undercurrents`,
+    financialType: `Your ${sunSign.element} ambition meets ${moonSign.element} caution. The tension is the work.`,
+    sunInsight: sun.vibe,
+    moonInsight: moon.vibe,
+    risingInsight: rising.vibe,
+    overall: `${sunSign.element}/${moonSign.element}/${risingSign.element} — the architecture of how you make decisions under pressure`,
   };
 }
 
