@@ -18,12 +18,12 @@ export function useAmbientSound() {
     timersRef.current = [];
     nodesRef.current.forEach(n => {
       try {
-        n.gain.gain.cancelScheduledValues(0);
-        n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 2);
-        n.osc.stop(n.ac.currentTime + 2.1);
+        n.gain.gain.cancelScheduledValues(n.ac.currentTime);
+        n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 0.5);
+        n.osc.stop(n.ac.currentTime + 0.6);
       } catch (e) {}
     });
-    nodesRef.current = [];
+    setTimeout(() => { nodesRef.current = []; }, 700);
   }, []);
 
   // ─── DRIFT MODE ─────────────────────────────────────────────────────────
@@ -96,10 +96,11 @@ export function useAmbientSound() {
 
     // Strong bass foundation — more presence
     const bassDrones = [
-      { freq: 27.5, vol: 0.16 },  // A0 — very sub
-      { freq: 35, vol: 0.18 },     // B0
-      { freq: 41.2, vol: 0.15 },   // E1
-      { freq: 55.0, vol: 0.13 },   // A1 — mid-bass
+      { freq: 16.35, vol: 0.22 },  // C0 — deepest sub
+      { freq: 27.5, vol: 0.24 },   // A0 — very sub
+      { freq: 35, vol: 0.26 },     // B0
+      { freq: 41.2, vol: 0.22 },   // E1
+      { freq: 55.0, vol: 0.20 },   // A1 — mid-bass
     ];
 
     bassDrones.forEach(({ freq, vol }) => {
@@ -229,9 +230,10 @@ export function useAmbientSound() {
 
     // Heavy bass foundation for focus
     const bassDrones = [
-      { freq: 27.5, vol: 0.18 },  // A0 — very sub
-      { freq: 55.0, vol: 0.15 },  // A1
-      { freq: 82.41, vol: 0.12 }, // E2
+      { freq: 16.35, vol: 0.24 }, // C0 — deepest
+      { freq: 27.5, vol: 0.25 },  // A0 — very sub
+      { freq: 55.0, vol: 0.22 },  // A1
+      { freq: 82.41, vol: 0.18 }, // E2
     ];
 
     bassDrones.forEach(({ freq, vol }) => {
@@ -767,13 +769,13 @@ export function useAmbientSound() {
     });
 
     // Heavy sub-bass foundation (trap essential)
-    [36.7, 55.0].forEach((freq, i) => {
+    [16.35, 36.7, 55.0].forEach((freq, i) => {
       const sub = ac.createOscillator();
       const subGain = ac.createGain();
       sub.type = 'sine';
       sub.frequency.value = freq;
       subGain.gain.setValueAtTime(0, ac.currentTime);
-      subGain.gain.linearRampToValueAtTime(0.16 - i * 0.02, ac.currentTime + 5);
+      subGain.gain.linearRampToValueAtTime(0.22 - i * 0.03, ac.currentTime + 5);
       sub.connect(subGain);
       subGain.connect(master);
       sub.start();
@@ -846,7 +848,7 @@ export function useAmbientSound() {
       kickOsc.type = 'sine';
       kickOsc.frequency.setValueAtTime(120, t);
       kickOsc.frequency.exponentialRampToValueAtTime(50, t + 0.08);
-      kickGain.gain.setValueAtTime(0.14, t);
+      kickGain.gain.setValueAtTime(0.18, t);
       kickGain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
       kickOsc.connect(kickGain);
       kickGain.connect(master);
@@ -858,15 +860,28 @@ export function useAmbientSound() {
       const subGain = ac.createGain();
       subBass.type = 'sine';
       subBass.frequency.value = 55.0; // Deep A1
-      subGain.gain.setValueAtTime(0.12, t);
-      subGain.gain.linearRampToValueAtTime(0.1, t + 0.3);
+      subGain.gain.setValueAtTime(0.18, t);
+      subGain.gain.linearRampToValueAtTime(0.16, t + 0.3);
       subBass.connect(subGain);
       subGain.connect(master);
       subBass.start(t);
       subBass.stop(t + 0.5);
 
+      // Ultra-sub foundation
+      const ultraSub = ac.createOscillator();
+      const ultraSubGain = ac.createGain();
+      ultraSub.type = 'sine';
+      ultraSub.frequency.value = 27.5; // A0
+      ultraSubGain.gain.setValueAtTime(0.14, t);
+      ultraSubGain.gain.linearRampToValueAtTime(0.12, t + 0.3);
+      ultraSub.connect(ultraSubGain);
+      ultraSubGain.connect(master);
+      ultraSub.start(t);
+      ultraSub.stop(t + 0.5);
+
       nodesRef.current.push({ osc: kickOsc, gain: kickGain, ac });
       nodesRef.current.push({ osc: subBass, gain: subGain, ac });
+      nodesRef.current.push({ osc: ultraSub, gain: ultraSubGain, ac });
 
       // Four-on-the-floor house beat (~120 BPM)
       const nextKick = 500;
