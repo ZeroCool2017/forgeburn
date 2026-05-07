@@ -13,13 +13,16 @@ function Organism({ index, progress, totalCount, positions }) {
   const y = useMotionValue(Math.random() * 100);
   const xRef = useRef(x.get());
   const yRef = useRef(y.get());
+  const velocityRef = useRef({ x: 0, y: 0 });
   
   const seed = index * 1234;
   const baseSize = 6 + Math.random() * 10;
-  const breatheDuration = 4 + (seed % 3000) / 1000;
+  const breatheDuration = 3 + (seed % 2000) / 1000;
   
-  // Create wave-like synchronized motion
-  const cycleTime = 8000 + (seed % 4000);
+  // Organic, flowing motion — multiple overlapping cycles
+  const slowCycle = 12000 + (seed % 8000);   // Slow drift
+  const midCycle = 4000 + (seed % 3000);     // Medium flow
+  const fastCycle = 1500 + (seed % 1500);    // Quick flutter
   const phase = (index / totalCount) * Math.PI * 2;
 
   useEffect(() => {
@@ -29,13 +32,30 @@ function Organism({ index, progress, totalCount, positions }) {
     const animate = () => {
       time += 16; // ~60fps
       
-      // Smooth sine wave for x (left-right oscillation)
-      let xWave = 50 + Math.sin(time / cycleTime * Math.PI * 2 + phase) * 40;
+      // Multi-layer motion: slow drift + medium flow + fast flutter = organic movement
+      const slowX = Math.sin(time / slowCycle * Math.PI * 2 + phase) * 35;
+      const slowY = Math.cos(time / slowCycle * Math.PI * 2 + phase + 0.5) * 30;
       
-      // Offset y sine for perpendicular motion (creates orbital feel)
-      let yWave = 50 + Math.cos((time / cycleTime * Math.PI * 2 + phase) * 0.7) * 35;
+      const midX = Math.sin(time / midCycle * Math.PI * 2 + phase * 1.3) * 20;
+      const midY = Math.cos(time / midCycle * Math.PI * 2 + phase * 0.7) * 18;
       
-      // Gentle collision/bounce with nearby organisms
+      const fastX = Math.sin(time / fastCycle * Math.PI * 2 + phase * 2) * 8;
+      const fastY = Math.cos(time / fastCycle * Math.PI * 2 + phase * 1.5) * 6;
+      
+      // Combine into smooth, fluid position
+      let xWave = 50 + slowX + midX + fastX;
+      let yWave = 50 + slowY + midY + fastY;
+      
+      // Soft attraction toward center (prevents escape)
+      const toCenterX = 50 - xWave;
+      const toCenterY = 50 - yWave;
+      const distToCenter = Math.sqrt(toCenterX * toCenterX + toCenterY * toCenterY);
+      if (distToCenter > 48) {
+        xWave += toCenterX * 0.08;
+        yWave += toCenterY * 0.08;
+      }
+      
+      // Smooth collision avoidance — elastic feel
       if (positions.current) {
         positions.current[index] = { x: xWave, y: yWave };
         
@@ -46,11 +66,11 @@ function Organism({ index, progress, totalCount, positions }) {
           const dx = other.x - xWave;
           const dy = other.y - yWave;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const minDist = 15; // Soft bounce distance
+          const minDist = 18;
           
-          if (dist < minDist && dist > 0) {
-            // Gentle repulsion
-            const force = (minDist - dist) * 0.15;
+          if (dist < minDist && dist > 0.5) {
+            // Smooth elastic repulsion
+            const force = (minDist - dist) * 0.25;
             const angle = Math.atan2(dy, dx);
             xWave -= Math.cos(angle) * force;
             yWave -= Math.sin(angle) * force;
@@ -58,9 +78,9 @@ function Organism({ index, progress, totalCount, positions }) {
         }
       }
       
-      // Clamp to viewport
-      xWave = Math.max(2, Math.min(98, xWave));
-      yWave = Math.max(2, Math.min(98, yWave));
+      // Soft bounds (creatures prefer inner area)
+      xWave = Math.max(5, Math.min(95, xWave));
+      yWave = Math.max(5, Math.min(95, yWave));
       
       xRef.current = xWave;
       yRef.current = yWave;
@@ -72,7 +92,7 @@ function Organism({ index, progress, totalCount, positions }) {
 
     animationFrame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrame);
-  }, [x, y, phase, cycleTime, index, totalCount, positions]);
+  }, [x, y, phase, slowCycle, midCycle, fastCycle, index, totalCount, positions]);
 
   return (
     <motion.div

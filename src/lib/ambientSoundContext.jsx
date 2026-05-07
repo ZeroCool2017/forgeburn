@@ -54,10 +54,9 @@ export function AmbientSoundProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(MODE_KEY, mode);
     localStorage.setItem(STORAGE_KEY, String(mode !== 'off'));
+    stop();
     if (mode !== 'off') {
-      start(mode, 0);
-    } else {
-      stop();
+      setTimeout(() => start(mode, 0), 100);
     }
   }, [mode, start, stop]);
 

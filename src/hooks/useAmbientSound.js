@@ -94,11 +94,12 @@ export function useAmbientSound() {
       timersRef.current.push(tid);
     };
 
-    // Soft multi-layer bass foundation
+    // Strong bass foundation — more presence
     const bassDrones = [
-      { freq: 27.5, vol: 0.06 },  // A0 — very sub
-      { freq: 35, vol: 0.08 },     // B0
-      { freq: 41.2, vol: 0.05 },   // E1
+      { freq: 27.5, vol: 0.12 },  // A0 — very sub
+      { freq: 35, vol: 0.14 },     // B0
+      { freq: 41.2, vol: 0.11 },   // E1
+      { freq: 55.0, vol: 0.09 },   // A1 — mid-bass
     ];
 
     bassDrones.forEach(({ freq, vol }) => {
@@ -240,10 +241,11 @@ export function useAmbientSound() {
       timersRef.current.push(setTimeout(spawnPing, offset));
     });
 
-    // Soft grounded bass foundation
+    // Strong grounded bass foundation
     const bassDrones = [
-      { freq: 27.5, vol: 0.08 },  // A0
-      { freq: 55.0, vol: 0.06 },  // A1
+      { freq: 27.5, vol: 0.14 },  // A0
+      { freq: 55.0, vol: 0.11 },  // A1
+      { freq: 82.41, vol: 0.08 }, // E2
     ];
 
     bassDrones.forEach(({ freq, vol }) => {
@@ -273,12 +275,12 @@ export function useAmbientSound() {
     lpf.Q.value = 1.2;
     lpf.connect(master);
 
-    // Three detuned sub drones
+    // Heavy detuned sub drones — deep presence
     const drones = [
-      { freq: 32.7, detune: 0, vol: 0.08 },
-      { freq: 32.7, detune: 7, vol: 0.05 },
-      { freq: 49.0, detune: -3, vol: 0.04 },
-      { freq: 65.4, detune: 5, vol: 0.03 },
+      { freq: 16.35, detune: 0, vol: 0.16 },   // C0 — sub-bass
+      { freq: 27.5, detune: 3, vol: 0.14 },    // A0
+      { freq: 32.7, detune: -4, vol: 0.12 },   // C#1
+      { freq: 49.0, detune: 2, vol: 0.1 },     // B0
     ];
 
     drones.forEach(({ freq, detune, vol }) => {
