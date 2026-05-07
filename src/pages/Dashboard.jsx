@@ -211,14 +211,14 @@ export default function Dashboard() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-mono text-primary tracking-widest mb-2">forge / glow / strike / break</p>
+              <p className="text-xs font-mono text-muted-foreground tracking-widest mb-2">forge/ glow → strike ⟶ break</p>
               <div className="flex items-center gap-3 mb-1">
                 <span className="text-3xl">⛓️</span>
                 <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight font-display">
                   Carry the <span className="text-primary">Zero</span>
                 </h1>
               </div>
-              <p className="text-sm font-mono text-primary">
+              <p className="text-sm font-mono text-muted-foreground">
                 ∑ chains = 0
               </p>
             </div>
