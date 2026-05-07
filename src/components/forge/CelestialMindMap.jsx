@@ -114,7 +114,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         return { ...p, growth: newGrowth };
       });
 
-      // Draw connections — more visible, neural network style
+      // Draw connections — glowing neural pathways
       currentParticles.forEach((p, i) => {
         currentParticles.slice(i + 1).forEach(q => {
           const dx = q.x - p.x;
@@ -123,20 +123,50 @@ export default function CelestialMindMap({ loans, schedule }) {
           const maxDist = 220;
           
           if (d < maxDist) {
-            // Stronger visibility, gradient effect
             const strength = 1 - (d / maxDist);
             const pColor = parseInt(p.color.slice(1), 16);
             const qColor = parseInt(q.color.slice(1), 16);
             const pR = (pColor >> 16) & 255;
             const pG = (pColor >> 8) & 255;
             const pB = pColor & 255;
+            const qR = (qColor >> 16) & 255;
+            const qG = (qColor >> 8) & 255;
+            const qB = qColor & 255;
             
-            ctx.strokeStyle = `rgba(${pR}, ${pG}, ${pB}, ${0.15 * strength})`;
-            ctx.lineWidth = 0.8 + strength * 1.2;
+            // Pulsing glow effect along the connection
+            const pulse = 0.6 + Math.sin(currentTime * 0.005) * 0.4;
+            
+            // Main neural pathway with gradient
+            const gradient = ctx.createLinearGradient(p.x, p.y, q.x, q.y);
+            gradient.addColorStop(0, `rgba(${pR}, ${pG}, ${pB}, ${0.2 * strength * pulse})`);
+            gradient.addColorStop(0.5, `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.25 * strength * pulse})`);
+            gradient.addColorStop(1, `rgba(${qR}, ${qG}, ${qB}, ${0.2 * strength * pulse})`);
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 0.8 + strength * 1.5;
+            ctx.lineCap = 'round';
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
             ctx.stroke();
+            
+            // Secondary glow halo for stronger visual presence
+            ctx.strokeStyle = `rgba(${pR}, ${pG}, ${pB}, ${0.08 * strength * pulse})`;
+            ctx.lineWidth = 3 + strength * 2;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.stroke();
+            
+            // Animated particle dots flowing along the connection
+            const t = (currentTime * 0.001) % 1;
+            const flowX = p.x + (q.x - p.x) * t;
+            const flowY = p.y + (q.y - p.y) * t;
+            const flowGlow = Math.sin(currentTime * 0.008) * 0.5 + 0.5;
+            ctx.fillStyle = `rgba(${(pR + qR) / 2}, ${(pG + qG) / 2}, ${(pB + qB) / 2}, ${0.6 * flowGlow})`;
+            ctx.beginPath();
+            ctx.arc(flowX, flowY, 1.2 + strength * 1.5, 0, Math.PI * 2);
+            ctx.fill();
           }
         });
       });
