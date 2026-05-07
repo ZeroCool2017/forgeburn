@@ -5,12 +5,15 @@ import CelestialBackground from '@/components/forge/CelestialBackground';
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-background obsidian-grid">
+    <div className="min-h-screen bg-background">
+      {/* Celestial background (z-1, fixed) */}
       <CelestialBackground />
-      {/* Subtle vignette edges */}
-      <div className="fixed inset-0 pointer-events-none z-0"
+      
+      {/* Subtle vignette edges (z-2) */}
+      <div className="fixed inset-0 pointer-events-none z-20"
         style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, hsl(0,0%,4%) 100%)' }} />
-      {/* Page content — padded so it clears the bottom nav */}
+      
+      {/* Page content — padded so it clears the bottom nav (z-10) */}
       <div className="pb-safe-nav relative z-10">
         <Outlet />
       </div>
