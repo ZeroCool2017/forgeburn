@@ -900,6 +900,56 @@ export const QUOTES = [
   { text: "What was burned down in 1921 was rebuilt. Debt is the same — you break free by breaking even.", author: "Tulsa Resilience" },
   { text: "The money you don't owe is the freedom they can't take from you.", author: "Greenwood Wisdom" },
   { text: "Generational wealth starts with zero debt. Generational freedom starts with refusing the trap.", author: "Black Economics" },
+
+  // It's So Cold in the D — Big Sean
+  { text: "It's so cold in the D. That's why we stay focused on the numbers.", author: "Big Sean, It's So Cold in the D (adapted)" },
+  { text: "I'm from the D, baby. We built it from nothing. You can build a zero balance the same way.", author: "Big Sean (adapted)" },
+  { text: "Haters gonna hate. Debt gonna be paid off anyway.", author: "Big Sean, It's So Cold in the D (adapted)" },
+
+  // Deee-Lite
+  { text: "Groove is in the heart — and freedom is in the balance sheet.", author: "Deee-Lite (adapted)" },
+  { text: "Kilo, you bring the love, bring the love, bring the love — bring financial responsibility.", author: "Deee-Lite (adapted)" },
+  { text: "Lady Miss Kier said: express yourself. Express your debt payoff plan.", author: "Deee-Lite (adapted)" },
+
+  // Weezer Blue Album
+  { text: "Say it ain't so — say you're not carrying unnecessary debt.", author: "Weezer, Buddy Holly (adapted)" },
+  { text: "Undone — like your balance sheet when you pay the last dollar.", author: "Weezer, Undone (adapted)" },
+  { text: "The world has turned and left me here just watching the debt go down, down, down.", author: "Weezer (adapted)" },
+  { text: "I do believe it's true that there's love waiting in the free and clear financial life.", author: "Weezer, Blue Album (adapted)" },
+  { text: "Only in dreams you see what you can be — debt-free is not just a dream.", author: "Weezer (adapted)" },
+
+  // Cibo Matto
+  { text: "Micro-transgressions are the small payments that compound into freedom.", author: "Cibo Matto (adapted)" },
+  { text: "Know your worth. Sugar Water teaches that in every song.", author: "Cibo Matto (adapted)" },
+  { text: "Playful and smart — that's how you approach a spreadsheet.", author: "Cibo Matto (adapted)" },
+
+  // More SGI / Daisaku Ikeda
+  { text: "The moment you decide to change is the moment your debt destiny shifts.", author: "Daisaku Ikeda (adapted)" },
+  { text: "Buddhism teaches: you are not a victim of circumstance. You are the architect. Build freedom.", author: "SGI Principle (adapted)" },
+  { text: "The Buddha nature exists in every balance sheet. Polish it until it shines.", author: "SGI Philosophy (adapted)" },
+  { text: "Human revolution is personal. A payment at a time, a month at a time.", author: "Daisaku Ikeda (adapted)" },
+
+  // Dolores O'Riordan / The Cranberries
+  { text: "Dreams — they're made of the things you own, not the things you owe.", author: "Dolores O'Riordan, The Cranberries (adapted)" },
+  { text: "Zombie — that's how debt makes you feel. Dead inside. Until you pay it off.", author: "The Cranberries, Zombie (adapted)" },
+  { text: "Another head aches, another heart breaks — when you carry debt alone. Find help.", author: "The Cranberries (adapted)" },
+  { text: "Linger — don't let debt linger. Strike hard. Strike fast.", author: "The Cranberries, Linger (adapted)" },
+  { text: "Dolores taught us: pain is universal, but so is resilience.", author: "Dolores O'Riordan" },
+
+  // The Kardashians (tongue-in-cheek, real wisdom underneath)
+  { text: "I keep up with my budget the way I keep up with myself — constantly and deliberately.", author: "The Kardashians (adapted)" },
+  { text: "You can't build an empire on borrowed money. You build it on discipline.", author: "Kim Kardashian (adapted)" },
+  { text: "Break the internet — by breaking your debt cycle instead.", author: "The Kardashians (adapted)" },
+  { text: "It's not about the money. It's about knowing where the money goes.", author: "The Kardashians (adapted)" },
+  { text: "Momager energy: manage your debt like a business, not like an emotion.", author: "The Kardashians (adapted)" },
+
+  // Black Business Builders (expanded)
+  { text: "I created a billion-dollar brand from zero. You can create zero from debt.", author: "Kim Kardashian (business adapted)" },
+  { text: "Failure is feedback. Use it to pay faster.", author: "Kylie Jenner (adapted)" },
+  { text: "Build your brand by controlling your cash flow — not the other way around.", author: "Business Owner Wisdom (adapted)" },
+  { text: "The first rule of generational wealth: know your net worth at all times.", author: "Black Economics" },
+  { text: "Rihanna built Fenty from vision, not from a line of credit. Strategy first.", author: "Rihanna (adapted)" },
+  { text: "Lizzo: Truth hurts. So does debt. Face it and heal.", author: "Lizzo (adapted)" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order

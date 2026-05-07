@@ -246,95 +246,102 @@ export function useAmbientSound() {
     nodesRef.current.push({ osc: lfo, gain: lfoGain, ac });
   }, []);
 
-  const start = useCallback((mode = 'electroplankton', debtProgress = 0) => {
-    if (playingRef.current) return;
-    try {
-      const ac = getCtx();
-      if (ac.state === 'suspended') ac.resume();
-      playingRef.current = true;
-
-      if (mode === 'electroplankton') startElectroplankton(ac);
-      else if (mode === 'ender') startEnder(ac);
-      else if (mode === 'deep') startDeep(ac);
-    } catch (e) {}
-  }, [startElectroplankton, startEnder, startDeep]);
-
   // ─── TULSA MODE — Greenwood Black Wall Street, resilience ─────────────────
   const startTulsa = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.2, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.25, ac.currentTime + 5);
     master.connect(ac.destination);
 
-    // Warm, earthy low-pass filter
+    // Warm, earthy low-pass + mid-presence resonance
     const warmLpf = ac.createBiquadFilter();
     warmLpf.type = 'lowpass';
-    warmLpf.frequency.value = 1600;
-    warmLpf.Q.value = 0.8;
-    warmLpf.connect(master);
+    warmLpf.frequency.value = 1800;
+    warmLpf.Q.value = 0.7;
+    
+    const midBoost = ac.createBiquadFilter();
+    midBoost.type = 'peaking';
+    midBoost.frequency.value = 320;
+    midBoost.gain.value = 3;
+    midBoost.Q.value = 1.2;
+    
+    warmLpf.connect(midBoost);
+    midBoost.connect(master);
 
-    // Reverb-like delay (spiritual, reflective space)
-    const delay = ac.createDelay(3.5);
-    delay.delayTime.value = 0.45;
+    // Rich reverb-like delay (spiritual, reflective space)
+    const delay = ac.createDelay(4);
+    delay.delayTime.value = 0.58;
     const delayFB = ac.createGain();
-    delayFB.gain.value = 0.5;
+    delayFB.gain.value = 0.55;
     const delayWet = ac.createGain();
-    delayWet.gain.value = 0.3;
+    delayWet.gain.value = 0.35;
     delay.connect(delayFB);
     delayFB.connect(delay);
     delay.connect(delayWet);
     delayWet.connect(master);
 
-    // Blues/Gospel-inspired pentatonic + natural minor
+    // Blues/Gospel-inspired pentatonic + natural minor + blue notes
     const tulsiTones = [
-      110.0, 123.5, 146.8, 165.0, 196.0,  // A2 B2 D3 E3 G3
-      220.0, 246.9, 293.7, 330.0, 392.0,  // A3 B3 D4 E4 G4
-      440.0, 493.9, 587.3, 659.3, 784.0,  // A4 B4 D5 E5 G5
+      110.0, 123.5, 146.8, 155.6, 165.0, 196.0,  // A2 B2 D3 F#3 E3 G3
+      220.0, 246.9, 293.7, 330.0, 370.0, 392.0,  // A3 B3 D4 E4 F#4 G4
+      440.0, 493.9, 587.3, 659.3, 740.0, 784.0,  // A4 B4 D5 E5 F#5 G5
     ];
 
     const spawnBluesTone = () => {
       if (!playingRef.current) return;
       const t = ac.currentTime + 0.05;
       const freq = tulsiTones[Math.floor(Math.random() * tulsiTones.length)];
-      const duration = 3 + Math.random() * 7;
-      const peakVol = 0.035 + Math.random() * 0.055;
+      const duration = 2.5 + Math.random() * 8;
+      const peakVol = 0.04 + Math.random() * 0.06;
 
       const osc = ac.createOscillator();
       const gain = ac.createGain();
-      osc.type = Math.random() > 0.6 ? 'triangle' : 'sine';
+      osc.type = Math.random() > 0.5 ? 'triangle' : 'sine';
       osc.frequency.value = freq;
-      osc.detune.value = (Math.random() - 0.5) * 5;
+      osc.detune.value = (Math.random() - 0.5) * 8;
 
-      // Warm, breathy envelope
+      // Warm, breathy envelope with vibrato
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(peakVol * 0.7, t + duration * 0.25);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.6, t + duration * 0.2);
       gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
 
       osc.connect(gain);
       gain.connect(warmLpf);
-      osc.start(t); osc.stop(t + duration + 0.1);
+      osc.start(t); osc.stop(t + duration + 0.15);
       nodesRef.current.push({ osc, gain, ac });
 
-      const nextIn = 800 + Math.random() * 3200;
+      const nextIn = 700 + Math.random() * 3500;
       timersRef.current.push(setTimeout(spawnBluesTone, nextIn));
     };
 
-    [0, 1200, 2600, 4200].forEach(offset => {
+    [0, 1400, 2800, 4600].forEach(offset => {
       timersRef.current.push(setTimeout(spawnBluesTone, offset));
     });
 
-    // Deep earth drone — foundation
+    // Deep earth drone — foundation (low A)
     const earthDrone = ac.createOscillator();
     const earthGain = ac.createGain();
     earthDrone.type = 'sine';
     earthDrone.frequency.value = 55.0; // A1
     earthGain.gain.setValueAtTime(0, ac.currentTime);
-    earthGain.gain.linearRampToValueAtTime(0.08, ac.currentTime + 7);
+    earthGain.gain.linearRampToValueAtTime(0.1, ac.currentTime + 8);
     earthDrone.connect(earthGain);
     earthGain.connect(warmLpf);
-    earthDrone.start();
+    earthDrone.start(ac.currentTime);
     nodesRef.current.push({ osc: earthDrone, gain: earthGain, ac });
+
+    // Second harmonic drone (E1)
+    const harmonic = ac.createOscillator();
+    const harmonicGain = ac.createGain();
+    harmonic.type = 'sine';
+    harmonic.frequency.value = 82.41; // E1
+    harmonicGain.gain.setValueAtTime(0, ac.currentTime);
+    harmonicGain.gain.linearRampToValueAtTime(0.055, ac.currentTime + 7);
+    harmonic.connect(harmonicGain);
+    harmonicGain.connect(warmLpf);
+    harmonic.start(ac.currentTime);
+    nodesRef.current.push({ osc: harmonic, gain: harmonicGain, ac });
 
     // Soft brass-like shimmer
     const shimmer = ac.createOscillator();
@@ -342,7 +349,7 @@ export function useAmbientSound() {
     shimmer.type = 'sine';
     shimmer.frequency.value = 1760; // A6
     shimmerGain.gain.setValueAtTime(0, ac.currentTime);
-    shimmerGain.gain.linearRampToValueAtTime(0.015, ac.currentTime + 6);
+    shimmerGain.gain.linearRampToValueAtTime(0.02, ac.currentTime + 6);
     shimmer.connect(shimmerGain);
     shimmerGain.connect(warmLpf);
     shimmer.start(ac.currentTime);
