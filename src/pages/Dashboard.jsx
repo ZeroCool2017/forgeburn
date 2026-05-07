@@ -20,6 +20,8 @@ import AddLoanDialog from '@/components/forge/AddLoanDialog';
 import EmptyState from '@/components/forge/EmptyState';
 import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
 import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
+import MilestoneOverlay from '@/components/forge/MilestoneOverlay';
+import { detectMilestone } from '@/lib/milestones';
 import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
 import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
@@ -37,6 +39,8 @@ export default function Dashboard() {
   const [shatterColor, setShatterColor] = useState('#a78bfa');
   const [shatterOrigin, setShatterOrigin] = useState({ x: 0, y: 0 });
   const [shatteringLoanId, setShatteringLoanId] = useState(null);
+  const [activeMilestone, setActiveMilestone] = useState(null);
+  const [milestoneLoanName, setMilestoneLoanName] = useState('');
 
   const cardRefs = useRef({});
   const queryClient = useQueryClient();
@@ -103,15 +107,21 @@ export default function Dashboard() {
       setShatterOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
     }
 
+    // Milestone detection
+    const original = loan.original_balance || loan.current_balance;
+    const newBalance = Math.max(0, loan.current_balance - amount);
+    const milestone = detectMilestone(loan.current_balance, newBalance, original);
+    if (milestone) {
+      setActiveMilestone(milestone);
+      setMilestoneLoanName(loan.name);
+    }
+
     playChainBreak();
     setShatterColor(cat.color);
     setShatteringLoanId(loan.id);
-    setShatterTrigger(t => t + 1); // increment to re-trigger overlay
+    setShatterTrigger(t => t + 1);
 
-    // Clear the shatter card highlight after animation
     setTimeout(() => setShatteringLoanId(null), 600);
-
-    // Apply DB update slightly after for visual effect
     setTimeout(() => recordPayment.mutate({ loan, amount }), 100);
   }, [recordPayment]);
 
@@ -170,6 +180,13 @@ export default function Dashboard() {
           />
         )}
       </AnimatePresence>
+
+      {/* Milestone overlay */}
+      <MilestoneOverlay
+        milestone={activeMilestone}
+        loanName={milestoneLoanName}
+        onDismiss={() => setActiveMilestone(null)}
+      />
 
       {/* Record payment dialog */}
       <RecordPaymentDialog
