@@ -23,6 +23,7 @@ import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
 import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
 import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
+import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
@@ -263,6 +264,13 @@ export default function Dashboard() {
                 minimumSchedule={minimumSchedule}
                 totalDebt={totalOriginal}
               />
+            </div>
+
+            <div className="obs-divider my-6" />
+            {/* Systems Map */}
+            <p className="obs-label mb-3">— connections</p>
+            <div className="mb-6">
+              <SystemsMapWidget loans={loans} schedule={schedule} />
             </div>
 
             <div className="obs-divider my-6" />

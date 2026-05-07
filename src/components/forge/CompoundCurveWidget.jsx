@@ -1,3 +1,4 @@
+// Carry the Zero — Compound Curve Widget
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/lib/loanCalculations';
