@@ -276,7 +276,7 @@ export default function Dashboard() {
         ) : (
           <>
             {/* Stats Row */}
-            <p className="obs-label mb-3">— overview</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— overview</p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
               <StatsOrb label="Total Debt" value={formatCurrency(totalDebt)} sublabel={`of ${formatCurrency(totalOriginal)}`} delay={0} />
               <StatsOrb label="Free In" value={formatMonths(schedule.months)} sublabel={`${monthsSaved > 0 ? monthsSaved + ' months saved' : 'vs minimum'}`} delay={0.1} />
@@ -286,7 +286,7 @@ export default function Dashboard() {
 
             <div className="obs-divider my-6" />
             {/* Visualize Value panel */}
-            <p className="obs-label mb-3">— data story</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— data story</p>
             <div className="mb-6">
               <VisualizeValue
                 totalDebt={totalDebt}
@@ -299,7 +299,7 @@ export default function Dashboard() {
 
             <div className="obs-divider my-6" />
             {/* Extra Budget + Freedom Score — CONTROL POINT */}
-            <p className="obs-label mb-3">— forge controls</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— forge controls</p>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
               <div className="lg:col-span-2">
                 <ExtraBudgetSlider value={extraBudget} onChange={setExtraBudget} />
@@ -309,7 +309,7 @@ export default function Dashboard() {
 
             <div className="obs-divider my-6" />
             {/* Systems-thinking: compound curve widget */}
-            <p className="obs-label mb-3">— compound effect</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— compound effect</p>
             <div className="mb-6">
               <CompoundCurveWidget
                 loans={loans}
@@ -320,7 +320,7 @@ export default function Dashboard() {
 
             <div className="obs-divider my-6" />
             {/* Debt Reduction Progress */}
-            <p className="obs-label mb-3">— reduction trajectory</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— reduction trajectory</p>
             <div className="mb-6">
               <DebtReductionChart
                 schedule={schedule}
@@ -331,14 +331,14 @@ export default function Dashboard() {
 
             {/* PAYOFF TIMELINE — museum moment */}
             <div className="obs-divider my-8" />
-            <p className="obs-label mb-4">— your freedom timeline</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— your freedom timeline</p>
             <div className="mb-12">
               <FreedomTimeline schedule={schedule.schedule} months={schedule.months} />
             </div>
 
             {/* STRATEGY ARENA */}
             <div className="obs-divider my-8" />
-            <p className="obs-label mb-4">— strategy arena</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— strategy arena</p>
             <div className="mb-12">
               <StrategyCompare
                 loans={loans}
@@ -350,7 +350,7 @@ export default function Dashboard() {
 
             {/* INTERACTIVE INTEREST MAP */}
             <div className="obs-divider my-8" />
-            <p className="obs-label mb-4">— interactive interest map</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— interactive interest map</p>
             <div className="mb-12">
               <InteractiveHeatmap 
                 schedule={schedule.schedule} 
@@ -361,7 +361,7 @@ export default function Dashboard() {
 
             {/* MOMENTUM FIELD */}
             <div className="obs-divider my-8" />
-            <p className="obs-label mb-4">— living mind map</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— systems field</p>
             <div className="mb-12">
               <CelestialMindMap loans={loans} schedule={schedule} />
               {showInsight && <MindMapInsights loans={loans} habits={habits} onClose={() => setShowInsight(false)} />}
@@ -370,7 +370,7 @@ export default function Dashboard() {
             <div className="obs-divider my-6" />
             {/* Loan Cards */}
             <div className="mb-6">
-              <p className="obs-label mb-3">— your chains</p>
+              <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— your chains</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {loans.map(loan => (
                   <div
