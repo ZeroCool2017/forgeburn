@@ -177,75 +177,61 @@ export function useAmbientSound() {
     });
   }, []);
 
-  // ─── FOCUS MODE — precise, grounded with soft bass ─────────────────────────────────
+  // ─── FOCUS MODE — fast beats with strong bass ─────────────────────────────────
   const startFocus = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.18, ac.currentTime + 3);
+    master.gain.linearRampToValueAtTime(0.22, ac.currentTime + 2);
     master.connect(ac.destination);
 
-    // Long sparse delay — like the Battle Room's echo
-    const delay = ac.createDelay(6.0);
-    delay.delayTime.value = 1.2;
-    const delayFB = ac.createGain();
-    delayFB.gain.value = 0.55;
-    const delayWet = ac.createGain();
-    delayWet.gain.value = 0.35;
-    delay.connect(delayFB);
-    delayFB.connect(delay);
-    delay.connect(delayWet);
-    delayWet.connect(master);
+    // Warm tight lowpass
+    const lpf = ac.createBiquadFilter();
+    lpf.type = 'lowpass';
+    lpf.frequency.value = 2800;
+    lpf.Q.value = 0.8;
+    lpf.connect(master);
 
-    // High-pass filter — cold, clear
-    const hpf = ac.createBiquadFilter();
-    hpf.type = 'highpass';
-    hpf.frequency.value = 300;
-    hpf.connect(master);
-    hpf.connect(delay);
-
-    // Tactical tones — Locrian / minor pentatonic, cold intervals
-    const enderTones = [
-      130.8, 155.6, 185.0, 220.0, 246.9,   // C3 Eb3 F#3 A3 B3
-      261.6, 311.1, 369.9, 440.0, 493.9,   // C4 Eb4 F#4 A4 B4
-      523.3, 622.3, 739.9, 880.0,           // C5 Eb5 F#5 A5
+    // Fast pulsing tones — minor pentatonic, rapid fire
+    const focusTones = [
+      110.0, 130.8, 155.6, 185.0, 220.0, 246.9, 293.7,
+      440.0, 523.3, 587.3, 659.3, 740.0, 880.0
     ];
 
-    const spawnPing = () => {
+    const spawnPulse = () => {
       if (!playingRef.current) return;
-      const t = ac.currentTime + 0.02;
-      const freq = enderTones[Math.floor(Math.random() * enderTones.length)];
-      const duration = 2.5 + Math.random() * 5;
-      const peakVol = 0.025 + Math.random() * 0.04;
+      const t = ac.currentTime;
+      const freq = focusTones[Math.floor(Math.random() * focusTones.length)];
+      const duration = 0.8 + Math.random() * 1.2;
+      const peakVol = 0.035 + Math.random() * 0.045;
 
       const osc = ac.createOscillator();
       const gain = ac.createGain();
-      osc.type = 'sine';
+      osc.type = Math.random() > 0.6 ? 'square' : 'sine';
       osc.frequency.value = freq;
-      // Sharp attack, exponential decay — like a sonar ping
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(peakVol, t + 0.04);
+      gain.gain.linearRampToValueAtTime(peakVol, t + 0.08);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
       osc.connect(gain);
-      gain.connect(hpf);
+      gain.connect(lpf);
       osc.start(t);
-      osc.stop(t + duration + 0.1);
+      osc.stop(t + duration);
       nodesRef.current.push({ osc, gain, ac });
 
-      // Very sparse — 2-6 seconds between pings
-      const nextIn = 2000 + Math.random() * 4000;
-      const tid = setTimeout(spawnPing, nextIn);
+      // Faster spawn — 400-1200ms
+      const nextIn = 400 + Math.random() * 800;
+      const tid = setTimeout(spawnPulse, nextIn);
       timersRef.current.push(tid);
     };
 
-    [0, 1500, 3200, 5100].forEach(offset => {
-      timersRef.current.push(setTimeout(spawnPing, offset));
+    [0, 300, 700, 1100].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnPulse, offset));
     });
 
-    // Strong grounded bass foundation
+    // Heavy bass foundation for focus
     const bassDrones = [
-      { freq: 27.5, vol: 0.14 },  // A0
-      { freq: 55.0, vol: 0.11 },  // A1
-      { freq: 82.41, vol: 0.08 }, // E2
+      { freq: 27.5, vol: 0.18 },  // A0 — very sub
+      { freq: 55.0, vol: 0.15 },  // A1
+      { freq: 82.41, vol: 0.12 }, // E2
     ];
 
     bassDrones.forEach(({ freq, vol }) => {
@@ -254,7 +240,7 @@ export function useAmbientSound() {
       sub.type = 'sine';
       sub.frequency.value = freq;
       subGain.gain.setValueAtTime(0, ac.currentTime);
-      subGain.gain.linearRampToValueAtTime(vol, ac.currentTime + 6);
+      subGain.gain.linearRampToValueAtTime(vol, ac.currentTime + 3);
       sub.connect(subGain);
       subGain.connect(master);
       sub.start();
@@ -262,25 +248,133 @@ export function useAmbientSound() {
     });
   }, []);
 
-  // ─── DEEP DRONE MODE ─────────────────────────────────────────────────────
+  // ─── HARPSICHORD MODE — creepy, unsettling ─────────────────────────────────
+  const startHarpsichord = useCallback((ac) => {
+    const master = ac.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.2, ac.currentTime + 4);
+    master.connect(ac.destination);
+
+    // Spectral high-pass — thin, ghostly
+    const hpf = ac.createBiquadFilter();
+    hpf.type = 'highpass';
+    hpf.frequency.value = 800;
+    hpf.Q.value = 2;
+    hpf.connect(master);
+
+    // Harpsichord-like clicks — sharp attack, quick decay
+    const harpTones = [
+      261.6, 293.7, 329.6, 392.0, 440.0, 523.3, 587.3, 659.3, 783.9,
+      880.0, 987.8, 1046.5, 1174.7, 1319.5, 1479.9
+    ];
+
+    const spawnClick = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime;
+      const freq = harpTones[Math.floor(Math.random() * harpTones.length)];
+      
+      // Harsh metallic click
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.08, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+      osc.connect(gain);
+      gain.connect(hpf);
+      osc.start(t);
+      osc.stop(t + 0.16);
+      nodesRef.current.push({ osc, gain, ac });
+
+      // Sparse, eerie timing
+      const nextIn = 1200 + Math.random() * 3000;
+      const tid = setTimeout(spawnClick, nextIn);
+      timersRef.current.push(tid);
+    };
+
+    [0, 2400, 4800].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnClick, offset));
+    });
+
+    // Creepy low drone
+    const drone = ac.createOscillator();
+    const droneGain = ac.createGain();
+    drone.type = 'sine';
+    drone.frequency.value = 65.4;
+    droneGain.gain.setValueAtTime(0, ac.currentTime);
+    droneGain.gain.linearRampToValueAtTime(0.08, ac.currentTime + 5);
+    drone.connect(droneGain);
+    droneGain.connect(master);
+    drone.start();
+    nodesRef.current.push({ osc: drone, gain: droneGain, ac });
+  }, []);
+
+  // ─── ARCADE MODE — retro 8-bit chiptune ─────────────────────────────────
+  const startArcade = useCallback((ac) => {
+    const master = ac.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.16, ac.currentTime + 2);
+    master.connect(ac.destination);
+
+    // Sharp, thin sound — no bass depth
+    const hpf = ac.createBiquadFilter();
+    hpf.type = 'highpass';
+    hpf.frequency.value = 400;
+    hpf.connect(master);
+
+    // Chiptune bleeps — square waves, arpeggios
+    const chiptunes = [
+      440, 494, 523, 587, 659, 784, 880, 988, 1046, 1175
+    ];
+
+    const spawnBleep = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime;
+      const freq = chiptunes[Math.floor(Math.random() * chiptunes.length)];
+      const duration = 0.15 + Math.random() * 0.25;
+
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.06, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(gain);
+      gain.connect(hpf);
+      osc.start(t);
+      osc.stop(t + duration);
+      nodesRef.current.push({ osc, gain, ac });
+
+      // Rapid bleeps
+      const nextIn = 150 + Math.random() * 600;
+      const tid = setTimeout(spawnBleep, nextIn);
+      timersRef.current.push(tid);
+    };
+
+    [0, 250, 500, 750].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnBleep, offset));
+    });
+  }, []);
+
+  // ─── DEEP VOID MODE — oppressive subsonic ─────────────────────────────────
   const startDeep = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.25, ac.currentTime + 6);
+    master.gain.linearRampToValueAtTime(0.28, ac.currentTime + 7);
     master.connect(ac.destination);
 
     const lpf = ac.createBiquadFilter();
     lpf.type = 'lowpass';
-    lpf.frequency.value = 800;
-    lpf.Q.value = 1.2;
+    lpf.frequency.value = 600;
+    lpf.Q.value = 1.5;
     lpf.connect(master);
 
-    // Heavy detuned sub drones — deep presence
+    // Very deep sub drones
     const drones = [
-      { freq: 16.35, detune: 0, vol: 0.16 },   // C0 — sub-bass
-      { freq: 27.5, detune: 3, vol: 0.14 },    // A0
-      { freq: 32.7, detune: -4, vol: 0.12 },   // C#1
-      { freq: 49.0, detune: 2, vol: 0.1 },     // B0
+      { freq: 16.35, detune: 0, vol: 0.2 },    // C0 — deepest void
+      { freq: 27.5, detune: 5, vol: 0.18 },    // A0
+      { freq: 32.7, detune: -6, vol: 0.15 },   // C#1
+      { freq: 49.0, detune: 3, vol: 0.12 },    // B0
     ];
 
     drones.forEach(({ freq, detune, vol }) => {
@@ -290,132 +384,244 @@ export function useAmbientSound() {
       osc.frequency.value = freq;
       osc.detune.value = detune;
       gain.gain.setValueAtTime(0, ac.currentTime);
-      gain.gain.linearRampToValueAtTime(vol, ac.currentTime + 5 + Math.random() * 4);
+      gain.gain.linearRampToValueAtTime(vol, ac.currentTime + 6 + Math.random() * 3);
       osc.connect(gain);
       gain.connect(lpf);
       osc.start();
       nodesRef.current.push({ osc, gain, ac });
     });
 
-    // Slow LFO tremolo on master
+    // Slow pulse
     const lfo = ac.createOscillator();
     const lfoGain = ac.createGain();
-    lfo.frequency.value = 0.03;
-    lfoGain.gain.value = 0.03;
+    lfo.frequency.value = 0.025;
+    lfoGain.gain.value = 0.04;
     lfo.connect(lfoGain);
     lfoGain.connect(master.gain);
     lfo.start();
     nodesRef.current.push({ osc: lfo, gain: lfoGain, ac });
   }, []);
 
-  // ─── TULSA MODE — Greenwood Black Wall Street, resilience ─────────────────
-  const startTulsa = useCallback((ac) => {
+  // ─── GREENWOOD MODE — blues, soul, resilience ─────────────────────────────
+  const startGreenwood = useCallback((ac) => {
     const master = ac.createGain();
     master.gain.value = 0;
-    master.gain.linearRampToValueAtTime(0.25, ac.currentTime + 5);
+    master.gain.linearRampToValueAtTime(0.27, ac.currentTime + 6);
     master.connect(ac.destination);
 
-    // Warm, earthy low-pass + mid-presence resonance
+    // Warm, soulful mid-forward sound
     const warmLpf = ac.createBiquadFilter();
     warmLpf.type = 'lowpass';
-    warmLpf.frequency.value = 1800;
-    warmLpf.Q.value = 0.7;
+    warmLpf.frequency.value = 2200;
+    warmLpf.Q.value = 0.6;
     
-    const midBoost = ac.createBiquadFilter();
-    midBoost.type = 'peaking';
-    midBoost.frequency.value = 320;
-    midBoost.gain.value = 3;
-    midBoost.Q.value = 1.2;
+    const soulBoost = ac.createBiquadFilter();
+    soulBoost.type = 'peaking';
+    soulBoost.frequency.value = 400;
+    soulBoost.gain.value = 4;
+    soulBoost.Q.value = 1;
     
-    warmLpf.connect(midBoost);
-    midBoost.connect(master);
+    warmLpf.connect(soulBoost);
+    soulBoost.connect(master);
 
-    // Rich reverb-like delay (spiritual, reflective space)
+    // Deep reverb delay
     const delay = ac.createDelay(4);
-    delay.delayTime.value = 0.58;
+    delay.delayTime.value = 0.72;
     const delayFB = ac.createGain();
-    delayFB.gain.value = 0.55;
+    delayFB.gain.value = 0.6;
     const delayWet = ac.createGain();
-    delayWet.gain.value = 0.35;
+    delayWet.gain.value = 0.4;
     delay.connect(delayFB);
     delayFB.connect(delay);
     delay.connect(delayWet);
     delayWet.connect(master);
 
-    // Blues/Gospel-inspired pentatonic + natural minor + blue notes
-    const tulsiTones = [
-      110.0, 123.5, 146.8, 155.6, 165.0, 196.0,  // A2 B2 D3 F#3 E3 G3
-      220.0, 246.9, 293.7, 330.0, 370.0, 392.0,  // A3 B3 D4 E4 F#4 G4
-      440.0, 493.9, 587.3, 659.3, 740.0, 784.0,  // A4 B4 D5 E5 F#5 G5
+    // Deep blues pentatonic — emphasis on soul notes
+    const bluesTones = [
+      82.41, 110.0, 123.5, 146.8, 164.8, 196.0,     // E1-G3
+      220.0, 246.9, 293.7, 330.0, 369.9, 392.0,    // A3-G4
+      440.0, 493.9, 587.3, 659.3, 739.9, 880.0,    // A4-A5
     ];
 
-    const spawnBluesTone = () => {
+    const spawnBlues = () => {
       if (!playingRef.current) return;
-      const t = ac.currentTime + 0.05;
-      const freq = tulsiTones[Math.floor(Math.random() * tulsiTones.length)];
-      const duration = 2.5 + Math.random() * 8;
-      const peakVol = 0.04 + Math.random() * 0.06;
+      const t = ac.currentTime + 0.08;
+      const freq = bluesTones[Math.floor(Math.random() * bluesTones.length)];
+      const duration = 3 + Math.random() * 9;
+      const peakVol = 0.05 + Math.random() * 0.07;
 
       const osc = ac.createOscillator();
       const gain = ac.createGain();
-      osc.type = Math.random() > 0.5 ? 'triangle' : 'sine';
+      osc.type = 'triangle';
       osc.frequency.value = freq;
-      osc.detune.value = (Math.random() - 0.5) * 8;
+      osc.detune.value = (Math.random() - 0.5) * 10;
 
-      // Warm, breathy envelope with vibrato
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(peakVol * 0.6, t + duration * 0.2);
-      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.4);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.5, t + duration * 0.25);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.5);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
 
       osc.connect(gain);
       gain.connect(warmLpf);
-      osc.start(t); osc.stop(t + duration + 0.15);
+      osc.start(t);
+      osc.stop(t + duration + 0.2);
       nodesRef.current.push({ osc, gain, ac });
 
-      const nextIn = 700 + Math.random() * 3500;
-      timersRef.current.push(setTimeout(spawnBluesTone, nextIn));
+      const nextIn = 900 + Math.random() * 4000;
+      timersRef.current.push(setTimeout(spawnBlues, nextIn));
     };
 
-    [0, 1400, 2800, 4600].forEach(offset => {
-      timersRef.current.push(setTimeout(spawnBluesTone, offset));
+    [0, 1800, 3600, 5400].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnBlues, offset));
     });
 
-    // Deep earth drone — foundation (low A)
-    const earthDrone = ac.createOscillator();
-    const earthGain = ac.createGain();
-    earthDrone.type = 'sine';
-    earthDrone.frequency.value = 55.0; // A1
-    earthGain.gain.setValueAtTime(0, ac.currentTime);
-    earthGain.gain.linearRampToValueAtTime(0.1, ac.currentTime + 8);
-    earthDrone.connect(earthGain);
-    earthGain.connect(warmLpf);
-    earthDrone.start(ac.currentTime);
-    nodesRef.current.push({ osc: earthDrone, gain: earthGain, ac });
+    // Strong foundational bass
+    [55.0, 82.41, 110.0].forEach((freq, i) => {
+      const bass = ac.createOscillator();
+      const bassGain = ac.createGain();
+      bass.type = 'sine';
+      bass.frequency.value = freq;
+      bass.detune.value = (Math.random() - 0.5) * 3;
+      bassGain.gain.setValueAtTime(0, ac.currentTime);
+      bassGain.gain.linearRampToValueAtTime(0.14 - i * 0.02, ac.currentTime + 7 + i);
+      bass.connect(bassGain);
+      bassGain.connect(master);
+      bass.start();
+      nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+    });
+  }, []);
 
-    // Second harmonic drone (E1)
-    const harmonic = ac.createOscillator();
-    const harmonicGain = ac.createGain();
-    harmonic.type = 'sine';
-    harmonic.frequency.value = 82.41; // E1
-    harmonicGain.gain.setValueAtTime(0, ac.currentTime);
-    harmonicGain.gain.linearRampToValueAtTime(0.055, ac.currentTime + 7);
-    harmonic.connect(harmonicGain);
-    harmonicGain.connect(warmLpf);
-    harmonic.start(ac.currentTime);
-    nodesRef.current.push({ osc: harmonic, gain: harmonicGain, ac });
+  // ─── UPLIFTING MODE — hopeful, ascending major key ─────────────────────────
+  const startUplifting = useCallback((ac) => {
+    const master = ac.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.24, ac.currentTime + 4);
+    master.connect(ac.destination);
 
-    // Soft brass-like shimmer
-    const shimmer = ac.createOscillator();
-    const shimmerGain = ac.createGain();
-    shimmer.type = 'sine';
-    shimmer.frequency.value = 1760; // A6
-    shimmerGain.gain.setValueAtTime(0, ac.currentTime);
-    shimmerGain.gain.linearRampToValueAtTime(0.02, ac.currentTime + 6);
-    shimmer.connect(shimmerGain);
-    shimmerGain.connect(warmLpf);
-    shimmer.start(ac.currentTime);
-    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac });
+    // Bright, open filter
+    const lpf = ac.createBiquadFilter();
+    lpf.type = 'lowpass';
+    lpf.frequency.value = 3200;
+    lpf.Q.value = 0.5;
+    lpf.connect(master);
+
+    // Major key ascending tones — C major pentatonic
+    const upliftTones = [
+      130.8, 164.8, 196.0, 246.9, 261.6, 293.7, 329.6, 392.0, 440.0, 523.3, 587.3, 659.3, 783.9, 880.0, 1046.5
+    ];
+
+    const spawnAscent = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime;
+      const baseIdx = Math.floor(Math.random() * 10);
+      const freq = upliftTones[baseIdx];
+      const duration = 1.5 + Math.random() * 3.5;
+      const peakVol = 0.04 + Math.random() * 0.055;
+
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(peakVol, t + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+      osc.connect(gain);
+      gain.connect(lpf);
+      osc.start(t);
+      osc.stop(t + duration);
+      nodesRef.current.push({ osc, gain, ac });
+
+      const nextIn = 600 + Math.random() * 2400;
+      const tid = setTimeout(spawnAscent, nextIn);
+      timersRef.current.push(tid);
+    };
+
+    [0, 900, 1800, 2700].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnAscent, offset));
+    });
+
+    // Warm, present bass
+    const bass = ac.createOscillator();
+    const bassGain = ac.createGain();
+    bass.type = 'sine';
+    bass.frequency.value = 65.4; // E2
+    bassGain.gain.setValueAtTime(0, ac.currentTime);
+    bassGain.gain.linearRampToValueAtTime(0.12, ac.currentTime + 5);
+    bass.connect(bassGain);
+    bassGain.connect(master);
+    bass.start();
+    nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+  }, []);
+
+  // ─── WESTERN MODE — pedal steel, outlaw spirit ───────────────────────────
+  const startWestern = useCallback((ac) => {
+    const master = ac.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.26, ac.currentTime + 5);
+    master.connect(ac.destination);
+
+    // Warm resonance
+    const warmLpf = ac.createBiquadFilter();
+    warmLpf.type = 'lowpass';
+    warmLpf.frequency.value = 1600;
+    warmLpf.Q.value = 0.7;
+    warmLpf.connect(master);
+
+    // Pentatonic minor — country/western blues
+    const westernTones = [
+      110.0, 123.5, 146.8, 165.0, 196.0,       // A2-G3
+      220.0, 246.9, 293.7, 330.0, 392.0,       // A3-G4
+      440.0, 493.9, 587.3, 659.3, 784.0, 880.0 // A4-A5
+    ];
+
+    const spawnSlide = () => {
+      if (!playingRef.current) return;
+      const t = ac.currentTime + 0.04;
+      const startFreq = westernTones[Math.floor(Math.random() * westernTones.length)];
+      const endFreq = westernTones[Math.floor(Math.random() * westernTones.length)];
+      const duration = 2 + Math.random() * 5;
+      const peakVol = 0.045 + Math.random() * 0.065;
+
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(startFreq, t);
+      osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.6);
+      osc.frequency.linearRampToValueAtTime(endFreq, t + duration);
+
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(peakVol * 0.5, t + duration * 0.2);
+      gain.gain.linearRampToValueAtTime(peakVol, t + duration * 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+
+      osc.connect(gain);
+      gain.connect(warmLpf);
+      osc.start(t);
+      osc.stop(t + duration + 0.15);
+      nodesRef.current.push({ osc, gain, ac });
+
+      const nextIn = 1200 + Math.random() * 4000;
+      timersRef.current.push(setTimeout(spawnSlide, nextIn));
+    };
+
+    [0, 2000, 4000, 6000].forEach(offset => {
+      timersRef.current.push(setTimeout(spawnSlide, offset));
+    });
+
+    // Deep, grounded bass
+    [55.0, 82.41].forEach((freq, i) => {
+      const bass = ac.createOscillator();
+      const bassGain = ac.createGain();
+      bass.type = 'sine';
+      bass.frequency.value = freq;
+      bassGain.gain.setValueAtTime(0, ac.currentTime);
+      bassGain.gain.linearRampToValueAtTime(0.16 - i * 0.03, ac.currentTime + 6 + i * 0.5);
+      bass.connect(bassGain);
+      bassGain.connect(master);
+      bass.start();
+      nodesRef.current.push({ osc: bass, gain: bassGain, ac });
+    });
   }, []);
 
   const start = useCallback((mode = 'drift', debtProgress = 0) => {
@@ -427,10 +633,14 @@ export function useAmbientSound() {
 
       if (mode === 'drift') startDrift(ac);
       else if (mode === 'focus') startFocus(ac);
+      else if (mode === 'harpsichord') startHarpsichord(ac);
+      else if (mode === 'arcade') startArcade(ac);
       else if (mode === 'deep') startDeep(ac);
-      else if (mode === 'tulsa') startTulsa(ac);
+      else if (mode === 'tulsa') startGreenwood(ac);
+      else if (mode === 'uplifting') startUplifting(ac);
+      else if (mode === 'western') startWestern(ac);
     } catch (e) {}
-  }, [startDrift, startFocus, startDeep, startTulsa]);
+  }, [startDrift, startFocus, startHarpsichord, startArcade, startDeep, startGreenwood, startUplifting, startWestern]);
 
   const updateProgress = useCallback((debtProgress) => {
     // Modulate organism spawn rate and complexity based on progress (0-1)

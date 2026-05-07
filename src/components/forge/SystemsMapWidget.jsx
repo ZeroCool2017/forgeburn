@@ -17,6 +17,20 @@ function polarToXY(angle, r) {
   };
 }
 
+function getFloatingOffset(nodeId, time) {
+  // Deterministic floating based on node ID
+  const seed = parseInt(nodeId.slice(0, 8), 16) || 0;
+  const phase1 = (seed % 1000) / 1000 * Math.PI * 2;
+  const phase2 = ((seed >> 8) % 1000) / 1000 * Math.PI * 2;
+  
+  const t = time / 1000;
+  const floatX = Math.sin(t * 0.8 + phase1) * 4 + Math.sin(t * 0.3 + phase1 * 2) * 2;
+  const floatY = Math.cos(t * 0.9 + phase2) * 3.5 + Math.cos(t * 0.4 + phase2 * 1.5) * 1.5;
+  const scaleFloat = 1 + (Math.sin(t * 0.5 + phase1) * 0.08 + Math.sin(t * 0.35 + phase2) * 0.06);
+  
+  return { floatX, floatY, scaleFloat };
+}
+
 function NodeLabel({ x, y, label, value, color, isCenter }) {
   return (
     <g>
@@ -44,7 +58,15 @@ function NodeLabel({ x, y, label, value, color, isCenter }) {
 
 export default function SystemsMapWidget({ loans, schedule }) {
   const [hovered, setHovered] = useState(null);
+  const [time, setTime] = useState(0);
   const svgRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(t => t + 16);
+    }, 16);
+    return () => clearInterval(interval);
+  }, []);
 
   const nodes = useMemo(() => {
     if (!loans.length) return [];
@@ -165,25 +187,38 @@ export default function SystemsMapWidget({ loans, schedule }) {
               />
 
               {/* Loan nodes */}
-              {nodes.map((node) => (
-                <g
-                  key={node.id}
-                  style={{ cursor: 'pointer' }}
-                  onMouseEnter={() => setHovered(node.id)}
-                  onMouseLeave={() => setHovered(null)}
-                >
-                  <circle cx={node.x} cy={node.y} r={24} fill="transparent" />
-                  <NodeLabel
-                    x={node.x} y={node.y}
-                    label={node.name}
-                    color={node.color}
-                  />
-                  {/* Emoji label below */}
-                  <text x={node.x} y={node.y + 28} textAnchor="middle" fontSize={10}>
-                    {node.emoji}
-                  </text>
-                </g>
-              ))}
+              {nodes.map((node) => {
+                const { floatX, floatY, scaleFloat } = getFloatingOffset(node.id, time);
+                const floatedX = node.x + floatX;
+                const floatedY = node.y + floatY;
+
+                return (
+                  <g
+                    key={node.id}
+                    style={{ cursor: 'pointer' }}
+                    onMouseEnter={() => setHovered(node.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    <circle cx={floatedX} cy={floatedY} r={24} fill="transparent" />
+                    {/* Pulsing glow halo */}
+                    <circle
+                      cx={floatedX} cy={floatedY}
+                      r={24 * scaleFloat}
+                      fill={node.color}
+                      fillOpacity={0.08 * (scaleFloat - 0.92)}
+                    />
+                    <NodeLabel
+                      x={floatedX} y={floatedY}
+                      label={node.name}
+                      color={node.color}
+                    />
+                    {/* Emoji label below */}
+                    <text x={floatedX} y={floatedY + 28} textAnchor="middle" fontSize={10}>
+                      {node.emoji}
+                    </text>
+                  </g>
+                );
+              })}
             </svg>
           </div>
 
