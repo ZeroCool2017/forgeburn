@@ -65,11 +65,18 @@ export function playHarmonicNote(index = 0, duration = 0.4) {
   }
 }
 
-// Chord: play 3 notes together for deeper resonance
+// Rich harmonic chord — stacked thirds for lush resonance
 export function playHarmonicChord(rootIndex = 0) {
-  const indices = [rootIndex, rootIndex + 2, rootIndex + 4];
-  indices.forEach((idx, i) => {
-    setTimeout(() => playHarmonicNote(idx, 0.6), i * 30);
+  // Play root + major/minor third + perfect fifth (classic harmonic triad)
+  const notes = [
+    { index: rootIndex, delay: 0, duration: 0.8 },           // Root
+    { index: rootIndex + 2, delay: 40, duration: 0.75 },     // Third (harmonic interval)
+    { index: rootIndex + 4, delay: 80, duration: 0.7 },      // Fifth (perfect interval)
+    { index: rootIndex + 1, delay: 120, duration: 0.65 },    // Added tension note for richness
+  ];
+
+  notes.forEach(({ index, delay, duration }) => {
+    setTimeout(() => playHarmonicNote(index, duration), delay);
   });
 }
 

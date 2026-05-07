@@ -20,7 +20,7 @@ import DebtReductionChart from '@/components/forge/DebtReductionChart';
 import AddLoanDialog from '@/components/forge/AddLoanDialog';
 import EmptyState from '@/components/forge/EmptyState';
 import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
-import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
+import ChainDissolutionEffect from '@/components/forge/ChainDissolutionEffect';
 import MilestoneOverlay from '@/components/forge/MilestoneOverlay';
 import FloatingOrganisms from '@/components/forge/FloatingOrganisms';
 import { detectMilestone } from '@/lib/milestones';
@@ -184,10 +184,10 @@ export default function Dashboard() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-chart-3/5 rounded-full blur-3xl" />
       </div>
 
-      {/* Shatter overlay — remounts on each new trigger */}
+      {/* Chain dissolution overlay — permanent, weighty effect */}
       <AnimatePresence>
         {shatterTrigger > 0 && (
-          <ChainShatterOverlay
+          <ChainDissolutionEffect
             key={shatterTrigger}
             trigger={shatterTrigger}
             color={shatterColor}
