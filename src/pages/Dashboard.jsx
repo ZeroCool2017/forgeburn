@@ -33,7 +33,6 @@ import LoanNarrative from '@/components/forge/LoanNarrative';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
 import MindMapInsights from '@/components/forge/MindMapInsights';
 import TypingInsightPanel from '@/components/forge/TypingInsightPanel';
-import FieldEvolutionPanel from '@/components/forge/FieldEvolutionPanel';
 import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
 import HabitNodes from '@/components/forge/HabitNodes';
 import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
@@ -44,7 +43,6 @@ export default function Dashboard() {
   const [strategy, setStrategy] = useState('momentum');
   const [extraBudget, setExtraBudget] = useState(200);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [showFieldEvolutionNote, setShowFieldEvolutionNote] = useState(false);
   const [birthData, setBirthData] = useState(null);
 
   // Payment flow state
