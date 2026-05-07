@@ -308,6 +308,33 @@ export const QUOTES = [
   { text: "Draft picks are currency. Protect them like assets.", author: "Sam Presti" },
   { text: "Patience is not passive. It's an active strategy.", author: "Sam Presti" },
 
+  // Benjamin Hardy (Be Your Future Self Now)
+  { text: "Your future self is your greatest asset. Invest in them daily.", author: "Benjamin Hardy" },
+  { text: "The person you are today is not the person you have to be tomorrow.", author: "Benjamin Hardy" },
+  { text: "Every dollar of debt is a vote against your future self.", author: "Benjamin Hardy" },
+  { text: "Personality is not fixed. Neither is your financial situation.", author: "Benjamin Hardy" },
+  { text: "You are always moving toward something. Make sure it's the life you actually want.", author: "Benjamin Hardy" },
+  { text: "Commitment creates clarity. Decide who you're becoming and act accordingly.", author: "Benjamin Hardy" },
+  { text: "Your environment shapes your behavior more than your willpower. Design it intentionally.", author: "Benjamin Hardy" },
+  { text: "The best time to plant a tree was 20 years ago. The second best time is today — especially with your debt.", author: "Benjamin Hardy" },
+
+  // Cardi B
+  { text: "I don't dance now, I make money moves.", author: "Cardi B" },
+  { text: "Be careful. Everything you put out into the world comes back.", author: "Cardi B" },
+  { text: "I worked hard. I hustled. I prayed. Nothing was handed to me.", author: "Cardi B" },
+  { text: "They never thought I'd make it. Now they watch.", author: "Cardi B" },
+  { text: "Success is the best revenge and compound interest is the best strategy.", author: "Cardi B" },
+  { text: "I said what I said. My credit score agrees.", author: "Cardi B" },
+  { text: "Know your worth. Then add interest.", author: "Cardi B" },
+
+  // Future
+  { text: "I turned my pain into progress.", author: "Future" },
+  { text: "Leveling up is a lifestyle, not a moment.", author: "Future" },
+  { text: "The grind doesn't stop. The debt shouldn't either — pay it.", author: "Future" },
+  { text: "I came from nothing. Debt is just another nothing to overcome.", author: "Future" },
+  { text: "Mask off. Face your numbers.", author: "Future" },
+  { text: "Every move I make is intentional. Every payment should be too.", author: "Future" },
+
   // Mathematicians & scientists with diverse abilities
   { text: "A mathematician, like a painter or poet, is a maker of patterns.", author: "G.H. Hardy" },
   { text: "Do not worry about your difficulties in mathematics. I can assure you mine are still greater.", author: "Albert Einstein" },
