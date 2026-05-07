@@ -333,6 +333,17 @@ export default function Dashboard() {
               />
             </div>
 
+            <div className="obs-divider my-6" />
+            {/* Debt Reduction Progress */}
+            <p className="obs-label mb-3">— reduction trajectory</p>
+            <div className="mb-6">
+              <DebtReductionChart
+                schedule={schedule}
+                minimumSchedule={minimumSchedule}
+                totalDebt={totalOriginal}
+              />
+            </div>
+
             {/* PAYOFF TIMELINE — museum moment */}
             <div className="obs-divider my-8" />
             <p className="obs-label mb-4">— your freedom timeline</p>
