@@ -6,78 +6,78 @@
 
 @layer base {
   :root {
-    /* Tulsa Art Deco — Philtower midnight, Boston Ave gold, terracotta oil-boom */
-    --background: 196 28% 7%;
-    --foreground: 42 30% 90%;
-    --card: 196 24% 10%;
-    --card-foreground: 42 30% 90%;
-    --popover: 196 24% 10%;
-    --popover-foreground: 42 30% 90%;
-    --primary: 43 78% 52%;
-    --primary-foreground: 196 28% 7%;
-    --secondary: 196 20% 15%;
-    --secondary-foreground: 42 20% 80%;
-    --muted: 196 18% 13%;
-    --muted-foreground: 196 10% 52%;
-    --accent: 18 65% 48%;
-    --accent-foreground: 42 30% 95%;
+    /* Obsidian — pure black stone, violet accents, soft chalk foreground */
+    --background: 0 0% 6%;
+    --foreground: 240 10% 88%;
+    --card: 0 0% 9%;
+    --card-foreground: 240 10% 88%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 240 10% 88%;
+    --primary: 258 80% 68%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 240 8% 75%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 240 5% 48%;
+    --accent: 280 60% 58%;
+    --accent-foreground: 240 10% 95%;
     --destructive: 0 68% 52%;
     --destructive-foreground: 0 0% 98%;
-    --border: 196 18% 16%;
-    --input: 196 18% 16%;
-    --ring: 43 78% 52%;
-    --chart-1: 43 78% 52%;
-    --chart-2: 186 60% 48%;
-    --chart-3: 18 65% 52%;
-    --chart-4: 160 50% 46%;
-    --chart-5: 280 50% 60%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 258 80% 68%;
+    --chart-1: 258 80% 68%;
+    --chart-2: 220 70% 62%;
+    --chart-3: 280 60% 62%;
+    --chart-4: 180 55% 52%;
+    --chart-5: 320 60% 62%;
     --radius: 0.5rem;
-    --sidebar-background: 196 28% 7%;
-    --sidebar-foreground: 42 30% 90%;
-    --sidebar-primary: 43 78% 52%;
-    --sidebar-primary-foreground: 196 28% 7%;
-    --sidebar-accent: 196 20% 15%;
-    --sidebar-accent-foreground: 42 30% 90%;
-    --sidebar-border: 196 18% 16%;
-    --sidebar-ring: 43 78% 52%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 240 10% 88%;
+    --sidebar-primary: 258 80% 68%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 13%;
+    --sidebar-accent-foreground: 240 10% 88%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 258 80% 68%;
     --font-sans: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --font-display: 'Cormorant Garamond', serif;
   }
 
   .dark {
-    --background: 196 28% 7%;
-    --foreground: 42 30% 90%;
-    --card: 196 24% 10%;
-    --card-foreground: 42 30% 90%;
-    --popover: 196 24% 10%;
-    --popover-foreground: 42 30% 90%;
-    --primary: 43 78% 52%;
-    --primary-foreground: 196 28% 7%;
-    --secondary: 196 20% 15%;
-    --secondary-foreground: 42 20% 80%;
-    --muted: 196 18% 13%;
-    --muted-foreground: 196 10% 52%;
-    --accent: 18 65% 48%;
-    --accent-foreground: 42 30% 95%;
+    --background: 0 0% 6%;
+    --foreground: 240 10% 88%;
+    --card: 0 0% 9%;
+    --card-foreground: 240 10% 88%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 240 10% 88%;
+    --primary: 258 80% 68%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 240 8% 75%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 240 5% 48%;
+    --accent: 280 60% 58%;
+    --accent-foreground: 240 10% 95%;
     --destructive: 0 68% 52%;
     --destructive-foreground: 0 0% 98%;
-    --border: 196 18% 16%;
-    --input: 196 18% 16%;
-    --ring: 43 78% 52%;
-    --chart-1: 43 78% 52%;
-    --chart-2: 186 60% 48%;
-    --chart-3: 18 65% 52%;
-    --chart-4: 160 50% 46%;
-    --chart-5: 280 50% 60%;
-    --sidebar-background: 196 28% 7%;
-    --sidebar-foreground: 42 30% 90%;
-    --sidebar-primary: 43 78% 52%;
-    --sidebar-primary-foreground: 196 28% 7%;
-    --sidebar-accent: 196 20% 15%;
-    --sidebar-accent-foreground: 42 30% 90%;
-    --sidebar-border: 196 18% 16%;
-    --sidebar-ring: 43 78% 52%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 258 80% 68%;
+    --chart-1: 258 80% 68%;
+    --chart-2: 220 70% 62%;
+    --chart-3: 280 60% 62%;
+    --chart-4: 180 55% 52%;
+    --chart-5: 320 60% 62%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 240 10% 88%;
+    --sidebar-primary: 258 80% 68%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 13%;
+    --sidebar-accent-foreground: 240 10% 88%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 258 80% 68%;
   }
 }
 
@@ -108,14 +108,14 @@
     @apply bg-card/60 backdrop-blur-xl border border-border/50;
   }
   .glow-purple {
-    box-shadow: 0 0 20px rgba(196, 155, 55, 0.18), 0 0 60px rgba(196, 155, 55, 0.06);
+    box-shadow: 0 0 24px rgba(140, 100, 240, 0.22), 0 0 64px rgba(140, 100, 240, 0.08);
   }
   .glow-text {
-    text-shadow: 0 0 20px rgba(196, 155, 55, 0.55);
+    text-shadow: 0 0 20px rgba(140, 100, 240, 0.6);
   }
-  /* Art Deco geometric border accent */
+  /* Obsidian subtle border accent */
   .deco-border {
-    border-image: linear-gradient(90deg, transparent, hsl(43,78%,52%), transparent) 1;
+    border-image: linear-gradient(90deg, transparent, hsl(258,80%,68%), transparent) 1;
   }
   .font-display {
     font-family: var(--font-display);
