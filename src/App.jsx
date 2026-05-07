@@ -113,11 +113,12 @@ function App() {
               <AuthenticatedApp />
             </Router>
           </div>
+
           <Toaster />
         </AmbientSoundProvider>
       </QueryClientProvider>
     </AuthProvider>
   )
-}
+  }
 
-export default App
+  export default App
