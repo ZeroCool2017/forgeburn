@@ -16,6 +16,7 @@ import StrategyCompare from '@/components/forge/StrategyCompare';
 import FreedomScore from '@/components/forge/FreedomScore';
 import MonthlyHeatmap from '@/components/forge/MonthlyHeatmap';
 import ExtraBudgetSlider from '@/components/forge/ExtraBudgetSlider';
+import DebtReductionChart from '@/components/forge/DebtReductionChart';
 import AddLoanDialog from '@/components/forge/AddLoanDialog';
 import EmptyState from '@/components/forge/EmptyState';
 import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
@@ -217,6 +218,15 @@ export default function Dashboard() {
                 <ExtraBudgetSlider value={extraBudget} onChange={setExtraBudget} />
               </div>
               <FreedomScore loans={loans} />
+            </div>
+
+            {/* Debt Reduction Progress */}
+            <div className="mb-6">
+              <DebtReductionChart
+                schedule={schedule}
+                minimumSchedule={minimumSchedule}
+                totalDebt={totalOriginal}
+              />
             </div>
 
             {/* Main Charts */}
