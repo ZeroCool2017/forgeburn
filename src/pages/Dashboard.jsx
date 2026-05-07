@@ -330,15 +330,6 @@ export default function Dashboard() {
             </div>
 
             <div className="obs-divider my-6" />
-            {/* Narrative Context */}
-            <p className="obs-label mb-3">— your story</p>
-            <div className="grid gap-4 mb-6">
-              {loans.map(loan => (
-                <LoanNarrative key={loan.id} loan={loan} />
-              ))}
-            </div>
-
-            <div className="obs-divider my-6" />
             {/* Momentum Field */}
             <p className="obs-label mb-3">— momentum field</p>
             <div className="mb-6">
