@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2 } from 'lucide-react';
+import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, isShattering }) {
   const original = loan.original_balance || loan.current_balance;
@@ -10,6 +11,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const links = 20;
   const brokenLinks = Math.floor(progress * links);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { playStrike } = useForgeSound();
 
   return (
     <motion.div
@@ -137,7 +139,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
         {/* Pay button */}
         {onPay && (
           <button
-            onClick={onPay}
+            onClick={() => { playStrike(); onPay?.(); }}
             className="flex items-center gap-1 text-xs font-semibold font-mono px-2.5 py-1 rounded-lg border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:border-primary/60 transition-all"
           >
             <Zap className="w-3 h-3" />

@@ -234,13 +234,70 @@ export const QUOTES = [
   { text: "I don't have low self-esteem. I have low esteem for everyone else.", author: "Daria Morgendorffer" },
   { text: "My goal is not to wake up at 40 with the bitter realization that I've wasted my life in a job I hate.", author: "Daria Morgendorffer" },
   { text: "It's not that I'm antisocial. I just have nothing to say to people who have nothing to say.", author: "Daria Morgendorffer" },
-  { text: "You're not a failure if you don't make it. You're a success if you try.", author: "Helen Morgendorffer, Daria" },
   { text: "I say if you're going to do something, be honest about it.", author: "Daria Morgendorffer" },
   { text: "I like having low expectations. It's the only way I'm ever pleasantly surprised.", author: "Daria Morgendorffer" },
   { text: "Is it lonely being the only sane person in the room? Probably. But it beats the alternative.", author: "Daria Morgendorffer" },
   { text: "The only thing worse than being talked about is not being talked about. Unless they're discussing your debt.", author: "Jane Lane, Daria" },
-  { text: "Fashion is just a way to tell people what to think of you before they get to know you.", author: "Daria Morgendorffer" },
   { text: "It's a crazy world. You either laugh or you owe someone money.", author: "Jane Lane, Daria" },
+
+  // Donald Judd
+  { text: "Design has to work. Art does not.", author: "Donald Judd" },
+  { text: "The whole idea of a corner of anything is that it is a limit — define it, then exceed it.", author: "Donald Judd" },
+  { text: "Space is made by the artist or architect. It is not found or packaged.", author: "Donald Judd" },
+  { text: "Everything exists in a specific space. Know where you are.", author: "Donald Judd" },
+
+  // Moneyball / Billy Beane / Michael Lewis
+  { text: "Adapt or die.", author: "Billy Beane, Moneyball" },
+  { text: "Your goal shouldn't be to buy players. Your goal should be to buy wins.", author: "Billy Beane, Moneyball" },
+  { text: "The market for baseball players is an irrational one. So is the market for everything else.", author: "Michael Lewis, Moneyball" },
+  { text: "People in both fields operate with beliefs and biases. To the extent you can eliminate both and replace with data, you gain a competitive advantage.", author: "Billy Beane, Moneyball" },
+  { text: "It's hard not to be romantic about baseball. It's hard not to be romantic about compound interest too.", author: "Moneyball (adapted)" },
+
+  // 400m Track Stars
+  { text: "The race is not always to the swift, but to those who keep on running.", author: "Michael Johnson" },
+  { text: "You can't put a limit on anything. The more you dream, the farther you get.", author: "Michael Johnson" },
+  { text: "I work hard every single day. Not some days. Every single day.", author: "Wayde van Niekerk" },
+  { text: "Records are meant to be broken. That's why they exist.", author: "Wayde van Niekerk" },
+  { text: "Pain is temporary. Quitting lasts forever.", author: "Sanya Richards-Ross" },
+  { text: "Discipline is the bridge between goals and accomplishment.", author: "Sanya Richards-Ross" },
+
+  // Nobel Prize winners (diverse / interesting)
+  { text: "If you want to learn something, read about it. If you want to understand something, write about it. If you want to master something, teach it.", author: "Yogi Bhajan (attributed)" },
+  { text: "The more I study science, the more I believe in God — and in the system underneath it all.", author: "Albert Einstein" },
+  { text: "Imagination is more important than knowledge.", author: "Albert Einstein" },
+  { text: "I am not afraid of storms, for I am learning how to sail my ship.", author: "Malala Yousafzai" },
+  { text: "When the whole world is silent, even one voice becomes powerful.", author: "Malala Yousafzai" },
+  { text: "The function of education is to teach one to think intensively and to think critically.", author: "Martin Luther King Jr." },
+  { text: "One must always maintain one's connection to the past and yet ceaselessly pull away from it.", author: "Gaston Bachelard" },
+  { text: "The good news is that the moment you decide that what you know is more important than what you have been taught to believe, you will have shifted gears.", author: "Buckminster Fuller" },
+  { text: "You never change things by fighting the existing reality. Build a new model that makes the old one obsolete.", author: "Buckminster Fuller" },
+
+  // Atul Gawande
+  { text: "Better is possible. It does not require genius. It requires diligence, and a willingness to try.", author: "Atul Gawande" },
+  { text: "We always hope for the easy fix: the one simple change that will erase a problem. But few things in life work this way.", author: "Atul Gawande" },
+  { text: "The most dangerous thing in medicine is a doctor who is certain.", author: "Atul Gawande" },
+  { text: "Good checklists are efficient. They're quick and easy to use and they save lives.", author: "Atul Gawande" },
+
+  // Kacey Musgraves
+  { text: "Follow your arrow wherever it points.", author: "Kacey Musgraves" },
+  { text: "You can't be everyone's cup of tea. Some people prefer coffee.", author: "Kacey Musgraves" },
+  { text: "Rainbow after the storm — there's always something on the other side.", author: "Kacey Musgraves" },
+  { text: "Same trailer, different park. Your zip code doesn't define your worth.", author: "Kacey Musgraves" },
+
+  // Sam Presti (OKC Thunder GM)
+  { text: "Process over results. If the process is sound, the results will follow.", author: "Sam Presti" },
+  { text: "We're not trying to win a press conference. We're trying to win a championship.", author: "Sam Presti" },
+  { text: "Draft picks are currency. Protect them like assets.", author: "Sam Presti" },
+  { text: "Patience is not passive. It's an active strategy.", author: "Sam Presti" },
+
+  // Mathematicians & scientists with diverse abilities
+  { text: "A mathematician, like a painter or poet, is a maker of patterns.", author: "G.H. Hardy" },
+  { text: "Do not worry about your difficulties in mathematics. I can assure you mine are still greater.", author: "Albert Einstein" },
+  { text: "There is no royal road to geometry.", author: "Euclid" },
+  { text: "In mathematics you don't understand things. You just get used to them.", author: "John von Neumann" },
+  { text: "The essence of mathematics is its freedom.", author: "Georg Cantor" },
+  { text: "Pure mathematics is, in its way, the poetry of logical ideas.", author: "Albert Einstein" },
+  { text: "Mathematics is the language in which God has written the universe.", author: "Galileo Galilei" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order

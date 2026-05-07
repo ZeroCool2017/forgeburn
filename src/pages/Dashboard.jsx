@@ -21,6 +21,8 @@ import EmptyState from '@/components/forge/EmptyState';
 import RecordPaymentDialog from '@/components/forge/RecordPaymentDialog';
 import ChainShatterOverlay from '@/components/forge/ChainShatterOverlay';
 import PullToRefresh from '@/components/forge/PullToRefresh';
+import VisualizeValue from '@/components/forge/VisualizeValue';
+import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
   const [strategy, setStrategy] = useState('momentum');
@@ -36,6 +38,7 @@ export default function Dashboard() {
 
   const cardRefs = useRef({});
   const queryClient = useQueryClient();
+  const { playChainBreak, playAdd } = useForgeSound();
 
   const { data: loans = [], isLoading } = useQuery({
     queryKey: ['loans'],
@@ -98,6 +101,7 @@ export default function Dashboard() {
       setShatterOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
     }
 
+    playChainBreak();
     setShatterColor(cat.color);
     setShatteringLoanId(loan.id);
     setShatterTrigger(t => t + 1); // increment to re-trigger overlay
@@ -209,6 +213,16 @@ export default function Dashboard() {
               <StatsOrb label="Free In" value={formatMonths(schedule.months)} sublabel={`${monthsSaved > 0 ? monthsSaved + ' months saved' : 'vs minimum'}`} delay={0.1} />
               <StatsOrb label="Forge Power" value={interestSaved > 0 ? formatCurrency(interestSaved) : '—'} sublabel={interestSaved > 0 ? `${monthsSaved}mo reclaimed` : 'add extra budget'} delay={0.2} accent="chart-3" />
               <StatsOrb label="Chains" value={loans.length} sublabel={`${loans.filter(l => l.current_balance <= 0).length} broken`} delay={0.3} />
+            </div>
+
+            {/* Visualize Value panel */}
+            <div className="mb-6">
+              <VisualizeValue
+                totalDebt={totalDebt}
+                totalOriginal={totalOriginal}
+                interestSaved={interestSaved > 0 ? interestSaved : 0}
+                months={monthsSaved > 0 ? monthsSaved : schedule.months}
+              />
             </div>
 
             {/* Extra Budget + Freedom Score */}
