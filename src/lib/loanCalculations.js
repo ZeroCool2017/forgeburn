@@ -141,6 +141,22 @@ export const QUOTES = [
   { text: "Small habits compound into remarkable results over time.", author: "James Clear" },
   { text: "The most practical way to change who you are is to change what you do.", author: "James Clear" },
   { text: "Goals are good for setting direction. Systems are best for making progress.", author: "James Clear" },
+  { text: "A 1% improvement every day leads to being 37 times better by year's end.", author: "James Clear" },
+  { text: "The first mistake is never the one that ruins you. It's the spiral of repeated mistakes that follows.", author: "James Clear" },
+  { text: "Make it obvious. Make it attractive. Make it easy. Make it satisfying.", author: "James Clear" },
+  { text: "You don't have to be the victim of your environment. You can also be the architect of it.", author: "James Clear" },
+
+  // Systems Thinking
+  { text: "A system is never the sum of its parts. It is the product of their interactions.", author: "Russell Ackoff" },
+  { text: "Every system is perfectly designed to get the results it gets.", author: "W. Edwards Deming" },
+  { text: "The behavior of a system cannot be known just by knowing the elements of which the system is made.", author: "Donella Meadows" },
+  { text: "You can't change the game if you're trapped inside the rules of it.", author: "Donella Meadows" },
+  { text: "Leverage points are places in a system where a small shift can produce big changes.", author: "Donella Meadows" },
+  { text: "The greatest leverage is often found in the most counterintuitive places.", author: "Donella Meadows" },
+  { text: "Problems cannot be solved with the same level of thinking that created them.", author: "Albert Einstein" },
+  { text: "Don't push growth — remove the factors limiting growth.", author: "Peter Senge" },
+  { text: "Today's problems come from yesterday's solutions.", author: "Peter Senge" },
+  { text: "The system will push back. Learn to read the feedback, not fight it.", author: "Peter Senge" },
 
   // Marsha Linehan (DBT)
   { text: "You can't go back and change the beginning, but you can start where you are and change the ending.", author: "Marsha Linehan" },
