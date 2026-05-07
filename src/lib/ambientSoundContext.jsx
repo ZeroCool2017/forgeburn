@@ -35,6 +35,13 @@ export const SOUND_MODES = [
     icon: '🌊',
     description: 'Sub-harmonic drone layers. Low and slow — for when the debt feels heavy and you need to breathe.',
   },
+  {
+    id: 'tulsa',
+    label: 'Greenwood',
+    sub: 'Blues & resilience',
+    icon: '🏛️',
+    description: 'Gospel and blues-inspired pentatonic. For Greenwood, Black Wall Street, and the resilience it took to rebuild. Warm, reflective, grounded.',
+  },
 ];
 
 export function AmbientSoundProvider({ children }) {
@@ -48,7 +55,7 @@ export function AmbientSoundProvider({ children }) {
     localStorage.setItem(MODE_KEY, mode);
     localStorage.setItem(STORAGE_KEY, String(mode !== 'off'));
     if (mode !== 'off') {
-      start(mode);
+      start(mode, 0);
     } else {
       stop();
     }

@@ -78,6 +78,7 @@ export const QUOTE_GROUPS = [
   { id: 'gary', label: 'Gary', filter: q => q.author === 'Gary' },
   { id: 'clairo', label: 'Clairo', filter: q => q.author?.includes('Clairo') },
   { id: 'presti', label: 'Sam Presti / Thunder', filter: q => q.author?.includes('Presti') || q.author?.includes('Thunder') },
+  { id: 'tulsa', label: 'Greenwood / Black Wall Street', filter: q => q.author?.includes('Greenwood') || q.author?.includes('Black Wall Street') || q.author?.includes('Tulsa') || q.author?.includes('Black Economics') },
   { id: 'finance', label: 'Finance & Systems Thinking', filter: q => ['Buffett','Graham','JL Collins','Ken Honda','James Clear','Donella','Peter Senge','Meadows','Ackoff','Deming','Benjamin Hardy'].some(a => q.author?.includes(a)) },
   { id: 'moneyball', label: 'Moneyball / Billy Beane', filter: q => q.author?.includes('Beane') || q.author?.includes('Moneyball') || q.author?.includes('Michael Lewis') },
   { id: 'gwh', label: 'Good Will Hunting', filter: q => q.author?.includes('Good Will Hunting') },

@@ -893,6 +893,13 @@ export const QUOTES = [
   { text: "The Thunder is built on draft picks and long-term vision, not shortcuts.", author: "Sam Presti" },
   { text: "In the NBA, as in debt, compounding matters more than the headline move.", author: "Sam Presti (adapted)" },
   { text: "The best trade is the one you don't make. The best debt is the one you don't take.", author: "Sam Presti (adapted)" },
+
+  // Tulsa, Greenwood, Black Wall Street
+  { text: "Greenwood Avenue had the highest concentration of Black-owned businesses in America. They rebuilt it twice.", author: "Black Wall Street History" },
+  { text: "Wealth is the work you do long-term. Not the money you borrowed short-term.", author: "Greenwood Principle (adapted)" },
+  { text: "What was burned down in 1921 was rebuilt. Debt is the same — you break free by breaking even.", author: "Tulsa Resilience" },
+  { text: "The money you don't owe is the freedom they can't take from you.", author: "Greenwood Wisdom" },
+  { text: "Generational wealth starts with zero debt. Generational freedom starts with refusing the trap.", author: "Black Economics" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order
