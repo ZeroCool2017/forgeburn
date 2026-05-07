@@ -1,8 +1,95 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
+
+// Dot-grid canvas that draws the payoff connection line from current balance → zero
+function PayoffCanvas({ progress, color }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw dot grid
+    ctx.fillStyle = 'rgba(140,100,240,0.06)';
+    const spacing = 10;
+    for (let x = spacing; x < W; x += spacing) {
+      for (let y = spacing; y < H; y += spacing) {
+        ctx.beginPath();
+        ctx.arc(x, y, 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Draw the trajectory path: a smooth curve from current balance (left, high) → zero (right, bottom)
+    const startX = 4;
+    const startY = H - 4 - (progress * (H - 12)); // already-paid portion lifts the start
+    const endX = W - 4;
+    const endY = H - 4; // zero is always at the bottom-right
+
+    // Remaining balance line (from current position → zero)
+    const cp1x = startX + (endX - startX) * 0.35;
+    const cp1y = startY;
+    const cp2x = startX + (endX - startX) * 0.65;
+    const cp2y = endY;
+
+    // Glow under-line (paid portion) — from origin to current
+    const originY = H - 4;
+    ctx.beginPath();
+    ctx.moveTo(4, originY);
+    ctx.lineTo(startX, startY);
+    ctx.strokeStyle = color + '40';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([2, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Main remaining path
+    const grad = ctx.createLinearGradient(startX, startY, endX, endY);
+    grad.addColorStop(0, color + 'cc');
+    grad.addColorStop(1, color + '33');
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Current balance dot
+    ctx.beginPath();
+    ctx.arc(startX, startY, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // Zero target dot (hollow ring)
+    ctx.beginPath();
+    ctx.arc(endX, endY, 3.5, 0, Math.PI * 2);
+    ctx.strokeStyle = color + '88';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Zero label
+    ctx.font = '8px monospace';
+    ctx.fillStyle = color + '70';
+    ctx.fillText('$0', endX - 6, endY - 6);
+  }, [progress, color]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={280}
+      height={52}
+      className="w-full rounded-sm"
+      style={{ display: 'block' }}
+    />
+  );
+}
 
 export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, isShattering }) {
   const original = loan.original_balance || loan.current_balance;
@@ -69,7 +156,6 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
             <AnimatePresence>
               {menuOpen && (
                 <>
-                  {/* Backdrop */}
                   <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9, y: -4 }}
@@ -93,7 +179,12 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
         </div>
       </div>
 
-      {/* Chain visualization */}
+      {/* Dot-grid canvas — balance → zero connection line */}
+      <div className="mb-3 rounded-lg overflow-hidden border border-border/20 bg-background/30">
+        <PayoffCanvas progress={progress} color={cat.color} />
+      </div>
+
+      {/* Chain link visualization */}
       <div className="flex items-center gap-0.5 mb-3">
         {Array.from({ length: links }).map((_, i) => {
           const isBroken = i < brokenLinks;
@@ -107,7 +198,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
                   : { opacity: isBroken ? 0.3 : 1, scale: isBroken ? 0.8 : 1 }
               }
               transition={isNewlyBroken ? { duration: 0.45, times: [0, 0.25, 0.7, 1] } : {}}
-              className="flex-1 h-2 rounded-full relative overflow-hidden"
+              className="flex-1 h-1.5 rounded-full relative overflow-hidden"
               style={{
                 background: isBroken
                   ? 'hsl(var(--muted))'
@@ -136,7 +227,6 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
           </span>
         </div>
 
-        {/* Pay button */}
         {onPay && (
           <button
             onClick={() => { playStrike(); onPay?.(); }}
