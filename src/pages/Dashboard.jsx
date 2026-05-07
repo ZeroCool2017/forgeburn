@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,6 +41,8 @@ export default function Dashboard() {
   const [strategy, setStrategy] = useState('momentum');
   const [extraBudget, setExtraBudget] = useState(200);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [showFieldEvolutionNote, setShowFieldEvolutionNote] = useState(false);
+  const [birthData, setBirthData] = useState(null);
 
   // Payment flow state
   const [payingLoan, setPayingLoan] = useState(null);
@@ -54,6 +56,19 @@ export default function Dashboard() {
   const cardRefs = useRef({});
   const queryClient = useQueryClient();
   const { playChainBreak, playAdd } = useForgeSound();
+
+  // Load user birth data for astrology
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: async () => base44.auth.me(),
+  });
+
+  // Extract birth data from user metadata when available
+  useEffect(() => {
+    if (user?.birthData) {
+      setBirthData(user.birthData);
+    }
+  }, [user]);
 
   const { data: loans = [], isLoading } = useQuery({
     queryKey: ['loans'],
@@ -339,10 +354,11 @@ export default function Dashboard() {
                   <p className="text-xs text-muted-foreground">Your decisions, patterns, and dreams shape the momentum field. It grows smarter and more attuned to helping you excel in all areas of life, not just debt payoff.</p>
                 </div>
                 <motion.button
+                  onClick={() => setShowFieldEvolutionNote(true)}
                   whileTap={{ scale: 0.95 }}
-                  className="shrink-0 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/40 text-primary text-xs font-semibold hover:bg-primary/30 transition-all"
+                  className="shrink-0 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/40 text-primary text-xs font-semibold hover:bg-primary/30 transition-all cursor-pointer"
                 >
-                  Understood
+                  Got it
                 </motion.button>
               </div>
             </motion.div>
@@ -351,15 +367,14 @@ export default function Dashboard() {
             {/* Money Horoscope */}
             <p className="obs-label mb-3">— astrology & prophecy</p>
             <div className="mb-6">
-              <MoneyHoroscope birthData={null} />
+              <MoneyHoroscope birthData={birthData} />
             </div>
 
             <div className="obs-divider my-6" />
             {/* Habit Astrology — educational linking */}
             <p className="obs-label mb-3">— habit patterns</p>
             <div className="mb-6">
-              {/* Note: birthData would come from saved user preferences in the future */}
-              <HabitAstrologyPanel birthData={null} />
+              <HabitAstrologyPanel birthData={birthData} />
             </div>
 
             <div className="obs-divider my-6" />
