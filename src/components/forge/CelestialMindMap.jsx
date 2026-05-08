@@ -25,6 +25,7 @@ export default function CelestialMindMap({ loans, schedule }) {
   const H = 380;
   const CX = W / 2;
   const CY = H / 2;
+  const DPR = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
 
   // Initialize particles based on loans + habits
   useEffect(() => {
@@ -100,6 +101,13 @@ export default function CelestialMindMap({ loans, schedule }) {
   useEffect(() => {
     if (!canvasRef.current || !particles.length) return;
 
+    // Set canvas resolution for crisp rendering
+    const canvas = canvasRef.current;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width = `${W}px`;
+    canvas.style.height = `${H}px`;
+
     let animationFrameId;
     let currentTime = 0;
     let currentParticles = [...particles];
@@ -107,6 +115,7 @@ export default function CelestialMindMap({ loans, schedule }) {
     const animate = () => {
       currentTime += 16; // ~60fps
       const ctx = canvasRef.current.getContext('2d');
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
       // Draw obsidian grid background
@@ -157,8 +166,13 @@ export default function CelestialMindMap({ loans, schedule }) {
         p.x += p.vx;
         p.y += p.vy;
 
-        p.x = Math.max(20, Math.min(W - 20, p.x));
-        p.y = Math.max(20, Math.min(H - 20, p.y));
+        // Keep nodes fully inside canvas using their actual radius
+        const maxR = p.type === 'loan' ? 28 : p.type === 'habit' ? 14 : 6;
+        const margin = maxR + 4;
+        if (p.x < margin) { p.x = margin; p.vx = Math.abs(p.vx) * 0.5; }
+        if (p.x > W - margin) { p.x = W - margin; p.vx = -Math.abs(p.vx) * 0.5; }
+        if (p.y < margin) { p.y = margin; p.vy = Math.abs(p.vy) * 0.5; }
+        if (p.y > H - margin) { p.y = H - margin; p.vy = -Math.abs(p.vy) * 0.5; }
 
         return { ...p, growth: newGrowth };
       });
@@ -310,13 +324,7 @@ export default function CelestialMindMap({ loans, schedule }) {
           ctx.stroke();
         }
 
-        // Draw emoji inside loan bubble
-        if (p.type === 'loan' && r > 10 && p.emoji) {
-          ctx.font = `${Math.max(8, Math.min(14, r * 0.7))}px serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(p.emoji, Math.round(p.x), Math.round(p.y));
-        }
+        // No emoji inside bubble — color key shown below
 
         ctx.restore();
       });
@@ -352,11 +360,22 @@ export default function CelestialMindMap({ loans, schedule }) {
       <div className="relative overflow-hidden rounded-lg border border-border/20 bg-background/30">
         <canvas
           ref={canvasRef}
-          width={W}
-          height={H}
-          className="w-full"
-          style={{ display: 'block' }}
+          style={{ display: 'block', width: '100%', height: 'auto' }}
         />
+      </div>
+
+      {/* Color key */}
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-3">
+        {Object.entries(CATEGORY_CONFIG).map(([key, cat]) => (
+          <div key={key} className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: cat.color }} />
+            <span className="text-[10px] font-mono text-muted-foreground">{cat.label}</span>
+          </div>
+        ))}
+        <div className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#34d39a' }} />
+          <span className="text-[10px] font-mono text-muted-foreground">Paid off</span>
+        </div>
       </div>
 
       {/* Footer info */}
