@@ -353,7 +353,6 @@ export default function Dashboard() {
             <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— debt patterns</p>
             <div className="mb-12">
               <CelestialMindMap loans={loans} schedule={schedule} />
-              {showInsight && <MindMapInsights loans={loans} habits={habits} onClose={() => setShowInsight(false)} />}
             </div>
 
             <div className="obs-divider my-6" />
