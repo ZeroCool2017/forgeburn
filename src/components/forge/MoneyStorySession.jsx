@@ -206,24 +206,32 @@ Tone: wise, warm, direct. Like a great therapist who also knows finance deeply. 
 export default function MoneyStorySession({ loan, open, onOpenChange }) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [selectedTag, setSelectedTag] = useState(null);
   const [showResult, setShowResult] = useState(false);
-
+  const isLastQuestion = questionIndex === PSYCHOLOGIST_QUESTIONS.length - 1;
   const currentQuestion = PSYCHOLOGIST_QUESTIONS[questionIndex];
-  const progress = (questionIndex / PSYCHOLOGIST_QUESTIONS.length) * 100;
+  const progress = ((questionIndex + (selectedTag ? 1 : 0)) / PSYCHOLOGIST_QUESTIONS.length) * 100;
 
   const handleChoose = (choice) => {
-    const newAnswers = { ...answers, [currentQuestion.id]: choice.tag };
+    setSelectedTag(choice.tag);
+  };
+
+  const handleNext = () => {
+    if (!selectedTag) return;
+    const newAnswers = { ...answers, [currentQuestion.id]: selectedTag };
     setAnswers(newAnswers);
-    if (questionIndex < PSYCHOLOGIST_QUESTIONS.length - 1) {
-      setQuestionIndex(questionIndex + 1);
-    } else {
+    setSelectedTag(null);
+    if (isLastQuestion) {
       setShowResult(true);
+    } else {
+      setQuestionIndex(i => i + 1);
     }
   };
 
   const handleClose = () => {
     setQuestionIndex(0);
     setAnswers({});
+    setSelectedTag(null);
     setShowResult(false);
     onOpenChange(false);
   };
@@ -249,10 +257,11 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 60 }}
             transition={{ type: 'spring', stiffness: 280, damping: 32 }}
-            className="relative z-10 w-full sm:max-w-lg glass rounded-t-3xl sm:rounded-2xl border border-border/40 shadow-2xl overflow-hidden"
+            className="relative z-10 w-full sm:max-w-lg glass rounded-t-3xl sm:rounded-2xl border border-border/40 shadow-2xl flex flex-col"
+            style={{ maxHeight: '90vh' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-border/20">
+            <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-border/20 shrink-0">
               <div className="flex items-center gap-2">
                 <Brain className="w-5 h-5 text-primary" />
                 <div>
@@ -265,8 +274,8 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
               </button>
             </div>
 
-            {/* Content */}
-            <div className="px-5 py-5 max-h-[75vh] overflow-y-auto" style={{ paddingBottom: 'calc(1.25rem + env(safe-area-inset-bottom))' }}>
+            {/* Content — scrollable */}
+            <div className="flex-1 overflow-y-auto px-5 py-5" style={{ paddingBottom: 'calc(1.25rem + env(safe-area-inset-bottom))' }}>
               <AnimatePresence mode="wait">
                 {showResult ? (
                   <motion.div key="result" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -279,7 +288,7 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.22 }}
-                    className="space-y-5"
+                    className="space-y-4"
                   >
                     {/* Progress bar */}
                     <div className="space-y-1.5">
@@ -300,27 +309,56 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
 
                     {/* Question */}
                     <div className="space-y-1">
-                      <p className="text-xs font-semibold text-foreground leading-snug">{currentQuestion.text}</p>
-                      <p className="text-[10px] text-muted-foreground italic">{currentQuestion.hint}</p>
+                      <p className="text-sm font-semibold text-foreground leading-relaxed">{currentQuestion.text}</p>
+                      <p className="text-[11px] text-muted-foreground italic">{currentQuestion.hint}</p>
                     </div>
 
                     {/* Choices */}
-                    <div className="space-y-1.5">
-                      {currentQuestion.choices.map((choice, idx) => (
-                        <motion.button
-                          key={idx}
-                          whileHover={{ x: 3 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => handleChoose(choice)}
-                          className="w-full p-2.5 text-left bg-secondary/40 hover:bg-primary/15 border border-border/30 hover:border-primary/40 rounded-xl transition-all group"
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-xs text-foreground/90 leading-snug">{choice.text}</span>
-                            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
-                          </div>
-                        </motion.button>
-                      ))}
+                    <div className="space-y-2">
+                      {currentQuestion.choices.map((choice, idx) => {
+                        const isSelected = selectedTag === choice.tag;
+                        return (
+                          <motion.button
+                            key={idx}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => handleChoose(choice)}
+                            className={`w-full p-3 text-left rounded-xl transition-all border ${
+                              isSelected
+                                ? 'bg-primary/20 border-primary/60 text-foreground'
+                                : 'bg-secondary/40 hover:bg-primary/10 border-border/30 hover:border-primary/30'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs text-foreground/90 leading-relaxed">{choice.text}</span>
+                              {isSelected && (
+                                <motion.span
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="text-primary font-bold text-sm shrink-0"
+                                >✓</motion.span>
+                              )}
+                            </div>
+                          </motion.button>
+                        );
+                      })}
                     </div>
+
+                    {/* Next / Done button */}
+                    <motion.button
+                      whileHover={{ scale: selectedTag ? 1.01 : 1 }}
+                      whileTap={{ scale: selectedTag ? 0.98 : 1 }}
+                      onClick={handleNext}
+                      disabled={!selectedTag}
+                      className={`w-full py-3 rounded-xl font-semibold text-sm transition-all mt-2 ${
+                        selectedTag
+                          ? isLastQuestion
+                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                            : 'bg-secondary/80 text-foreground hover:bg-secondary border border-border/40'
+                          : 'bg-secondary/30 text-muted-foreground cursor-not-allowed border border-border/20'
+                      }`}
+                    >
+                      {isLastQuestion ? '✨ Generate My Story' : 'Next →'}
+                    </motion.button>
                   </motion.div>
                 )}
               </AnimatePresence>
