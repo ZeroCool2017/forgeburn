@@ -300,23 +300,23 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
 
                     {/* Question */}
                     <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground leading-snug">{currentQuestion.text}</p>
-                      <p className="text-[11px] text-muted-foreground italic">{currentQuestion.hint}</p>
+                      <p className="text-xs font-semibold text-foreground leading-snug">{currentQuestion.text}</p>
+                      <p className="text-[10px] text-muted-foreground italic">{currentQuestion.hint}</p>
                     </div>
 
                     {/* Choices */}
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       {currentQuestion.choices.map((choice, idx) => (
                         <motion.button
                           key={idx}
                           whileHover={{ x: 3 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => handleChoose(choice)}
-                          className="w-full p-3.5 text-left bg-secondary/40 hover:bg-primary/15 border border-border/30 hover:border-primary/40 rounded-xl transition-all group"
+                          className="w-full p-2.5 text-left bg-secondary/40 hover:bg-primary/15 border border-border/30 hover:border-primary/40 rounded-xl transition-all group"
                         >
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-sm text-foreground/90 leading-snug">{choice.text}</span>
-                            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
+                            <span className="text-xs text-foreground/90 leading-snug">{choice.text}</span>
+                            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
                           </div>
                         </motion.button>
                       ))}

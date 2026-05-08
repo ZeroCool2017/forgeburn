@@ -14,6 +14,7 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
     original_balance: '',
     interest_rate: '',
     minimum_payment: '',
+    due_date: '',
     category: 'personal',
   });
 
@@ -27,7 +28,7 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
       minimum_payment: parseFloat(form.minimum_payment),
     };
     onAdd(loan);
-    setForm({ name: '', current_balance: '', original_balance: '', interest_rate: '', minimum_payment: '', category: 'personal' });
+    setForm({ name: '', current_balance: '', original_balance: '', interest_rate: '', minimum_payment: '', due_date: '', category: 'personal' });
     onOpenChange(false);
   };
 
@@ -106,6 +107,15 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
                 required
               />
             </div>
+          </div>
+          <div>
+            <Label className="text-xs text-muted-foreground">Min. Payment Due Date</Label>
+            <Input
+              type="date"
+              value={form.due_date}
+              onChange={(e) => setForm({ ...form, due_date: e.target.value })}
+              className="bg-secondary/50 border-border/50 font-mono"
+            />
           </div>
           <div>
             <Label className="text-xs text-muted-foreground">Category</Label>

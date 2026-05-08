@@ -22,6 +22,11 @@
       "type": "number",
       "description": "Minimum monthly payment"
     },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Due date for minimum payment"
+    },
     "category": {
       "type": "string",
       "enum": [

@@ -16,6 +16,7 @@ export default function EditLoanDialog({ loan, open, onOpenChange }) {
     original_balance: '',
     interest_rate: '',
     minimum_payment: '',
+    due_date: '',
     category: 'personal',
   });
   const [saving, setSaving] = useState(false);
@@ -28,6 +29,7 @@ export default function EditLoanDialog({ loan, open, onOpenChange }) {
         original_balance: loan.original_balance ?? '',
         interest_rate: loan.interest_rate ?? '',
         minimum_payment: loan.minimum_payment ?? '',
+        due_date: loan.due_date || '',
         category: loan.category || 'personal',
       });
     }
@@ -115,6 +117,15 @@ export default function EditLoanDialog({ loan, open, onOpenChange }) {
                 required
               />
             </div>
+          </div>
+          <div>
+            <Label className="text-xs text-muted-foreground">Min. Payment Due Date</Label>
+            <Input
+              type="date"
+              value={form.due_date}
+              onChange={(e) => setForm({ ...form, due_date: e.target.value })}
+              className="bg-secondary/50 border-border/50 font-mono"
+            />
           </div>
           <div>
             <Label className="text-xs text-muted-foreground">Category</Label>
