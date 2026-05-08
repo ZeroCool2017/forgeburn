@@ -2,7 +2,8 @@ import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap } from 'lucide-react';
+import { Zap, Download } from 'lucide-react';
+import { exportAllData } from '@/lib/exportData';
 
 import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import QuoteBar from '@/components/forge/QuoteBar';
@@ -85,6 +86,18 @@ export default function Dashboard() {
     queryKey: ['spending_habits'],
     queryFn: () => base44.entities.SpendingHabit.list(),
   });
+
+  const { data: transactions = [] } = useQuery({
+    queryKey: ['transactions'],
+    queryFn: () => base44.entities.Transaction.list(),
+  });
+
+  const [exporting, setExporting] = useState(false);
+  const handleExport = async () => {
+    setExporting(true);
+    exportAllData(loans, transactions);
+    setTimeout(() => setExporting(false), 1000);
+  };
 
   // Calculate total monthly spending from habits
   const totalHabitSpending = habits.reduce((sum, h) => sum + (h.monthly_average || 0), 0);
@@ -276,7 +289,17 @@ export default function Dashboard() {
               </div>
 
             </div>
-            <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleExport}
+                disabled={exporting || loans.length === 0}
+                className="flex items-center gap-1.5 text-xs font-mono px-3 py-2 rounded-lg border border-border/40 bg-secondary/40 text-muted-foreground hover:text-foreground hover:border-border/70 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <Download className="w-3.5 h-3.5" />
+                {exporting ? 'Exporting…' : 'Export'}
+              </button>
+              <AddLoanDialog onAdd={createLoan.mutate} open={dialogOpen} onOpenChange={setDialogOpen} />
+            </div>
           </div>
           <div className="obs-divider mt-6" />
         </motion.div>
