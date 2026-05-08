@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
+import { playElectroplantonTone } from '@/lib/musicalInterface';
 import DebtStoryAdventure from './DebtStoryAdventure';
 import EditLoanDialog from './EditLoanDialog';
 import MoneyStorySession from './MoneyStorySession';
@@ -94,6 +95,8 @@ function PayoffCanvas({ progress, color }) {
   );
 }
 
+const MUSICAL_SYMBOLS = ['♩', '♪', '♫', '♬', '𝅘𝅥𝅮'];
+
 export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, isShattering }) {
   const original = loan.original_balance || loan.current_balance;
   const progress = Math.max(0, Math.min(1, 1 - (loan.current_balance / original)));
@@ -104,9 +107,46 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const [storyOpen, setStoryOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [moneyStoryOpen, setMoneyStoryOpen] = useState(false);
+  const [floatingNotes, setFloatingNotes] = useState([]);
+  const [litLinks, setLitLinks] = useState(new Set());
+  const lastPlayedRef = useRef(-1);
+  const isDraggingRef = useRef(false);
+  const noteIdRef = useRef(0);
   const { playStrike } = useForgeSound();
   const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
   const formatPayoffDate = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+  const spawnNote = useCallback((linkIndex, x, y) => {
+    const id = noteIdRef.current++;
+    const symbol = MUSICAL_SYMBOLS[linkIndex % MUSICAL_SYMBOLS.length];
+    setFloatingNotes(prev => [...prev, { id, symbol, x, y }]);
+    setTimeout(() => setFloatingNotes(prev => prev.filter(n => n.id !== id)), 1200);
+  }, []);
+
+  const playLinkSound = useCallback((linkIndex, x, y) => {
+    if (lastPlayedRef.current === linkIndex) return;
+    lastPlayedRef.current = linkIndex;
+    const normalized = linkIndex / (links - 1);
+    playElectroplantonTone(normalized, 0.55);
+    setLitLinks(prev => { const s = new Set(prev); s.add(linkIndex); return s; });
+    setTimeout(() => setLitLinks(prev => { const s = new Set(prev); s.delete(linkIndex); return s; }), 300);
+    spawnNote(linkIndex, x, y);
+  }, [links, spawnNote]);
+
+  const handleLinkPointerEnter = useCallback((e, i) => {
+    if (!isDraggingRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    playLinkSound(i, rect.left + rect.width / 2, rect.top);
+  }, [playLinkSound]);
+
+  const handleLinkPointerDown = useCallback((e, i) => {
+    isDraggingRef.current = true;
+    lastPlayedRef.current = -1;
+    const rect = e.currentTarget.getBoundingClientRect();
+    playLinkSound(i, rect.left + rect.width / 2, rect.top);
+    const stop = () => { isDraggingRef.current = false; lastPlayedRef.current = -1; };
+    window.addEventListener('pointerup', stop, { once: true });
+  }, [playLinkSound]);
 
   return (
     <motion.div
@@ -218,43 +258,76 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
         free by {formatPayoffDate(payoffDate)}
       </p>
 
-      {/* Chain link visualization */}
-      <div className="flex items-center gap-0.5 mb-3">
-        {Array.from({ length: links }).map((_, i) => {
-          const isBroken = i < brokenLinks;
-          const isNewlyBroken = isShattering && i === brokenLinks - 1;
-          return (
-            <motion.div
-              key={i}
-              animate={
-                isNewlyBroken
-                  ? { scaleY: [1, 0.6, 1.1, 0.4], opacity: [1, 1, 0.6, 0] }
-                  : { opacity: isBroken ? 0.2 : 1, scaleY: isBroken ? 0.6 : 1 }
-              }
-              transition={isNewlyBroken ? { duration: 0.4, times: [0, 0.2, 0.5, 1], ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.15 }}
-              className="flex-1 h-1.5 rounded-full relative overflow-hidden"
+      {/* Chain link visualization — drag/swipe to play electroplankton notes */}
+      <div className="relative mb-3 select-none" style={{ touchAction: 'none' }}>
+        <div className="flex items-center gap-0.5">
+          {Array.from({ length: links }).map((_, i) => {
+            const isBroken = i < brokenLinks;
+            const isNewlyBroken = isShattering && i === brokenLinks - 1;
+            const isLit = litLinks.has(i);
+            return (
+              <motion.div
+                key={i}
+                onPointerDown={(e) => handleLinkPointerDown(e, i)}
+                onPointerEnter={(e) => handleLinkPointerEnter(e, i)}
+                animate={
+                  isNewlyBroken
+                    ? { scaleY: [1, 0.6, 1.1, 0.4], opacity: [1, 1, 0.6, 0] }
+                    : { opacity: isBroken ? 0.2 : 1, scaleY: isLit ? 1.8 : isBroken ? 0.6 : 1 }
+                }
+                transition={isNewlyBroken
+                  ? { duration: 0.4, times: [0, 0.2, 0.5, 1], ease: [0.34, 1.56, 0.64, 1] }
+                  : { duration: isLit ? 0.08 : 0.15 }
+                }
+                className="flex-1 h-1.5 rounded-full relative overflow-hidden cursor-pointer"
+                style={{
+                  background: isLit
+                    ? cat.color
+                    : isBroken
+                      ? 'hsl(var(--muted))'
+                      : `linear-gradient(90deg, ${cat.color}88, ${cat.color})`,
+                  boxShadow: isLit ? `0 0 6px ${cat.color}` : 'none',
+                }}
+              >
+                {isBroken && !isLit && (
+                  <div className="absolute inset-0 opacity-40"
+                    style={{
+                      background: `repeating-linear-gradient(
+                        45deg,
+                        ${cat.color}30,
+                        ${cat.color}30 1px,
+                        transparent 1px,
+                        transparent 3px
+                      )`,
+                    }}
+                  />
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Floating musical notes — portal-like, escape the chain row */}
+        <AnimatePresence>
+          {floatingNotes.map(note => (
+            <motion.span
+              key={note.id}
+              initial={{ opacity: 1, y: 0, x: 0, scale: 0.8 }}
+              animate={{ opacity: 0, y: -36, scale: 1.3 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.1, ease: 'easeOut' }}
+              className="pointer-events-none absolute text-xs font-bold z-20"
               style={{
-                background: isBroken
-                  ? 'hsl(var(--muted))'
-                  : `linear-gradient(90deg, ${cat.color}88, ${cat.color})`,
+                left: `${Math.random() * 80 + 10}%`,
+                top: '-4px',
+                color: cat.color,
+                textShadow: `0 0 8px ${cat.color}`,
               }}
             >
-              {isBroken && (
-                <div className="absolute inset-0 opacity-40"
-                  style={{
-                    background: `repeating-linear-gradient(
-                      45deg,
-                      ${cat.color}30,
-                      ${cat.color}30 1px,
-                      transparent 1px,
-                      transparent 3px
-                    )`,
-                  }}
-                />
-              )}
-            </motion.div>
-          );
-        })}
+              {note.symbol}
+            </motion.span>
+          ))}
+        </AnimatePresence>
       </div>
 
       <div className="flex items-center justify-between">
