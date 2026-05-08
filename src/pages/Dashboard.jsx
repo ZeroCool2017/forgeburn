@@ -361,7 +361,7 @@ export default function Dashboard() {
 
             {/* MOMENTUM FIELD */}
             <div className="obs-divider my-8" />
-            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— systems field</p>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— forge burn</p>
             <div className="mb-12">
               <CelestialMindMap loans={loans} schedule={schedule} />
               {showInsight && <MindMapInsights loans={loans} habits={habits} onClose={() => setShowInsight(false)} />}
