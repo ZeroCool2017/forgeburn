@@ -336,17 +336,6 @@ export default function Dashboard() {
               <FreedomTimeline schedule={schedule.schedule} months={schedule.months} />
             </div>
 
-            {/* STRATEGY ARENA */}
-            <div className="obs-divider my-8" />
-            <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-4">— strategy arena</p>
-            <div className="mb-12">
-              <StrategyCompare
-                loans={loans}
-                extraBudget={extraBudget}
-                activeStrategy={strategy}
-                onStrategyChange={setStrategy}
-              />
-            </div>
 
             {/* INTERACTIVE INTEREST MAP */}
             <div className="obs-divider my-8" />
