@@ -237,12 +237,18 @@ export default function CelestialMindMap({ loans, schedule }) {
 
       currentParticles.forEach(p => {
         let r;
+        const isPaidOff = p.type === 'loan' && p.balance <= 0;
 
         if (p.type === 'loan') {
           const progress = 1 - (p.balance / p.original);
-          const payoffSize = 4 + progress * 8;
-          const baseSize = (p.baseRadius || 8) + p.growth * 5;
-          r = (baseSize + payoffSize) * globalBreath;
+          if (isPaidOff) {
+            // Paid-off loans shrink down
+            r = 8 * globalBreath;
+          } else {
+            const payoffSize = 4 + progress * 8;
+            const baseSize = (p.baseRadius || 8) + p.growth * 5;
+            r = (baseSize + payoffSize) * globalBreath;
+          }
         } else if (p.type === 'micro') {
           r = (p.baseRadius || 1) * (0.9 + Math.sin(currentTime * 0.008 + p.id.charCodeAt(0)) * 0.15);
         } else {
@@ -250,52 +256,76 @@ export default function CelestialMindMap({ loans, schedule }) {
         }
 
         if (!p.color) return;
-        
-        const rgbColor = parseInt(p.color.slice(1), 16);
-        const rVal = (rgbColor >> 16) & 255;
-        const gVal = (rgbColor >> 8) & 255;
-        const bVal = rgbColor & 255;
 
-        // Soft glow (smaller for micro nodes)
-        const glowRad = p.type === 'micro' ? r * 2 : r * 2.5;
-        const glowGrad = ctx.createRadialGradient(p.x, p.y, r * 0.3, p.x, p.y, glowRad);
-        glowGrad.addColorStop(0, `rgba(${rVal}, ${gVal}, ${bVal}, 0.2)`);
-        glowGrad.addColorStop(0.6, `rgba(${rVal}, ${gVal}, ${bVal}, 0.05)`);
-        glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0)`);
+        // Paid-off color: bright emerald green
+        let rVal, gVal, bVal;
+        if (isPaidOff) {
+          rVal = 52; gVal = 211; bVal = 153; // emerald
+        } else {
+          const rgbColor = parseInt(p.color.slice(1), 16);
+          rVal = (rgbColor >> 16) & 255;
+          gVal = (rgbColor >> 8) & 255;
+          bVal = rgbColor & 255;
+        }
+
+        // Crisp core node (no blur — sharp edges)
+        ctx.save();
+        ctx.imageSmoothingEnabled = true;
+
+        // Tight inner glow only (not blurry spread)
+        const glowGrad = ctx.createRadialGradient(p.x - r * 0.25, p.y - r * 0.25, r * 0.1, p.x, p.y, r);
+        glowGrad.addColorStop(0, `rgba(255,255,255,0.18)`);
+        glowGrad.addColorStop(0.5, `rgba(${rVal}, ${gVal}, ${bVal}, 0.9)`);
+        glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0.7)`);
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, glowRad, 0, Math.PI * 2);
+        ctx.arc(Math.round(p.x), Math.round(p.y), r, 0, Math.PI * 2);
         ctx.fill();
 
-        // Core node
-        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.82)`;
+        // Crisp border ring
+        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.9)`;
+        ctx.lineWidth = p.type === 'micro' ? 0.5 : 1.2;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Subtle shimmer
-        const shimmer = 0.25 + Math.sin(currentTime * 0.012 + p.id.charCodeAt(0)) * 0.15;
-        ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, ${shimmer})`;
-        ctx.lineWidth = p.type === 'micro' ? 0.3 : 0.5;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.arc(Math.round(p.x), Math.round(p.y), r, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Progress ring (loans only, subtle)
-        if (p.type === 'loan') {
+        // Progress ring (loans only)
+        if (p.type === 'loan' && !isPaidOff) {
           const progress = 1 - (p.balance / p.original);
           if (progress > 0.01) {
-            const ringRadius = r + 2.5;
+            const ringRadius = r + 3;
             const startAngle = -Math.PI / 2;
             const endAngle = startAngle + progress * 2 * Math.PI;
-            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.4)`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.5)`;
+            ctx.lineWidth = 1.2;
             ctx.lineCap = 'round';
             ctx.beginPath();
-            ctx.arc(p.x, p.y, ringRadius, startAngle, endAngle);
+            ctx.arc(Math.round(p.x), Math.round(p.y), ringRadius, startAngle, endAngle);
             ctx.stroke();
           }
         }
+
+        // Paid-off: draw a checkmark pulse ring
+        if (isPaidOff) {
+          const pulse = 0.4 + Math.sin(currentTime * 0.006) * 0.3;
+          ctx.strokeStyle = `rgba(52, 211, 153, ${pulse})`;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(Math.round(p.x), Math.round(p.y), r + 4, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // Draw loan name label inside bubble
+        if (p.type === 'loan' && r > 10) {
+          const label = p.name ? (p.name.length > 8 ? p.name.slice(0, 7) + '…' : p.name) : '';
+          ctx.fillStyle = 'rgba(255,255,255,0.92)';
+          ctx.font = `bold ${Math.max(7, Math.min(10, r * 0.55))}px monospace`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(label, Math.round(p.x), Math.round(p.y));
+        }
+
+        ctx.restore();
       });
 
       animationFrameId = requestAnimationFrame(animate);
