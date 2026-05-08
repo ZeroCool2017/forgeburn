@@ -62,7 +62,7 @@ export default function FreedomTimeline({ schedule, months }) {
             style={{ background: 'hsl(180, 60%, 55%)' }}
           />
           <div>
-            <h3 className="text-sm font-semibold text-foreground tracking-wide">FREEDOM PROJECTION</h3>
+            <h3 className="text-sm font-semibold text-foreground">Freedom Projection</h3>
             <p className="text-[10px] font-mono text-muted-foreground/60 tracking-widest">debt → zero</p>
           </div>
         </div>
