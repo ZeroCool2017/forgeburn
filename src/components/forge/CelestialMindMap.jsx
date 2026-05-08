@@ -268,16 +268,11 @@ export default function CelestialMindMap({ loans, schedule }) {
           bVal = rgbColor & 255;
         }
 
-        // Crisp core node (no blur — sharp edges)
+        // Crisp core node (flat fill, no radial gradient to avoid dark center)
         ctx.save();
         ctx.imageSmoothingEnabled = true;
 
-        // Tight inner glow only (not blurry spread)
-        const glowGrad = ctx.createRadialGradient(p.x - r * 0.25, p.y - r * 0.25, r * 0.1, p.x, p.y, r);
-        glowGrad.addColorStop(0, `rgba(255,255,255,0.18)`);
-        glowGrad.addColorStop(0.5, `rgba(${rVal}, ${gVal}, ${bVal}, 0.9)`);
-        glowGrad.addColorStop(1, `rgba(${rVal}, ${gVal}, ${bVal}, 0.7)`);
-        ctx.fillStyle = glowGrad;
+        ctx.fillStyle = `rgba(${rVal}, ${gVal}, ${bVal}, 0.82)`;
         ctx.beginPath();
         ctx.arc(Math.round(p.x), Math.round(p.y), r, 0, Math.PI * 2);
         ctx.fill();
@@ -315,14 +310,12 @@ export default function CelestialMindMap({ loans, schedule }) {
           ctx.stroke();
         }
 
-        // Draw loan name label inside bubble
-        if (p.type === 'loan' && r > 10) {
-          const label = p.name ? (p.name.length > 8 ? p.name.slice(0, 7) + '…' : p.name) : '';
-          ctx.fillStyle = 'rgba(255,255,255,0.92)';
-          ctx.font = `bold ${Math.max(7, Math.min(10, r * 0.55))}px monospace`;
+        // Draw emoji inside loan bubble
+        if (p.type === 'loan' && r > 10 && p.emoji) {
+          ctx.font = `${Math.max(8, Math.min(14, r * 0.7))}px serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(label, Math.round(p.x), Math.round(p.y));
+          ctx.fillText(p.emoji, Math.round(p.x), Math.round(p.y));
         }
 
         ctx.restore();
