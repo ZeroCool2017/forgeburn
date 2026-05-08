@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Plus } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+import { useQueryClient } from '@tanstack/react-query';
 import { CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import CategorySheet from '@/components/forge/CategorySheet';
 
-export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
+export default function EditLoanDialog({ loan, open, onOpenChange }) {
+  const queryClient = useQueryClient();
   const [form, setForm] = useState({
     name: '',
     current_balance: '',
@@ -16,33 +18,44 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
     minimum_payment: '',
     category: 'personal',
   });
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (loan) {
+      setForm({
+        name: loan.name || '',
+        current_balance: loan.current_balance ?? '',
+        original_balance: loan.original_balance ?? '',
+        interest_rate: loan.interest_rate ?? '',
+        minimum_payment: loan.minimum_payment ?? '',
+        category: loan.category || 'personal',
+      });
+    }
+  }, [loan]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const loan = {
+    setSaving(true);
+    await base44.entities.Loan.update(loan.id, {
       ...form,
       current_balance: parseFloat(form.current_balance),
       original_balance: parseFloat(form.original_balance || form.current_balance),
       interest_rate: parseFloat(form.interest_rate),
       minimum_payment: parseFloat(form.minimum_payment),
-    };
-    onAdd(loan);
-    setForm({ name: '', current_balance: '', original_balance: '', interest_rate: '', minimum_payment: '', category: 'personal' });
+    });
+    await queryClient.invalidateQueries({ queryKey: ['loans'] });
+    setSaving(false);
     onOpenChange(false);
   };
 
+  if (!loan) return null;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 gap-2">
-          <Plus className="w-4 h-4" />
-          Add Chain
-        </Button>
-      </DialogTrigger>
       <DialogContent className="glass border-border/50 max-w-md">
         <DialogHeader>
           <DialogTitle className="text-foreground flex items-center gap-2">
-            <span>⛓️</span> Add a New Chain
+            <span>✏️</span> Edit Chain
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -62,7 +75,6 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
               <Input
                 type="number"
                 step="0.01"
-                placeholder="$12,000"
                 value={form.current_balance}
                 onChange={(e) => setForm({ ...form, current_balance: e.target.value })}
                 className="bg-secondary/50 border-border/50 font-mono"
@@ -74,7 +86,6 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
               <Input
                 type="number"
                 step="0.01"
-                placeholder="$15,000"
                 value={form.original_balance}
                 onChange={(e) => setForm({ ...form, original_balance: e.target.value })}
                 className="bg-secondary/50 border-border/50 font-mono"
@@ -87,7 +98,6 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
               <Input
                 type="number"
                 step="0.01"
-                placeholder="19.99"
                 value={form.interest_rate}
                 onChange={(e) => setForm({ ...form, interest_rate: e.target.value })}
                 className="bg-secondary/50 border-border/50 font-mono"
@@ -99,7 +109,6 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
               <Input
                 type="number"
                 step="0.01"
-                placeholder="$250"
                 value={form.minimum_payment}
                 onChange={(e) => setForm({ ...form, minimum_payment: e.target.value })}
                 className="bg-secondary/50 border-border/50 font-mono"
@@ -111,8 +120,8 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
             <Label className="text-xs text-muted-foreground">Category</Label>
             <CategorySheet value={form.category} onChange={(v) => setForm({ ...form, category: v })} />
           </div>
-          <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-            Forge This Chain ⚒️
+          <Button type="submit" disabled={saving} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+            {saving ? 'Saving...' : 'Save Changes'}
           </Button>
         </form>
       </DialogContent>

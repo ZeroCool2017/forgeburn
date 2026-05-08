@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
-import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book } from 'lucide-react';
+import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
 import DebtStoryAdventure from './DebtStoryAdventure';
+import EditLoanDialog from './EditLoanDialog';
+import MoneyStorySession from './MoneyStorySession';
 
 // Dot-grid canvas that draws the payoff connection line from current balance → zero
 function PayoffCanvas({ progress, color }) {
@@ -100,6 +102,8 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const brokenLinks = Math.floor(progress * links);
   const [menuOpen, setMenuOpen] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [moneyStoryOpen, setMoneyStoryOpen] = useState(false);
   const { playStrike } = useForgeSound();
   const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
   const formatPayoffDate = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -168,6 +172,20 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
                     transition={{ duration: 0.12 }}
                     className="absolute right-0 top-7 z-20 glass border border-border/50 rounded-xl shadow-xl overflow-hidden min-w-[130px]"
                   >
+                    <button
+                      onClick={() => { setMenuOpen(false); setEditOpen(true); }}
+                      className="flex items-center gap-2 w-full px-3 py-2.5 text-xs text-foreground hover:bg-secondary/60 transition-colors"
+                    >
+                      <span className="text-xs">✏️</span>
+                      Edit chain
+                    </button>
+                    <button
+                      onClick={() => { setMenuOpen(false); setMoneyStoryOpen(true); }}
+                      className="flex items-center gap-2 w-full px-3 py-2.5 text-xs text-accent hover:bg-accent/10 transition-colors"
+                    >
+                      <Brain className="w-3.5 h-3.5" />
+                      Money story
+                    </button>
                     <button
                       onClick={() => { setMenuOpen(false); setStoryOpen(true); }}
                       className="flex items-center gap-2 w-full px-3 py-2.5 text-xs text-accent hover:bg-accent/10 transition-colors"
@@ -264,6 +282,12 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
 
       {/* Story adventure modal */}
       <DebtStoryAdventure debt={loan} open={storyOpen} onOpenChange={setStoryOpen} />
+
+      {/* Edit dialog */}
+      <EditLoanDialog loan={loan} open={editOpen} onOpenChange={setEditOpen} />
+
+      {/* Money psychologist session */}
+      <MoneyStorySession loan={loan} open={moneyStoryOpen} onOpenChange={setMoneyStoryOpen} />
     </motion.div>
   );
 }

@@ -30,6 +30,7 @@ import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
 import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 
 import LoanNarrative from '@/components/forge/LoanNarrative';
+import MoneyStorySession from '@/components/forge/MoneyStorySession';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
 import MindMapInsights from '@/components/forge/MindMapInsights';
 import TypingInsightPanel from '@/components/forge/TypingInsightPanel';
@@ -54,6 +55,8 @@ export default function Dashboard() {
   const [activeMilestone, setActiveMilestone] = useState(null);
   const [milestoneLoanName, setMilestoneLoanName] = useState('');
   const [showInsight, setShowInsight] = useState(true);
+  const [newLoanForStory, setNewLoanForStory] = useState(null);
+  const [moneyStoryOpen, setMoneyStoryOpen] = useState(false);
 
   const cardRefs = useRef({});
   const queryClient = useQueryClient();
@@ -99,6 +102,11 @@ export default function Dashboard() {
     },
     onError: (_e, _v, ctx) => queryClient.setQueryData(['loans'], ctx.prev),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['loans'] }),
+    onSuccess: (_data, variables) => {
+      // Auto-open money story session after adding a chain
+      setNewLoanForStory({ ...variables, name: variables.name || 'New Chain' });
+      setMoneyStoryOpen(true);
+    },
   });
 
   const deleteLoan = useMutation({
@@ -230,6 +238,13 @@ export default function Dashboard() {
         milestone={activeMilestone}
         loanName={milestoneLoanName}
         onDismiss={() => setActiveMilestone(null)}
+      />
+
+      {/* Money story auto-triggered after adding a chain */}
+      <MoneyStorySession
+        loan={newLoanForStory}
+        open={moneyStoryOpen}
+        onOpenChange={(open) => { setMoneyStoryOpen(open); if (!open) setNewLoanForStory(null); }}
       />
 
       {/* Record payment dialog */}
