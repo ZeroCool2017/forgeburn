@@ -151,7 +151,7 @@ export default function CelestialBackground() {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [mode]);
+  }, []);
 
   return (
     <canvas
