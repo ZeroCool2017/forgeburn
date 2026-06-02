@@ -55,9 +55,8 @@ export default function Strategy() {
         });
       }
       case 'blitz':
-        return [...active].sort((a, b) =>
-          (b.current_balance * b.interest_rate) - (a.current_balance * a.interest_rate)
-        );
+        // Highest minimum payment first — frees up cash flow fastest
+        return [...active].sort((a, b) => (b.minimum_payment || 0) - (a.minimum_payment || 0));
       default:
         return active;
     }

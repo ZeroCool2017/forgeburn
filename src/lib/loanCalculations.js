@@ -73,11 +73,8 @@ function getStrategyOrder(loans, strategy) {
         return bScore - aScore;
       });
     case 'blitz':
-      // Target the loan with highest monthly interest cost
-      return [...loans].sort((a, b) => {
-        const aMonthly = (b.balance * b.interest_rate) - (a.balance * a.interest_rate);
-        return aMonthly;
-      });
+      // Highest minimum payment first — frees up cash flow fastest
+      return [...loans].sort((a, b) => (b.minimum_payment || 0) - (a.minimum_payment || 0));
     default:
       return loans;
   }
@@ -91,7 +88,7 @@ export const STRATEGIES = [
   { id: 'momentum', name: 'Momentum', description: 'Smart hybrid — balances quick wins with interest savings', icon: '⛓️' },
   { id: 'avalanche', name: 'Avalanche', description: 'Highest interest first — mathematically optimal', icon: '💧' },
   { id: 'snowball', name: 'Snowball', description: 'Smallest balance first — psychological wins', icon: '⚪' },
-  { id: 'blitz', name: 'Blitz', description: 'Highest monthly cost first — maximum cash flow relief', icon: '💥' },
+  { id: 'blitz', name: 'Cash Flow', description: 'Highest minimum payment first — frees up monthly cash fastest', icon: '💥' },
 ];
 
 export const QUOTES = [
