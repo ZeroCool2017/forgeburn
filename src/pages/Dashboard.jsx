@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Download } from 'lucide-react';
+import { Zap, Download, PartyPopper } from 'lucide-react';
 import { exportAllData } from '@/lib/exportData';
 
 import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
@@ -42,10 +42,16 @@ import InteractiveHeatmap from '@/components/forge/InteractiveHeatmap';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
 export default function Dashboard() {
-  const [strategy, setStrategy] = useState('momentum');
+  const [strategy, setStrategy] = useState(() => localStorage.getItem('forge_strategy') || 'momentum');
   const [extraBudget, setExtraBudget] = useState(200);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [birthData, setBirthData] = useState(null);
+  const [showBroken, setShowBroken] = useState(false);
+
+  // Sync strategy to localStorage so Strategy page can share it
+  useEffect(() => {
+    localStorage.setItem('forge_strategy', strategy);
+  }, [strategy]);
 
   // Payment flow state
   const [payingLoan, setPayingLoan] = useState(null);
@@ -181,6 +187,46 @@ export default function Dashboard() {
     setTimeout(() => recordPayment.mutate({ loan, amount }), 100);
   }, [recordPayment]);
 
+  // Sort active loans by strategy — mirrors Strategy page
+  const activeLoans = useMemo(() => {
+    const active = loans.filter(l => l.current_balance > 0);
+    switch (strategy) {
+      case 'avalanche':
+        return [...active].sort((a, b) => b.interest_rate - a.interest_rate);
+      case 'snowball':
+        return [...active].sort((a, b) => a.current_balance - b.current_balance);
+      case 'blitz':
+        return [...active].sort((a, b) => (b.minimum_payment || 0) - (a.minimum_payment || 0));
+      case 'momentum':
+      default:
+        return [...active].sort((a, b) => {
+          const aProgress = 1 - (a.current_balance / (a.original_balance || a.current_balance));
+          const bProgress = 1 - (b.current_balance / (b.original_balance || b.current_balance));
+          const aScore = (a.interest_rate * 0.6) + (aProgress * 100 * 0.4);
+          const bScore = (b.interest_rate * 0.6) + (bProgress * 100 * 0.4);
+          return bScore - aScore;
+        });
+    }
+  }, [loans, strategy]);
+
+  const brokenChains = useMemo(() => loans.filter(l => l.current_balance <= 0), [loans]);
+
+  // Fire confetti when a chain is broken
+  const prevBrokenCount = useRef(0);
+  useEffect(() => {
+    if (brokenChains.length > prevBrokenCount.current) {
+      import('canvas-confetti').then(({ default: confetti }) => {
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#a78bfa', '#c084fc', '#818cf8', '#f472b6', '#fbbf24'],
+        });
+      });
+    }
+    prevBrokenCount.current = brokenChains.length;
+  }, [brokenChains.length]);
+
   // Adjust extra budget based on habit spending reduction (tangible connection)
   const adjustedExtraBudget = Math.max(0, extraBudget - (totalHabitSpending * 0.1)); // Habits reduce available extra by 10% of their value
   
@@ -290,6 +336,28 @@ export default function Dashboard() {
 
             </div>
             <div className="flex items-center gap-2">
+              {/* Strategy selector */}
+              <div className="flex gap-0.5 bg-card/60 border border-border/30 rounded-lg p-0.5">
+                {[
+                  { id: 'momentum', icon: '⛓️' },
+                  { id: 'avalanche', icon: '💧' },
+                  { id: 'snowball', icon: '⚪' },
+                  { id: 'blitz', icon: '💥' },
+                ].map(s => (
+                  <button
+                    key={s.id}
+                    onClick={() => setStrategy(s.id)}
+                    className={`px-1.5 py-1 rounded-md text-xs transition-all ${
+                      strategy === s.id
+                        ? 'bg-primary/20 text-primary shadow-sm'
+                        : 'text-muted-foreground/50 hover:text-muted-foreground'
+                    }`}
+                    title={s.id === 'blitz' ? 'Cash Flow' : s.id.charAt(0).toUpperCase() + s.id.slice(1)}
+                  >
+                    {s.icon}
+                  </button>
+                ))}
+              </div>
               <button
                 onClick={handleExport}
                 disabled={exporting || loans.length === 0}
@@ -319,7 +387,7 @@ export default function Dashboard() {
               <StatsOrb label="Total Debt" value={formatCurrency(totalDebt)} sublabel={`of ${formatCurrency(totalOriginal)}`} delay={0} />
               <StatsOrb label="Free In" value={formatMonths(schedule.months)} sublabel={`${monthsSaved > 0 ? monthsSaved + ' months saved' : 'vs minimum'}`} delay={0.1} />
               <StatsOrb label="Forge Power" value={interestSaved > 0 ? formatCurrency(interestSaved) : '—'} sublabel={interestSaved > 0 ? `${monthsSaved}mo reclaimed` : 'add extra budget'} delay={0.2} accent="chart-3" />
-              <StatsOrb label="Chains" value={loans.length} sublabel={`${loans.filter(l => l.current_balance <= 0).length} broken`} delay={0.3} />
+              <StatsOrb label="Chains" value={activeLoans.length} sublabel={`${brokenChains.length} broken`} delay={0.3} />
             </div>
 
             <div className="obs-divider my-6" />
@@ -398,7 +466,7 @@ export default function Dashboard() {
             <div className="mb-6">
               <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— your chains</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {loans.map(loan => (
+                {activeLoans.map(loan => (
                   <div
                     key={loan.id}
                     ref={el => cardRefs.current[loan.id] = el}
@@ -414,6 +482,55 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
+
+            {/* Broken Chains */}
+            {brokenChains.length > 0 && (
+              <div className="mb-6">
+                <button
+                  onClick={() => setShowBroken(!showBroken)}
+                  className="flex items-center gap-2 text-xs font-mono text-muted-foreground/60 hover:text-muted-foreground transition-colors mb-3"
+                >
+                  <PartyPopper className="w-3.5 h-3.5" />
+                  {brokenChains.length} chain{brokenChains.length > 1 ? 's' : ''} broken — {showBroken ? 'hide' : 'show'}
+                </button>
+                <AnimatePresence>
+                  {showBroken && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+                    >
+                      {brokenChains.map(loan => (
+                        <motion.div
+                          key={loan.id}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="glass rounded-2xl p-4 border border-green-500/20 relative overflow-hidden"
+                        >
+                          <div className="absolute top-2 right-2">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/30">
+                              BROKEN
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-xl opacity-50">⛓️💥</span>
+                            <div>
+                              <p className="text-sm font-semibold text-foreground/60 line-through">{loan.name}</p>
+                              <p className="text-[10px] font-mono text-muted-foreground/40">
+                                was {loan.original_balance || loan.current_balance > 0 ? formatCurrency(loan.original_balance || loan.current_balance) : '—'}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="h-px bg-gradient-to-r from-green-500/20 via-green-500/10 to-transparent" />
+                          <p className="text-[10px] font-mono text-green-500/60 mt-2">✓ Paid in full</p>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
           </>
         )}
       </div>

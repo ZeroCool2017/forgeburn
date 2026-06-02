@@ -9,7 +9,7 @@ import BurndownChart from '@/components/forge/BurndownChart';
 import ExtraBudgetSlider from '@/components/forge/ExtraBudgetSlider';
 
 export default function Strategy() {
-  const [strategy, setStrategy] = useState('momentum');
+  const [strategy, setStrategy] = useState(() => localStorage.getItem('forge_strategy') || 'momentum');
   const [extraBudget, setExtraBudget] = useState(200);
   const [selectedCategory, setSelectedCategory] = useState('all');
 

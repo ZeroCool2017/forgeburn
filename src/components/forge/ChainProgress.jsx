@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
-import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain } from 'lucide-react';
+import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain, PartyPopper } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
 import { playElectroplantonTone } from '@/lib/musicalInterface';
 import DebtStoryAdventure from './DebtStoryAdventure';
