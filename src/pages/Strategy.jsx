@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -12,6 +12,11 @@ export default function Strategy() {
   const [strategy, setStrategy] = useState(() => localStorage.getItem('forge_strategy') || 'momentum');
   const [extraBudget, setExtraBudget] = useState(200);
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Sync to localStorage so Dashboard picks it up
+  useEffect(() => {
+    localStorage.setItem('forge_strategy', strategy);
+  }, [strategy]);
 
   const { data: loans = [], isLoading } = useQuery({
     queryKey: ['loans'],
