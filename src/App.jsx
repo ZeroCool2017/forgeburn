@@ -2,7 +2,7 @@ import React from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -112,9 +112,9 @@ function App() {
           
           {/* App content */}
           <div className="relative" style={{ zIndex: 10 }}>
-            <Router>
+            <HashRouter>
               <AuthenticatedApp />
-            </Router>
+            </HashRouter>
           </div>
 
           <Toaster />
