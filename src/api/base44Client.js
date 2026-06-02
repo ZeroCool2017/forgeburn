@@ -83,6 +83,7 @@ async function clearAllData() {
   await db.loans.clear();
   await db.spending_habits.clear();
   await db.transactions.clear();
+  await db.notes.clear();
   await db.user_profile.clear();
 }
 

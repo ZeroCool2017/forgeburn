@@ -6,6 +6,7 @@ db.version(1).stores({
   loans: '++id, name, category, current_balance',
   spending_habits: '++id, name, pattern',
   transactions: '++id, date, habit_id',
+  notes: '++id, month, created_at',
   user_profile: 'id',
 });
 
