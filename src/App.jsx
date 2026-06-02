@@ -2,7 +2,7 @@ import React from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { HashRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -14,6 +14,7 @@ import Onboarding from './pages/Onboarding';
 import AppLayout from './components/AppLayout';
 import CelestialBackground from './components/forge/CelestialBackground';
 import { AmbientSoundProvider } from './lib/ambientSoundContext';
+import SaveIndicator from './components/SaveIndicator';
 // Add page imports here
 
 const TAB_ORDER = ['/', '/strategy', '/settings'];
@@ -65,7 +66,16 @@ function AnimatedRoutes() {
 }
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, user, authChecked } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Redirect to onboarding on first visit
+  React.useEffect(() => {
+    if (authChecked && !isLoadingAuth && user && !user.personalization && location.pathname !== '/onboarding') {
+      navigate('/onboarding', { replace: true });
+    }
+  }, [authChecked, isLoadingAuth, user, location.pathname, navigate]);
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
@@ -118,6 +128,7 @@ function App() {
           </div>
 
           <Toaster />
+          <SaveIndicator />
         </AmbientSoundProvider>
       </QueryClientProvider>
     </AuthProvider>

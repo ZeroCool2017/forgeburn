@@ -3,6 +3,8 @@ import { base44 } from '@/api/base44Client';
 
 const AuthContext = createContext();
 
+export { AuthContext };
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -44,6 +46,12 @@ export const AuthProvider = ({ children }) => {
     console.debug('[local] navigateToLogin (no-op)');
   };
 
+  const refreshUser = async () => {
+    const currentUser = await base44.auth.me();
+    setUser(currentUser);
+    return currentUser;
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -54,6 +62,7 @@ export const AuthProvider = ({ children }) => {
       authChecked,
       logout,
       navigateToLogin,
+      refreshUser,
       checkUserAuth: checkAppState,
       checkAppState,
     }}>

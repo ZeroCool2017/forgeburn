@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sparkles, ChevronRight } from 'lucide-react';
+import { useAuth } from '@/lib/AuthContext';
 
 const QUESTIONS = [
   {
@@ -77,6 +78,7 @@ export default function Onboarding() {
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { refreshUser } = useAuth();
 
   const currentQuestion = QUESTIONS[step];
   const progress = ((step + 1) / QUESTIONS.length) * 100;
@@ -104,6 +106,7 @@ export default function Onboarding() {
       await base44.auth.updateMe({
         personalization: JSON.stringify(answers),
       });
+      await refreshUser();
       navigate('/');
     } catch (error) {
       console.error('Failed to save onboarding:', error);
