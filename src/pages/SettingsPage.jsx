@@ -57,12 +57,14 @@ export default function SettingsPage() {
     queryFn: () => base44.auth.me(),
   });
 
-  const handleLogout = () => base44.auth.logout('/');
+  const handleLogout = () => {
+    base44.auth.logout();
+  };
 
   const handleDeleteAccount = async () => {
     setDeleteLoading(true);
-    await base44.auth.updateMe({ account_deleted: true, deleted_at: new Date().toISOString() });
-    base44.auth.logout('/');
+    await base44.clearAllData();
+    window.location.reload();
   };
 
   return (

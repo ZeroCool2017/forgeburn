@@ -4,8 +4,7 @@
  */
 import makeEntityAPI, { db } from '@/lib/localDB';
 
-// Stub for LLM integration features — Base44 provided this but we can't
-// call it anymore. Returns a fallback so the UI doesn't crash.
+// Stub for LLM integration features
 const llmFallback = {
   async InvokeLLM({ prompt }) {
     console.debug('[local] LLM invoked (stub):', prompt?.slice(0, 80));
@@ -14,6 +13,13 @@ const llmFallback = {
     };
   },
 };
+
+async function clearAllData() {
+  await db.loans.clear();
+  await db.spending_habits.clear();
+  await db.transactions.clear();
+  await db.user_profile.clear();
+}
 
 export const base44 = {
   entities: {
@@ -32,17 +38,16 @@ export const base44 = {
       return db.user_profile.get('local');
     },
     logout: () => {
-      // No-op — local-only app, no session to clear
-      console.debug('[local] logout called (no-op)');
+      // Reload to clear React state to a clean page
+      window.location.reload();
     },
-    redirectToLogin: () => {
-      // No-op — always authenticated locally
-      console.debug('[local] redirectToLogin called (no-op)');
-    },
+    redirectToLogin: () => {},
   },
   integrations: {
     Core: llmFallback,
   },
+  // Clear all local data — replaces "Delete Account" in local mode
+  clearAllData,
 };
 
 export default base44;
