@@ -53,9 +53,15 @@ export function playOrbTone(normalized = 0.5, enabled = true, duration = 2.2) {
     const ac = getAudioContext();
     if (ac.state === 'suspended') ac.resume();
     const t = ac.currentTime + 0.02;
-    const freq = noteFromValue(normalized);
+    const idx = Math.floor(Math.max(0, Math.min(0.999, normalized)) * (PENTATONIC.length - 1));
+    const freq = PENTATONIC[idx];
+    // Every orb is a little chord (root + fifth + octave) with a soft sub for bass —
+    // like a chord keyboard where every button is a harmony.
     softVoice(freq, t, { ac, peak: 0.05, duration });
-    softVoice(freq * 0.5, t, { ac, peak: 0.04, duration: duration * 1.15, type: 'triangle' });
+    softVoice(freq * 1.5, t + 0.03, { ac, peak: 0.03, duration: duration * 0.9, detune: 4 });
+    softVoice(freq * 2, t + 0.06, { ac, peak: 0.016, duration: duration * 0.8, detune: 7 });
+    softVoice(freq * 0.5, t, { ac, peak: 0.045, duration: duration * 1.2, type: 'triangle' });
+    softVoice(freq * 0.25, t, { ac, peak: 0.04, duration: duration * 1.3, type: 'sine' });
   } catch {}
 }
 

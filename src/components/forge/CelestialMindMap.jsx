@@ -7,10 +7,6 @@ import { Sparkles } from 'lucide-react';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
 import { playFieldTone, playFieldBass, playNodeResonance } from '@/lib/orchestraSound';
 
-// Nintendo DS-style stylus cursor — the field is played like an Electroplankton
-// touch screen. The tip sits at the hotspot (4, 24).
-const DS_CURSOR = `url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='28'%20height='28'%20viewBox='0%200%2028%2028'%3E%3Cpath%20d='M4%2024%20L10%2018%20L20%208%20L22%2010%20L12%2020%20Z'%20fill='none'%20stroke='%23c8b6ff'%20stroke-width='2'%20stroke-linejoin='round'%20stroke-linecap='round'/%3E%3Ccircle%20cx='4'%20cy='24'%20r='2.4'%20fill='%23c8b6ff'/%3E%3C/svg%3E") 4 24, crosshair`;
-
 /**
  * Momentum Field — evolving, responsive system that grows smarter
  * Nodes represent loans (large) and spending habits (small)
@@ -28,6 +24,10 @@ export default function CelestialMindMap({ loans, schedule }) {
   const canvasRef = useRef(null);
   const positionsRef = useRef([]);
   const grabbedRef = useRef(null);
+  const trailRef = useRef([]);
+  const dotElRef = useRef(null);
+  const pointerTargetRef = useRef({ x: -100, y: -100, active: false });
+  const pointerDotRef = useRef({ x: -100, y: -100, opacity: 0 });
   const { enabled } = useAmbientSoundContext();
 
   const W = 540;
@@ -347,8 +347,44 @@ export default function CelestialMindMap({ loans, schedule }) {
       });
 
       positionsRef.current = currentParticles.map(p => ({
-        x: p.x, y: p.y, type: p.type, balance: p.balance, original: p.original,
+        x: p.x, y: p.y, type: p.type, balance: p.balance, original: p.original, color: p.color,
       }));
+
+      // Electroplankton-style glowing trail behind the grabbed node
+      const grabbed = grabbedRef.current;
+      if (grabbed) {
+        const gp = currentParticles.find(p => p.id === grabbed.id);
+        if (gp) {
+          trailRef.current.push({ x: gp.x, y: gp.y, color: gp.color });
+          if (trailRef.current.length > 45) trailRef.current.shift();
+        }
+      } else if (trailRef.current.length) {
+        trailRef.current.shift();
+      }
+      const trail = trailRef.current;
+      for (let i = 1; i < trail.length; i++) {
+        const a = i / trail.length;
+        const hex = trail[i].color ? parseInt(trail[i].color.slice(1), 16) : 0x8c64f0;
+        ctx.strokeStyle = `rgba(${(hex >> 16) & 255}, ${(hex >> 8) & 255}, ${hex & 255}, ${a * 0.5})`;
+        ctx.lineWidth = 1 + a * 2.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
+        ctx.lineTo(trail[i].x, trail[i].y);
+        ctx.stroke();
+      }
+
+      // Eased pointer glow — drags a little behind the stylus, nearly transparent
+      if (dotElRef.current) {
+        const t = pointerTargetRef.current;
+        const cur = pointerDotRef.current;
+        cur.x += (t.x - cur.x) * 0.2;
+        cur.y += (t.y - cur.y) * 0.2;
+        const targetOpacity = t.active ? 0.5 : 0;
+        cur.opacity += (targetOpacity - cur.opacity) * 0.12;
+        dotElRef.current.style.transform = `translate3d(${cur.x - 16}px, ${cur.y - 16}px, 0)`;
+        dotElRef.current.style.opacity = cur.opacity;
+      }
 
       animationFrameId = requestAnimationFrame(animate);
     };
@@ -358,8 +394,8 @@ export default function CelestialMindMap({ loans, schedule }) {
   }, [particles]);
 
   // Grab a node and drag it like an Electroplankton organism — it follows your
-  // stylus, and lifting it up and down sweeps the pitch like a theremin, singing a
-  // slow melody. A deep Endel-style bass swell rises on grab.
+  // stylus and leaves a glowing trail, and lifting it up and down sweeps the pitch
+  // like a theremin. A deep Endel-style bass swell rises on grab.
   const nodeAtPoint = (clientX, clientY, rect) => {
     const cx = (clientX - rect.left) * (W / rect.width);
     const cy = (clientY - rect.top) * (H / rect.height);
@@ -372,7 +408,15 @@ export default function CelestialMindMap({ loans, schedule }) {
     return nearest;
   };
 
+  // The pointer glow trails a little behind the stylus and is nearly transparent —
+  // a soft, fun presence that draws you in instead of a hard cursor.
+  const updatePointerDot = (e, active) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    pointerTargetRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top, active };
+  };
+
   const handlePointerDown = (e) => {
+    updatePointerDot(e, true);
     if (!enabled) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const n = nodeAtPoint(e.clientX, e.clientY, rect);
@@ -387,6 +431,7 @@ export default function CelestialMindMap({ loans, schedule }) {
   };
 
   const handlePointerMove = (e) => {
+    updatePointerDot(e, true);
     if (!enabled || !grabbedRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const cx = (e.clientX - rect.left) * (W / rect.width);
@@ -402,7 +447,9 @@ export default function CelestialMindMap({ loans, schedule }) {
     }
   };
 
-  const handlePointerEnd = () => { grabbedRef.current = null; };
+  const handlePointerUp = () => { grabbedRef.current = null; };
+  const handlePointerEnter = (e) => updatePointerDot(e, true);
+  const handlePointerLeave = (e) => { updatePointerDot(e, false); grabbedRef.current = null; };
 
   // Passive orchestra layer — a random node "breathes" a slow tone now and then.
   // Sparse and disconnected by design, like a living field humming to itself.
@@ -449,9 +496,23 @@ export default function CelestialMindMap({ loans, schedule }) {
           ref={canvasRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerEnd}
-          onPointerLeave={handlePointerEnd}
-          style={{ display: 'block', width: '100%', height: 'auto', cursor: DS_CURSOR, touchAction: 'none' }}
+          onPointerUp={handlePointerUp}
+          onPointerEnter={handlePointerEnter}
+          onPointerLeave={handlePointerLeave}
+          style={{ display: 'block', width: '100%', height: 'auto', cursor: 'none', touchAction: 'none' }}
+        />
+        {/* Soft pointer glow — nearly transparent, trails a little behind the stylus */}
+        <div
+          ref={dotElRef}
+          className="pointer-events-none absolute top-0 left-0 rounded-full"
+          style={{
+            width: 32,
+            height: 32,
+            opacity: 0,
+            background: 'radial-gradient(circle, hsl(270,80%,72%,0.9) 0%, hsl(270,80%,60%,0.35) 35%, transparent 70%)',
+            mixBlendMode: 'screen',
+            filter: 'blur(1px)',
+          }}
         />
       </div>
 
@@ -476,7 +537,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Living mind map. Nodes breathe as your debt shifts. Grab a node and drag it like an Electroplankton — lift it up and down to sweep its pitch, and a deep bass rises with your gesture. Lines show influence. Watch them evolve.
+        Living mind map. Nodes breathe as your debt shifts. Grab a node and drag it like an Electroplankton — it leaves a glowing trail and sings as you lift it up and down, with a deep bass rising on grab. Lines show influence. Watch them evolve.
       </motion.p>
     </motion.div>
   );

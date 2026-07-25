@@ -261,11 +261,12 @@ export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved
   const { enabled } = useAmbientSoundContext();
 
   // Each panel reveal exhales a slow therapeutic chord — deep, layered, never loops.
-  // The contemplative narrative panels also get an Endel-style deep bass swell.
+  // A little Endel-style bass pulses under every story beat; deeper on the
+  // contemplative narrative panels (the Tetris-Effect heartbeat of the dashboard).
   useEffect(() => {
     const panel = PANELS[panelIndex];
     playDataBloom(panelIndex / Math.max(1, PANELS.length - 1), enabled);
-    if (panel === 'story' || panel === 'debtstory') playFieldBass(enabled, 0.6);
+    playFieldBass(enabled, panel === 'story' || panel === 'debtstory' ? 0.6 : 0.3);
   }, [panelIndex, enabled]);
 
   useEffect(() => {
