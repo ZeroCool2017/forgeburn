@@ -4,9 +4,9 @@ import { ChevronRight, X, Brain, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 /**
- * Money Psychologist Session — 10 deep questions about the emotional
- * and psychological roots of this specific debt. Generates a personalized
- * money story narrative at the end.
+ * Money Story Session — 10 deep questions about the emotional
+ * roots of this specific debt. Generates a personalized money
+ * story narrative at the end.
  */
 
 const PSYCHOLOGIST_QUESTIONS = [
@@ -140,7 +140,7 @@ function InsightResult({ loanName, answers, onClose }) {
         .join('\n');
 
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are the world's most empathetic and insightful money psychologist. You have just completed a deep session with a client about their debt: "${loanName}".
+        prompt: `You are the world's most empathetic and insightful guide. You have just completed a deep session with someone about their debt: "${loanName}".
 
 Based on their responses, here are their psychological patterns:
 ${tagSummary}
@@ -179,7 +179,7 @@ Tone: wise, warm, direct. Like a great therapist who also knows finance deeply. 
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full"
           />
-          <p className="text-xs font-mono text-muted-foreground">The psychologist is reading your patterns...</p>
+          <p className="text-xs font-mono text-muted-foreground">Reading your patterns...</p>
         </div>
       ) : (
         <>
@@ -265,7 +265,7 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
               <div className="flex items-center gap-2">
                 <Brain className="w-5 h-5 text-primary" />
                 <div>
-                  <h2 className="text-sm font-bold text-foreground">Money Psychologist</h2>
+                  <h2 className="text-sm font-bold text-foreground">Pattern Reading</h2>
                   <p className="text-[10px] font-mono text-muted-foreground">Session: {loan.name}</p>
                 </div>
               </div>
