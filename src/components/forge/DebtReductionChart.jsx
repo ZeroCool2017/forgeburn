@@ -6,11 +6,26 @@ import {
 import { formatCurrency } from '@/lib/loanCalculations';
 import { TrendingDown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playOrbTone } from '@/lib/orchestraSound';
 
-const CustomTooltip = ({ active, payload, label }) => {
+let lastToneAt = 0;
+const CustomTooltip = ({ active, payload, label, max, enabled }) => {
   if (!active || !payload?.length) return null;
   const plan = payload.find(p => p.dataKey === 'balance');
   const min = payload.find(p => p.dataKey === 'minimum');
+
+  // Sonify the hover: higher progress → brighter pitch, gently throttled so it
+  // never feels busy. Part of the orchestra, never competing.
+  if (plan && enabled) {
+    const now = performance.now();
+    if (now - lastToneAt > 160) {
+      lastToneAt = now;
+      const progress = max > 0 ? 1 - (plan.value / max) : 0;
+      playOrbTone(Math.max(0, Math.min(1, progress)), enabled, 1.5);
+    }
+  }
+
   return (
     <div className="glass rounded-xl px-3 py-2.5 text-xs border border-border/50 shadow-xl">
       <p className="font-mono text-muted-foreground mb-1.5">Month {label}</p>
@@ -37,6 +52,7 @@ const VIEWS = [
 
 export default function DebtReductionChart({ schedule, minimumSchedule, totalDebt }) {
   const [view, setView] = useState('All');
+  const { enabled } = useAmbientSoundContext();
 
   if (!schedule?.schedule?.length) return null;
 
@@ -140,7 +156,7 @@ export default function DebtReductionChart({ schedule, minimumSchedule, totalDeb
             domain={[0, maxVal * 1.02]}
             width={36}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip max={totalDebt} enabled={enabled} />} />
 
           {/* Minimum-only ghost line */}
           <Area

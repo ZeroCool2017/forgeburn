@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { Sparkles } from 'lucide-react';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playNodeResonance } from '@/lib/orchestraSound';
 
 /**
  * Momentum Field — evolving, responsive system that grows smarter
@@ -20,6 +22,8 @@ export default function CelestialMindMap({ loans, schedule }) {
   const [time, setTime] = useState(0);
   const [particles, setParticles] = useState([]);
   const canvasRef = useRef(null);
+  const positionsRef = useRef([]);
+  const { enabled } = useAmbientSoundContext();
 
   const W = 540;
   const H = 380;
@@ -329,12 +333,55 @@ export default function CelestialMindMap({ loans, schedule }) {
         ctx.restore();
       });
 
+      positionsRef.current = currentParticles.map(p => ({
+        x: p.x, y: p.y, type: p.type, balance: p.balance, original: p.original,
+      }));
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
   }, [particles]);
+
+  // Tap a node to hear its pitch; each loan/habit is an instrument. Tapping across
+  // nodes layers them into evolving harmony.
+  const handleCanvasClick = (e) => {
+    if (!enabled) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) * (W / rect.width);
+    const cy = (e.clientY - rect.top) * (H / rect.height);
+    let nearest = null;
+    let bestD = 28;
+    for (const p of positionsRef.current) {
+      const d = Math.hypot(p.x - cx, p.y - cy);
+      if (d < bestD) { bestD = d; nearest = p; }
+    }
+    if (!nearest) return;
+    const progress = nearest.type === 'loan' && nearest.original
+      ? 1 - (nearest.balance / nearest.original)
+      : 0.5;
+    playNodeResonance(Math.round(Math.max(0, Math.min(1, progress)) * 7), enabled, 2.8);
+  };
+
+  // Passive orchestra layer — a random node "breathes" a slow tone now and then.
+  // Sparse and disconnected by design, like a living field humming to itself.
+  useEffect(() => {
+    if (!enabled || !particles.length) return;
+    let timer;
+    const breathe = () => {
+      const pick = particles[Math.floor(Math.random() * particles.length)];
+      if (pick && pick.type === 'loan' && pick.original) {
+        const progress = 1 - (pick.balance / pick.original);
+        playNodeResonance(Math.round(Math.max(0, Math.min(1, progress)) * 7), true, 3.0);
+      } else {
+        playNodeResonance(Math.floor(Math.random() * 8), true, 3.0);
+      }
+      timer = setTimeout(breathe, 9000 + Math.random() * 7000);
+    };
+    timer = setTimeout(breathe, 6000 + Math.random() * 4000);
+    return () => clearTimeout(timer);
+  }, [enabled, particles]);
 
   if (!loans.length) {
     return (
@@ -360,7 +407,8 @@ export default function CelestialMindMap({ loans, schedule }) {
       <div className="relative overflow-hidden rounded-lg border border-border/20 bg-background/30">
         <canvas
           ref={canvasRef}
-          style={{ display: 'block', width: '100%', height: 'auto' }}
+          onClick={handleCanvasClick}
+          style={{ display: 'block', width: '100%', height: 'auto', cursor: 'pointer' }}
         />
       </div>
 
@@ -385,7 +433,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Living mind map. Nodes breathe as your debt shifts. Larger nodes are your chains; smaller are your patterns. Lines show influence. Watch them evolve.
+        Living mind map. Nodes breathe as your debt shifts. Tap any node to hear its voice — each chain and pattern carries its own pitch. Lines show influence. Watch them evolve.
       </motion.p>
     </motion.div>
   );

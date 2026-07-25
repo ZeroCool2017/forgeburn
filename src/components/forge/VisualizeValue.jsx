@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playDataBloom } from '@/lib/orchestraSound';
 
 // Obsidian / Notion editorial style — each panel is a clean, typographic data story
 
@@ -256,6 +258,12 @@ const PANEL_DURATIONS = {
 export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved, months, loans }) {
   const [panelIndex, setPanelIndex] = useState(0);
   const paidOff = (totalOriginal || totalDebt) - totalDebt;
+  const { enabled } = useAmbientSoundContext();
+
+  // Each panel reveal exhales a slow therapeutic chord — deep, layered, never loops
+  useEffect(() => {
+    playDataBloom(panelIndex / Math.max(1, PANELS.length - 1), enabled);
+  }, [panelIndex, enabled]);
 
   useEffect(() => {
     const dur = PANEL_DURATIONS[PANELS[panelIndex]] || 10000;

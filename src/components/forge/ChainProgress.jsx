@@ -4,12 +4,14 @@ import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanC
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain, PartyPopper } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
 import { playElectroplantonTone } from '@/lib/musicalInterface';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playNodeResonance } from '@/lib/orchestraSound';
 import DebtStoryAdventure from './DebtStoryAdventure';
 import EditLoanDialog from './EditLoanDialog';
 import MoneyStorySession from './MoneyStorySession';
 
 // Dot-grid canvas that draws the payoff connection line from current balance → zero
-function PayoffCanvas({ progress, color }) {
+function PayoffCanvas({ progress, color, onResonate }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -89,7 +91,8 @@ function PayoffCanvas({ progress, color }) {
       ref={canvasRef}
       width={280}
       height={52}
-      className="w-full rounded-sm"
+      onClick={onResonate}
+      className="w-full rounded-sm cursor-pointer"
       style={{ display: 'block' }}
     />
   );
@@ -113,6 +116,8 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const isDraggingRef = useRef(false);
   const noteIdRef = useRef(0);
   const { playStrike } = useForgeSound();
+  const { enabled } = useAmbientSoundContext();
+  const pitchIndex = Math.round(progress * 7);
   const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
   const formatPayoffDate = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 
@@ -250,7 +255,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
 
       {/* Dot-grid canvas — balance → zero connection line */}
       <div className="mb-3 rounded-lg overflow-hidden border border-border/20 bg-background/30">
-        <PayoffCanvas progress={progress} color={cat.color} />
+        <PayoffCanvas progress={progress} color={cat.color} onResonate={() => playNodeResonance(pitchIndex, enabled, 2.4)} />
       </div>
 
       {/* Payoff date estimate */}
