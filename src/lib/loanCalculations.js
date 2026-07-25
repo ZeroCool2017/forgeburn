@@ -398,7 +398,7 @@ export const QUOTES = [
   { text: "The system will push back. Learn to read the feedback, not fight it.", author: "Peter Senge" },
 
   // Marsha Linehan (DBT)
-  { text: "You can't go back and change the beginning, but you can start where you are and change the ending.", author: "Marsha Linehan" },
+  { text: "You can't go back and change the beginning, but you can start where you are and change the ending.", author: "C.S. Lewis" },
   { text: "Radical acceptance is the path out of hell — refusing it keeps you there.", author: "Marsha Linehan" },
   { text: "The willingness to suffer is what makes the willingness to change possible.", author: "Marsha Linehan" },
   { text: "A life worth living is built one moment at a time.", author: "Marsha Linehan" },
@@ -430,11 +430,11 @@ export const QUOTES = [
   { text: "McDonald's can deliver burgers to every corner of the world. Why can't we deliver sight?", author: "Dr. Govindappa Venkataswamy (Dr. V)" },
 
   // Oklahoma figures
-  { text: "The most beautiful things in the world cannot be seen or touched — they are felt with the heart.", author: "Wilma Mankiller, Cherokee Nation Chief" },
+  { text: "The best and most beautiful things in the world cannot be seen or even touched — they must be felt with the heart.", author: "Helen Keller" },
   { text: "We must trust our own thinking, trust our own strength.", author: "Wilma Mankiller, Cherokee Nation Chief" },
   { text: "In every crisis there is an opportunity.", author: "Wilma Mankiller, Cherokee Nation Chief" },
   { text: "I've always been a systems thinker. Look at the structure, not just the problem.", author: "Brad Henry, Oklahoma Governor" },
-  { text: "Music is the shorthand of emotion.", author: "Leon Russell, Oklahoma musician" },
+  { text: "Music is the shorthand of emotion.", author: "Leo Tolstoy" },
 
   // SGI / Daisaku Ikeda
   { text: "A great human revolution in just a single individual will help achieve a change in the destiny of a nation.", author: "Daisaku Ikeda" },
@@ -450,7 +450,7 @@ export const QUOTES = [
 
   // Indian business leaders
   { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
-  { text: "The world is full of magic things, patiently waiting for our senses to grow sharper.", author: "Ratan Tata" },
+  { text: "The world is full of magic things, patiently waiting for our senses to grow sharper.", author: "W.B. Yeats" },
   { text: "Treat money as a tool, not a goal.", author: "Azim Premji" },
   { text: "Success is not just about making wealth but about making a difference.", author: "Narayana Murthy" },
   { text: "To survive, you must tell stories.", author: "Anita Roddick" },
@@ -466,7 +466,7 @@ export const QUOTES = [
   { text: "Every new medium gives us a new perspective on older media.", author: "David Hockney" },
 
   // Mitt Romney
-  { text: "Character is doing the right thing when nobody's looking.", author: "Mitt Romney" },
+  { text: "Character is doing the right thing when nobody's looking.", author: "J.C. Watts" },
 
   // Daria (MTV)
   { text: "I don't have low self-esteem. I have low esteem for everyone else.", author: "Daria Morgendorffer" },
