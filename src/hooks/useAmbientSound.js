@@ -19,11 +19,11 @@ export function useAmbientSound() {
     nodesRef.current.forEach(n => {
       try {
         n.gain.gain.cancelScheduledValues(n.ac.currentTime);
-        n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 1.4);
-        n.osc.stop(n.ac.currentTime + 1.6);
+        n.gain.gain.setValueAtTime(0, n.ac.currentTime);
+        n.osc.stop(n.ac.currentTime + 0.05);
       } catch (e) {}
     });
-    setTimeout(() => { nodesRef.current = []; }, 1700);
+    setTimeout(() => { nodesRef.current = []; }, 100);
   }, []);
 
   // ─── DRIFT MODE ─────────────────────────────────────────────────────────
