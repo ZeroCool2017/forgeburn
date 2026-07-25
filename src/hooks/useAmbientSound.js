@@ -19,15 +19,11 @@ export function useAmbientSound() {
     nodesRef.current.forEach(n => {
       try {
         n.gain.gain.cancelScheduledValues(n.ac.currentTime);
-        n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 0.5);
-        if (!n.isLoop) {
-          n.osc.stop(n.ac.currentTime + 0.6);
-        } else {
-          n.osc.stop(n.ac.currentTime + 0.6);
-        }
+        n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 1.4);
+        n.osc.stop(n.ac.currentTime + 1.6);
       } catch (e) {}
     });
-    setTimeout(() => { nodesRef.current = []; }, 700);
+    setTimeout(() => { nodesRef.current = []; }, 1700);
   }, []);
 
   // ─── DRIFT MODE ─────────────────────────────────────────────────────────
