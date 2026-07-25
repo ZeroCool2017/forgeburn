@@ -265,7 +265,7 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
               <div className="flex items-center gap-2">
                 <Brain className="w-5 h-5 text-primary" />
                 <div>
-                  <h2 className="text-sm font-bold text-foreground">Pattern Reading</h2>
+                  <h2 className="text-sm font-bold text-foreground">Money Pattern</h2>
                   <p className="text-[10px] font-mono text-muted-foreground">Session: {loan.name}</p>
                 </div>
               </div>
