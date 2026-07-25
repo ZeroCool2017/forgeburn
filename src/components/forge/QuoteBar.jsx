@@ -10,7 +10,7 @@ export default function QuoteBar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex(prev => (prev + 1) % Math.max(1, quotes.length));
-    }, 14000);
+    }, 18000);
     return () => clearInterval(interval);
   }, [quotes.length]);
 

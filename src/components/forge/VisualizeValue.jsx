@@ -243,16 +243,27 @@ function DebtStoryPanel({ loans }) {
 
 const PANELS = ['story', 'debtstory', 'zero', 'compound', 'grid', 'time'];
 
+// Dense panels get more dwell time so readers can finish; simple ones move sooner
+const PANEL_DURATIONS = {
+  story: 14000,
+  debtstory: 14000,
+  zero: 9000,
+  compound: 9000,
+  grid: 8000,
+  time: 8000,
+};
+
 export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved, months, loans }) {
   const [panelIndex, setPanelIndex] = useState(0);
   const paidOff = (totalOriginal || totalDebt) - totalDebt;
 
   useEffect(() => {
-    const t = setInterval(() => {
+    const dur = PANEL_DURATIONS[PANELS[panelIndex]] || 10000;
+    const t = setTimeout(() => {
       setPanelIndex(p => (p + 1) % PANELS.length);
-    }, 10000);
-    return () => clearInterval(t);
-  }, []);
+    }, dur);
+    return () => clearTimeout(t);
+  }, [panelIndex]);
 
   const panel = PANELS[panelIndex];
 
