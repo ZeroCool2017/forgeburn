@@ -7,6 +7,10 @@ import { Sparkles } from 'lucide-react';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
 import { playFieldTone, playFieldBass, playNodeResonance } from '@/lib/orchestraSound';
 
+// Nintendo DS-style stylus cursor — the field is played like an Electroplankton
+// touch screen. The tip sits at the hotspot (4, 24).
+const DS_CURSOR = `url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='28'%20height='28'%20viewBox='0%200%2028%2028'%3E%3Cpath%20d='M4%2024%20L10%2018%20L20%208%20L22%2010%20L12%2020%20Z'%20fill='none'%20stroke='%23c8b6ff'%20stroke-width='2'%20stroke-linejoin='round'%20stroke-linecap='round'/%3E%3Ccircle%20cx='4'%20cy='24'%20r='2.4'%20fill='%23c8b6ff'/%3E%3C/svg%3E") 4 24, crosshair`;
+
 /**
  * Momentum Field — evolving, responsive system that grows smarter
  * Nodes represent loans (large) and spending habits (small)
@@ -23,6 +27,7 @@ export default function CelestialMindMap({ loans, schedule }) {
   const [particles, setParticles] = useState([]);
   const canvasRef = useRef(null);
   const positionsRef = useRef([]);
+  const grabbedRef = useRef(null);
   const { enabled } = useAmbientSoundContext();
 
   const W = 540;
@@ -135,6 +140,14 @@ export default function CelestialMindMap({ loans, schedule }) {
 
       // Update particles physics
       currentParticles = currentParticles.map(p => {
+        // Grabbed node follows the stylus exactly; its physics is suspended
+        if (grabbedRef.current && p.id === grabbedRef.current.id) {
+          p.x = grabbedRef.current.targetX;
+          p.y = grabbedRef.current.targetY;
+          p.vx = 0;
+          p.vy = 0;
+          return { ...p };
+        }
         const payoffProgress = 1 - (p.balance / p.original);
         const targetGrowth = 0.8 + payoffProgress * 0.6;
         const newGrowth = p.growth + (targetGrowth - p.growth) * 0.05;
@@ -344,16 +357,14 @@ export default function CelestialMindMap({ loans, schedule }) {
     return () => cancelAnimationFrame(animationFrameId);
   }, [particles]);
 
-  // Drag through the field to play its nodes like an instrument — press and sweep
-  // across the organisms; each one you cross sings its own pitch, building a slow,
-  // evolving melody. A deep Endel-style bass swell rises with the gesture.
-  const dragRef = useRef({ active: false, lastId: null });
-
+  // Grab a node and drag it like an Electroplankton organism — it follows your
+  // stylus, and lifting it up and down sweeps the pitch like a theremin, singing a
+  // slow melody. A deep Endel-style bass swell rises on grab.
   const nodeAtPoint = (clientX, clientY, rect) => {
     const cx = (clientX - rect.left) * (W / rect.width);
     const cy = (clientY - rect.top) * (H / rect.height);
     let nearest = null;
-    let bestD = 30;
+    let bestD = 34;
     for (const p of positionsRef.current) {
       const d = Math.hypot(p.x - cx, p.y - cy);
       if (d < bestD) { bestD = d; nearest = p; }
@@ -361,29 +372,37 @@ export default function CelestialMindMap({ loans, schedule }) {
     return nearest;
   };
 
-  const pitchForNode = (p) => {
-    const progress = p && p.type === 'loan' && p.original ? 1 - (p.balance / p.original) : 0.5;
-    return Math.round(Math.max(0, Math.min(1, progress)) * 7);
-  };
-
   const handlePointerDown = (e) => {
     if (!enabled) return;
-    dragRef.current = { active: true, lastId: null };
+    const rect = e.currentTarget.getBoundingClientRect();
+    const n = nodeAtPoint(e.clientX, e.clientY, rect);
+    if (!n) return;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    const cx = (e.clientX - rect.left) * (W / rect.width);
+    const cy = (e.clientY - rect.top) * (H / rect.height);
+    const pitch = Math.round((1 - cy / H) * 7);
+    grabbedRef.current = { id: n.id, targetX: cx, targetY: cy, lastPitch: pitch, lastPlayAt: performance.now() };
     playFieldBass(enabled, 0.8);
-    const rect = e.currentTarget.getBoundingClientRect();
-    const n = nodeAtPoint(e.clientX, e.clientY, rect);
-    if (n) { playFieldTone(pitchForNode(n), enabled, 2.4); dragRef.current.lastId = n.id; }
+    playFieldTone(pitch, enabled, 2.2);
   };
+
   const handlePointerMove = (e) => {
-    if (!enabled || !dragRef.current.active) return;
+    if (!enabled || !grabbedRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const n = nodeAtPoint(e.clientX, e.clientY, rect);
-    if (n && n.id !== dragRef.current.lastId) {
-      playFieldTone(pitchForNode(n), enabled, 2.2);
-      dragRef.current.lastId = n.id;
+    const cx = (e.clientX - rect.left) * (W / rect.width);
+    const cy = (e.clientY - rect.top) * (H / rect.height);
+    grabbedRef.current.targetX = cx;
+    grabbedRef.current.targetY = cy;
+    const pitch = Math.round((1 - cy / H) * 7);
+    const now = performance.now();
+    if (pitch !== grabbedRef.current.lastPitch && now - grabbedRef.current.lastPlayAt > 120) {
+      playFieldTone(pitch, enabled, 1.8);
+      grabbedRef.current.lastPitch = pitch;
+      grabbedRef.current.lastPlayAt = now;
     }
   };
-  const handlePointerEnd = () => { dragRef.current = { active: false, lastId: null }; };
+
+  const handlePointerEnd = () => { grabbedRef.current = null; };
 
   // Passive orchestra layer — a random node "breathes" a slow tone now and then.
   // Sparse and disconnected by design, like a living field humming to itself.
@@ -432,7 +451,7 @@ export default function CelestialMindMap({ loans, schedule }) {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerEnd}
           onPointerLeave={handlePointerEnd}
-          style={{ display: 'block', width: '100%', height: 'auto', cursor: 'crosshair', touchAction: 'none' }}
+          style={{ display: 'block', width: '100%', height: 'auto', cursor: DS_CURSOR, touchAction: 'none' }}
         />
       </div>
 
@@ -457,7 +476,7 @@ export default function CelestialMindMap({ loans, schedule }) {
         transition={{ delay: 0.3 }}
         className="text-[10px] font-mono text-muted-foreground/70 mt-4 leading-relaxed"
       >
-        Living mind map. Nodes breathe as your debt shifts. Drag through the field to play it like an instrument — each chain and pattern carries its own pitch, and a deep bass rises with your gesture. Lines show influence. Watch them evolve.
+        Living mind map. Nodes breathe as your debt shifts. Grab a node and drag it like an Electroplankton — lift it up and down to sweep its pitch, and a deep bass rises with your gesture. Lines show influence. Watch them evolve.
       </motion.p>
     </motion.div>
   );

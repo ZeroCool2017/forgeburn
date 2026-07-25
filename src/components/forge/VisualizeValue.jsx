@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playDataBloom } from '@/lib/orchestraSound';
+import { playDataBloom, playFieldBass } from '@/lib/orchestraSound';
 
 // Obsidian / Notion editorial style — each panel is a clean, typographic data story
 
@@ -260,9 +260,12 @@ export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved
   const paidOff = (totalOriginal || totalDebt) - totalDebt;
   const { enabled } = useAmbientSoundContext();
 
-  // Each panel reveal exhales a slow therapeutic chord — deep, layered, never loops
+  // Each panel reveal exhales a slow therapeutic chord — deep, layered, never loops.
+  // The contemplative narrative panels also get an Endel-style deep bass swell.
   useEffect(() => {
+    const panel = PANELS[panelIndex];
     playDataBloom(panelIndex / Math.max(1, PANELS.length - 1), enabled);
+    if (panel === 'story' || panel === 'debtstory') playFieldBass(enabled, 0.6);
   }, [panelIndex, enabled]);
 
   useEffect(() => {
