@@ -7,7 +7,7 @@ import { formatCurrency } from '@/lib/loanCalculations';
 import { TrendingDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playOrbTone } from '@/lib/orchestraSound';
+import { playFieldTone } from '@/lib/orchestraSound';
 
 let lastToneAt = 0;
 const CustomTooltip = ({ active, payload, label, max, enabled }) => {
@@ -19,10 +19,10 @@ const CustomTooltip = ({ active, payload, label, max, enabled }) => {
   // never feels busy. Part of the orchestra, never competing.
   if (plan && enabled) {
     const now = performance.now();
-    if (now - lastToneAt > 160) {
+    if (now - lastToneAt > 200) {
       lastToneAt = now;
       const progress = max > 0 ? 1 - (plan.value / max) : 0;
-      playOrbTone(Math.max(0, Math.min(1, progress)), enabled, 1.5);
+      playFieldTone(Math.round(Math.max(0, Math.min(1, progress)) * 7), enabled, 1.7);
     }
   }
 

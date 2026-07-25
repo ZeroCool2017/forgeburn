@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playOrbTone } from '@/lib/orchestraSound';
+import { playFieldTone } from '@/lib/orchestraSound';
 
 let ftLastToneAt = 0;
 function FreedomTooltip({ active, payload, label, enabled }) {
@@ -12,9 +12,9 @@ function FreedomTooltip({ active, payload, label, enabled }) {
 
   if (enabled && prog) {
     const now = performance.now();
-    if (now - ftLastToneAt > 160) {
+    if (now - ftLastToneAt > 200) {
       ftLastToneAt = now;
-      playOrbTone(Math.max(0, Math.min(1, prog.value / 100)), enabled, 1.5);
+      playFieldTone(Math.round(Math.max(0, Math.min(1, prog.value / 100)) * 7), enabled, 1.7);
     }
   }
 

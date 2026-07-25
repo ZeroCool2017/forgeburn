@@ -3,9 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain, PartyPopper } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
-import { playElectroplantonTone } from '@/lib/musicalInterface';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playNodeResonance } from '@/lib/orchestraSound';
+import { playFieldTone } from '@/lib/orchestraSound';
 import DebtStoryAdventure from './DebtStoryAdventure';
 import EditLoanDialog from './EditLoanDialog';
 import MoneyStorySession from './MoneyStorySession';
@@ -132,7 +131,8 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
     if (lastPlayedRef.current === linkIndex) return;
     lastPlayedRef.current = linkIndex;
     const normalized = linkIndex / (links - 1);
-    playElectroplantonTone(normalized, 0.55);
+    // Lush field voice — soft, varied, deep; fits the orchestra instead of a bright pluck
+    playFieldTone(Math.round(normalized * 7), true, 1.6);
     setLitLinks(prev => { const s = new Set(prev); s.add(linkIndex); return s; });
     setTimeout(() => setLitLinks(prev => { const s = new Set(prev); s.delete(linkIndex); return s; }), 300);
     spawnNote(linkIndex, x, y);
@@ -255,7 +255,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
 
       {/* Dot-grid canvas — balance → zero connection line */}
       <div className="mb-3 rounded-lg overflow-hidden border border-border/20 bg-background/30">
-        <PayoffCanvas progress={progress} color={cat.color} onResonate={() => playNodeResonance(pitchIndex, enabled, 2.4)} />
+        <PayoffCanvas progress={progress} color={cat.color} onResonate={() => playFieldTone(pitchIndex, enabled, 2.2)} />
       </div>
 
       {/* Payoff date estimate */}

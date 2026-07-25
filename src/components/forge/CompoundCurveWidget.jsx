@@ -3,7 +3,7 @@ import React, { useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/lib/loanCalculations';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playOrbTone } from '@/lib/orchestraSound';
+import { playFieldTone } from '@/lib/orchestraSound';
 
 /**
  * Systems-thinking widget: shows how current payment pace bends the compounding curve.
@@ -136,7 +136,7 @@ export default function CompoundCurveWidget({ loans, schedule, minimumSchedule }
           lastScrubRef.current = now;
           const rect = e.currentTarget.getBoundingClientRect();
           const x = (e.clientX - rect.left) / rect.width;
-          playOrbTone(Math.max(0, Math.min(1, x)), enabled, 1.6);
+          playFieldTone(Math.round(Math.max(0, Math.min(1, x)) * 7), enabled, 1.8);
         }}
       >
         <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="w-full" style={{ height: 140 }}>
