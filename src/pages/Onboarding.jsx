@@ -154,6 +154,27 @@ export default function Onboarding() {
         category: 'credit_card'
       });
 
+      // Clear and seed anchors
+      await db.anchors.clear();
+      await base44.entities.Anchor.create({
+        name: 'Housing / Rent',
+        category: 'housing',
+        monthly_average: 1200,
+        emoji: '🏠'
+      });
+      await base44.entities.Anchor.create({
+        name: 'Utilities & Power',
+        category: 'utilities',
+        monthly_average: 150,
+        emoji: '⚡'
+      });
+      await base44.entities.Anchor.create({
+        name: 'Phone & Internet',
+        category: 'utilities',
+        monthly_average: 80,
+        emoji: '📱'
+      });
+
       await refreshUser();
       navigate('/');
     } catch (e) {

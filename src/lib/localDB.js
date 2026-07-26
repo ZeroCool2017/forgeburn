@@ -34,6 +34,17 @@ db.version(2).stores({
   money_story_drafts: 'id, loan_id, updated_at',
 });
 
+db.version(3).stores({
+  loans: '++id, name, category, current_balance, due_date, next_due_date',
+  spending_habits: '++id, name, pattern',
+  transactions: '++id, date, habit_id',
+  notes: '++id, month, created_at',
+  user_profile: 'id',
+  money_stories: '++id, loan_id, created_at, updated_at',
+  money_story_drafts: 'id, loan_id, updated_at',
+  anchors: '++id, name, category, monthly_average',
+});
+
 // Seed default user profile
 async function initProfile() {
   const count = await db.user_profile.count();
@@ -48,7 +59,22 @@ async function initProfile() {
     });
   }
 }
-initProfile();
+
+// Seed default Anchors (Fixed Expenses) to match the lore of the Forge
+async function initAnchors() {
+  const count = await db.anchors.count();
+  if (count === 0) {
+    await db.anchors.put({ id: 1, name: 'Housing / Rent', category: 'housing', monthly_average: 1200 });
+    await db.anchors.put({ id: 2, name: 'Utilities & Power', category: 'utilities', monthly_average: 150 });
+    await db.anchors.put({ id: 3, name: 'Phone & Internet', category: 'utilities', monthly_average: 80 });
+  }
+}
+
+async function runSeeds() {
+  await initProfile();
+  await initAnchors();
+}
+runSeeds();
 
 // Entity-style API that mirrors @base44/sdk shape
 function makeEntityAPI(tableName) {

@@ -11,6 +11,8 @@ import QuoteManager from '@/components/forge/QuoteManager';
 import SoundModePanel from '@/components/forge/SoundModePanel';
 import PersonalizationForm from '@/components/forge/PersonalizationForm';
 import SpendingHabitManager from '@/components/forge/SpendingHabitManager';
+import AnchorManager from '@/components/forge/AnchorManager';
+import { Anchor as AnchorIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -142,6 +144,27 @@ export default function SettingsPage() {
         category: 'credit_card'
       });
 
+      // Clear and seed anchors
+      await db.anchors.clear();
+      await base44.entities.Anchor.create({
+        name: 'Housing / Rent',
+        category: 'housing',
+        monthly_average: 1200,
+        emoji: '🏠'
+      });
+      await base44.entities.Anchor.create({
+        name: 'Utilities & Power',
+        category: 'utilities',
+        monthly_average: 150,
+        emoji: '⚡'
+      });
+      await base44.entities.Anchor.create({
+        name: 'Phone & Internet',
+        category: 'utilities',
+        monthly_average: 80,
+        emoji: '📱'
+      });
+
       window.location.href = '/#/';
       window.location.reload();
     } catch (e) {
@@ -196,6 +219,14 @@ export default function SettingsPage() {
               Track your daily spending patterns. Reducing these directly accelerates your debt payoff by freeing up extra budget.
             </p>
             <SpendingHabitManager />
+          </Section>
+
+          {/* Anchors & Overhead */}
+          <Section icon={AnchorIcon} label="Anchors & Overhead" defaultOpen={true}>
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed border-l-2 border-primary/30 pl-3">
+              Your fixed monthly bills (rent, power, phone). Reducing your anchors directly shrinks the anchor rings on your map and releases payoff budget.
+            </p>
+            <AnchorManager />
           </Section>
 
           {/* Sound & Music */}

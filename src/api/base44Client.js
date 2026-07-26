@@ -86,6 +86,7 @@ async function clearAllData() {
   await db.notes.clear();
   await db.money_stories.clear();
   await db.money_story_drafts.clear();
+  await db.anchors.clear();
   await db.user_profile.clear();
 }
 
@@ -96,6 +97,7 @@ export const base44 = {
     Transaction: makeEntityAPI('transactions'),
     MoneyStory: makeEntityAPI('money_stories'),
     MoneyStoryDraft: makeEntityAPI('money_story_drafts'),
+    Anchor: makeEntityAPI('anchors'),
   },
   auth: {
     me: async () => {

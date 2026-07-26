@@ -15,25 +15,22 @@ function colorToRgb(color) {
   return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
 }
 
-function influenceScore(habit, loan, totalBalance) {
-  const habitCategory = habit.category || habit.pattern || '';
-  const sameCategory = habitCategory && habitCategory === loan.category;
-  const balanceShare = (Math.max(0, Number(loan.current_balance) || 0) / Math.max(totalBalance, 1));
-  const rate = Math.max(0, Number(loan.interest_rate) || 0);
-  const monthly = Math.max(0, Number(habit.monthly_average) || 0);
-  return (sameCategory ? 4 : 1) + balanceShare * 2 + rate / 25 + monthly / 1000;
-}
-
 /**
  * Living Mind Map — Momentum Field
- * Blends the original high-fidelity neural network of loans, habits, and floating micro-particles
- * with tactile Electroplankton wiggling tails, expanding ripples, and vertical pitch-mapped chimes.
+ * Fuses the original dense neural network of loans, habits, and floating micro-particles
+ * with wiggling organism flagella tails, water ripples, and deep Endel AI binaural focus chords.
  */
 export default function CelestialMindMap({ loans }) {
   const { data: habits = [] } = useQuery({
     queryKey: ['spending_habits'],
     queryFn: () => base44.entities.SpendingHabit.list(),
   });
+
+  const { data: anchors = [] } = useQuery({
+    queryKey: ['anchors'],
+    queryFn: () => base44.entities.Anchor.list(),
+  });
+
   const canvasRef = useRef(null);
   const particleStateRef = useRef([]);
   const dragIdRef = useRef(null);
@@ -42,11 +39,75 @@ export default function CelestialMindMap({ loans }) {
   const lastXRef = useRef(0);
   const lastYRef = useRef(0);
   const collisionCooldownsRef = useRef({});
+  
+  // Endel Generative Synthesizer Refs
+  const audioCtxRef = useRef(null);
+  const osc1Ref = useRef(null);
+  const osc2Ref = useRef(null);
+  const droneGainRef = useRef(null);
+
   const [isDragging, setIsDragging] = useState(false);
   const [particles, setParticles] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
 
-  // Initialize nodes (loans, habits, and floating micro-particles) to match the style before
+  // Initialize Endel Focus Synthesizer (110Hz / 111Hz binaural wave)
+  const startEndelDrone = () => {
+    try {
+      if (audioCtxRef.current) return;
+      
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+
+      const ac = new AudioCtx();
+      audioCtxRef.current = ac;
+
+      const gain = ac.createGain();
+      gain.gain.setValueAtTime(0, ac.currentTime);
+      gain.connect(ac.destination);
+      droneGainRef.current = gain;
+
+      // Warm 110Hz sub bass focus carrier
+      const o1 = ac.createOscillator();
+      o1.type = 'triangle';
+      o1.frequency.setValueAtTime(110, ac.currentTime);
+      o1.connect(gain);
+      osc1Ref.current = o1;
+
+      // Binaural detuned 110.6Hz wave to stimulate calming waves
+      const o2 = ac.createOscillator();
+      o2.type = 'sine';
+      o2.frequency.setValueAtTime(110.6, ac.currentTime);
+      o2.connect(gain);
+      osc2Ref.current = o2;
+
+      o1.start();
+      o2.start();
+    } catch (e) {
+      // Fail silently
+    }
+  };
+
+  const ensureDroneRunning = () => {
+    startEndelDrone();
+    if (audioCtxRef.current?.state === 'suspended') {
+      audioCtxRef.current.resume();
+    }
+  };
+
+  // Clean up audio connections on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        osc1Ref.current?.stop();
+        osc2Ref.current?.stop();
+        audioCtxRef.current?.close();
+      } catch (e) {
+        // Fail silently
+      }
+    };
+  }, []);
+
+  // Initialize nodes (loans, habits, and floating micro-particles)
   useEffect(() => {
     if (!loans.length) {
       setParticles([]);
@@ -67,8 +128,8 @@ export default function CelestialMindMap({ loans }) {
         type: 'loan',
         x: CX + Math.cos(angle) * radius,
         y: CY + Math.sin(angle) * radius,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: (Math.random() - 0.5) * 0.1,
         balance: Number(loan.current_balance) || 0,
         original: Math.max(1, Number(loan.original_balance) || Number(loan.current_balance) || 1),
         name: loan.name,
@@ -83,10 +144,10 @@ export default function CelestialMindMap({ loans }) {
     // 2. Spending habit nodes (organisms)
     const habitParticles = habits.map((habit, index) => {
       const angle = (index / Math.max(1, habits.length)) * Math.PI * 2 + Math.PI / 4;
-      const radius = 135 + habits.length * 2;
+      const radius = 130 + habits.length * 2;
       const category = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.other;
       
-      // ONLY draw dotted lines to loans with a matching category (e.g. CC to CC, car to car)
+      // ONLY link habits to loans where the category matches (makes logical financial sense!)
       const linkedLoans = loans.filter(loan => {
         const habitCategory = habit.category || habit.pattern || '';
         return habitCategory && habitCategory === loan.category;
@@ -98,8 +159,8 @@ export default function CelestialMindMap({ loans }) {
         type: 'habit',
         x: CX + Math.cos(angle) * radius,
         y: CY + Math.sin(angle) * radius,
-        vx: (Math.random() - 0.5) * 0.1,
-        vy: (Math.random() - 0.5) * 0.1,
+        vx: (Math.random() - 0.5) * 0.05,
+        vy: (Math.random() - 0.5) * 0.05,
         name: habit.name,
         color: habit.color || category.color,
         category: habit.category,
@@ -110,7 +171,7 @@ export default function CelestialMindMap({ loans }) {
       };
     });
 
-    // 3. Visual dust micro-particles clustered around debts to bring back the rich design style before
+    // 3. Visual dust micro-particles clustered around debts
     const microParticles = loans.flatMap((loan, idx) => 
       Array.from({ length: 3 + Math.floor(Math.random() * 2) }).map((_, i) => {
         const angle = Math.random() * Math.PI * 2;
@@ -121,11 +182,11 @@ export default function CelestialMindMap({ loans }) {
           type: 'micro',
           x: CX + radius * Math.cos(angle),
           y: CY + radius * Math.sin(angle),
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
+          vx: (Math.random() - 0.5) * 0.1,
+          vy: (Math.random() - 0.5) * 0.1,
           color: category.color,
           growth: 0.1 + Math.random() * 0.2,
-          baseRadius: 1.5 + Math.random() * 2.0,
+          baseRadius: 1.5 + Math.random() * 1.5,
         };
       })
     );
@@ -136,7 +197,7 @@ export default function CelestialMindMap({ loans }) {
     return undefined;
   }, [loans, habits]);
 
-  // Main high fidelity render & physics animation loop
+  // Main high fidelity render & slow relaxing physics animation loop
   useEffect(() => {
     if (!canvasRef.current || !particles.length) return undefined;
     const canvas = canvasRef.current;
@@ -165,8 +226,8 @@ export default function CelestialMindMap({ loans }) {
       // Draw Electroplankton expanding water ripples
       ctx.save();
       ripplesRef.current = ripplesRef.current.filter(r => {
-        r.radius += 2.0;
-        r.alpha -= 0.016;
+        r.radius += 1.8;
+        r.alpha -= 0.015;
         if (r.alpha <= 0) return false;
         ctx.beginPath();
         ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
@@ -185,7 +246,7 @@ export default function CelestialMindMap({ loans }) {
 
       const state = particleStateRef.current;
 
-      // Update fluid drift physics & collision repulsion (slow, relaxing drift)
+      // Update slow relaxing drift physics & collision repulsion (soothing fluid)
       state.forEach(p => {
         if (dragIdRef.current === p.id) return;
         
@@ -194,10 +255,10 @@ export default function CelestialMindMap({ loans }) {
         const toCenterY = CY - p.y;
         const dist = Math.hypot(toCenterX, toCenterY) || 1;
         
-        p.vx += (toCenterX / dist) * 0.0015;
-        p.vy += (toCenterY / dist) * 0.0015;
+        p.vx += (toCenterX / dist) * 0.0012;
+        p.vy += (toCenterY / dist) * 0.0012;
 
-        // Soft, peaceful ambient floating drift (slowed down)
+        // Slow peaceful ambient floating drift (Endel app style)
         p.vx += Math.cos(currentTime * 0.0006 + p.id.length) * 0.006;
         p.vy += Math.sin(currentTime * 0.0005 + p.id.length) * 0.006;
 
@@ -262,7 +323,7 @@ export default function CelestialMindMap({ loans }) {
         });
       }
 
-      // Draw Connections (Dense Neural Network lines with flow particles)
+      // Draw Connections (Bioluminescent Lines between matching Categories)
       const pulse = 0.55 + Math.sin(currentTime * 0.006) * 0.25;
       state.filter(p => p.type === 'habit').forEach(habit => {
         habit.influences.forEach(loanId => {
@@ -295,9 +356,67 @@ export default function CelestialMindMap({ loans }) {
         });
       });
 
-      // Render all Nodes
-      const globalBreath = 1 + Math.sin(currentTime * 0.004) * 0.08;
-      
+      // Draw Concentric Jack Butcher style Pulsing Anchor Rings at the Bottom
+      let maxProximity = 0;
+      anchors.forEach((anchor, i) => {
+        const anchorX = (i + 0.5) * (W / Math.max(1, anchors.length));
+        const anchorY = H - 15;
+        const radius = 12 + Math.min(22, (anchor.monthly_average || 0) / 75);
+        
+        ctx.save();
+        // Slow-breathing outline
+        ctx.strokeStyle = 'rgba(139, 92, 246, 0.18)';
+        ctx.lineWidth = 1.0;
+        ctx.setLineDash([4, 6]);
+        ctx.beginPath();
+        ctx.arc(anchorX, anchorY, radius * (1.25 + Math.sin(currentTime * 0.0015 + i) * 0.12), 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(139, 92, 246, 0.07)';
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.arc(anchorX, anchorY, radius * 0.75, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.fillStyle = 'rgba(139, 92, 246, 0.09)';
+        ctx.beginPath();
+        ctx.arc(anchorX, anchorY, radius * 0.45, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Icon centered
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(anchor.emoji || '⚓', anchorX, anchorY - 6);
+        ctx.restore();
+
+        // Calculate proximity of particles to each anchor
+        state.forEach(p => {
+          if (p.type === 'micro') return;
+          const dist = Math.hypot(p.x - anchorX, p.y - anchorY);
+          if (dist < 85) {
+            const ratio = 1 - dist / 85;
+            if (ratio > maxProximity) maxProximity = ratio;
+
+            // Draw a beautiful thin connector vector line
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(139, 92, 246, ${0.3 * ratio})`;
+            ctx.lineWidth = 0.9;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(anchorX, anchorY);
+            ctx.stroke();
+          }
+        });
+      });
+
+      // Smoothly swell the generative binaural Endel drone volume based on proximity
+      if (droneGainRef.current && audioCtxRef.current) {
+        const targetGain = Math.min(0.24, maxProximity * 0.18);
+        droneGainRef.current.gain.setTargetAtTime(targetGain, audioCtxRef.current.currentTime, 0.1);
+      }
+
+      // Render Core Nodes
+      const globalBreath = 1 + Math.sin(currentTime * 0.003) * 0.06;
       state.forEach(p => {
         const progress = p.type === 'loan' ? Math.max(0, Math.min(1, 1 - p.balance / p.original)) : 0;
         const paidOff = p.type === 'loan' && p.balance <= 0;
@@ -308,7 +427,7 @@ export default function CelestialMindMap({ loans }) {
         } else if (p.type === 'habit') {
           radius = (p.baseRadius + Math.min(5, p.monthly / 150)) * globalBreath;
         } else {
-          radius = p.baseRadius * (0.95 + Math.sin(currentTime * 0.007 + p.id.length) * 0.15);
+          radius = p.baseRadius * (0.95 + Math.sin(currentTime * 0.006 + p.id.length) * 0.15);
         }
 
         const [r, g, b] = paidOff ? [52, 211, 153] : colorToRgb(p.color);
@@ -318,15 +437,15 @@ export default function CelestialMindMap({ loans }) {
         if (p.type === 'habit') {
           const angle = Math.atan2(p.y - CY, p.x - CX) + Math.PI;
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(${r},${g},${b},0.45)`;
+          ctx.strokeStyle = `rgba(${r},${g},${b},0.4)`;
           ctx.lineWidth = 1.2;
           ctx.moveTo(p.x, p.y);
           let tx = p.x;
           let ty = p.y;
           for (let i = 1; i <= 3; i++) {
-            const tailAngle = angle + Math.sin(currentTime * 0.012 + i + p.id.length) * 0.85;
-            tx += Math.cos(tailAngle) * (radius * 0.75);
-            ty += Math.sin(tailAngle) * (radius * 0.75);
+            const tailAngle = angle + Math.sin(currentTime * 0.01 + i + p.id.length) * 0.8;
+            tx += Math.cos(tailAngle) * (radius * 0.7);
+            ty += Math.sin(tailAngle) * (radius * 0.7);
             ctx.lineTo(tx, ty);
           }
           ctx.stroke();
@@ -366,7 +485,7 @@ export default function CelestialMindMap({ loans }) {
 
     frame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frame);
-  }, [particles]);
+  }, [particles, anchors]);
 
   const eventPoint = event => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -377,12 +496,13 @@ export default function CelestialMindMap({ loans }) {
   };
 
   const hitTest = point => [...particleStateRef.current].reverse().find(p => {
-    if (p.type === 'micro') return false; // don't drag tiny visual dust particles
+    if (p.type === 'micro') return false;
     const radius = p.type === 'loan' ? 25 : 18;
     return Math.hypot(point.x - p.x, point.y - p.y) <= radius;
   });
 
   const handlePointerDown = event => {
+    ensureDroneRunning();
     const node = hitTest(eventPoint(event));
     if (!node) return;
     dragIdRef.current = node.id;
@@ -462,10 +582,10 @@ export default function CelestialMindMap({ loans }) {
           Your financial ecosystem in motion. <span className="font-semibold text-foreground">Large glowing spheres</span> are your debts; <span className="font-semibold text-foreground">small floating, wiggling organisms</span> are your monthly habits.
         </p>
         <p className="text-[11px] leading-relaxed text-muted-foreground/80">
-          Glowing dotted threads show calculated <span className="text-primary font-medium">influence paths</span> where spending habits feed specific debts. 
+          Glowing dotted threads show calculated <span className="text-primary font-medium">influence paths</span> where spending habits feed specific debts. Concentric rings at the bottom are your <span className="text-purple-400 font-semibold">Anchors</span> (fixed bills).
         </p>
         <p className="text-[10px] italic text-muted-foreground/60">
-          Drag the organisms to play the feedback loop. Higher vertical positions on the screen synthesize higher musical notes in the pentatonic scale.
+          Drag the organisms to play the feedback loop. Drifting close to the Anchors synthesizes a deep, relaxing Endel style sub-bass focus drone.
         </p>
       </div>
       <div className="relative overflow-hidden rounded-lg border border-border/20 bg-background/30">
@@ -496,9 +616,10 @@ export default function CelestialMindMap({ loans }) {
         <ul>
           {loans.map(loan => <li key={`accessible-loan-${loan.id}`}>Debt: {loan.name}, ${(Number(loan.current_balance) || 0).toLocaleString()} remaining.</li>)}
           {habits.map(habit => {
-            const linkedLoans = [...loans]
-              .sort((a, b) => influenceScore(habit, b, loans.reduce((sum, item) => sum + (Number(item.current_balance) || 0), 0)) - influenceScore(habit, a, loans.reduce((sum, item) => sum + (Number(item.current_balance) || 0), 0)))
-              .slice(0, Math.min(3, loans.length));
+            const linkedLoans = loans.filter(loan => {
+              const habitCategory = habit.category || habit.pattern || '';
+              return habitCategory && habitCategory === loan.category;
+            });
             return <li key={`accessible-habit-${habit.id}`}>Pattern: {habit.name}, ${(Number(habit.monthly_average) || 0).toFixed(0)} per month, linked to {linkedLoans.map(loan => loan.name).join(', ') || 'no debts yet'}.</li>;
           })}
         </ul>
