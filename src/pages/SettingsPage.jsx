@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
   Settings, User, Trash2, LogOut, ShieldAlert, Headphones,
-  Globe, BookOpen, Palette, ChevronRight, ChevronDown,
+  Globe, BookOpen, Palette, ChevronRight, ChevronDown, Sparkles
 } from 'lucide-react';
+import { db } from '@/lib/localDB';
 import QuoteManager from '@/components/forge/QuoteManager';
 import SoundModePanel from '@/components/forge/SoundModePanel';
 import PersonalizationForm from '@/components/forge/PersonalizationForm';
@@ -51,6 +52,7 @@ function Section({ icon: Icon, label, children, defaultOpen = false, accent = fa
 
 export default function SettingsPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [seedLoading, setSeedLoading] = useState(false);
 
   const { data: user } = useQuery({
     queryKey: ['me'],
@@ -65,6 +67,88 @@ export default function SettingsPage() {
     setDeleteLoading(true);
     await base44.clearAllData();
     window.location.reload();
+  };
+
+  const handleSeedPlayground = async () => {
+    setSeedLoading(true);
+    try {
+      const demoAnswers = {
+        name: 'Lindsey',
+        biggest_fear: 'not being in control of my time',
+        freedom_looks_like: 'absolute creative autonomy and peace of mind',
+        admire_who: 'pioneering artists and free thinkers',
+        hobbies_passions: 'sound synthesis, design, and interactive coding',
+        songs_that_move: 'Aphex Twin - Stone in Focus',
+        small_win: 'getting this beautiful dashboard unblocked and live',
+        dream_impossible: 'build a self-sustaining eco-sound art park'
+      };
+      
+      await base44.auth.updateMe({
+        personalization: JSON.stringify(demoAnswers),
+      });
+
+      // Clear any empty state and seed high-quality test data
+      await db.loans.clear();
+      await db.spending_habits.clear();
+
+      await base44.entities.Loan.create({
+        name: 'Credit Card',
+        category: 'credit_card',
+        current_balance: 4200,
+        original_balance: 8000,
+        interest_rate: 18.9,
+        monthly_payment: 150
+      });
+
+      await base44.entities.Loan.create({
+        name: 'Tesla Auto Loan',
+        category: 'auto_loan',
+        current_balance: 14500,
+        original_balance: 22000,
+        interest_rate: 4.5,
+        monthly_payment: 380
+      });
+
+      await base44.entities.Loan.create({
+        name: 'Federal Student Loan',
+        category: 'student_loan',
+        current_balance: 28000,
+        original_balance: 35000,
+        interest_rate: 5.8,
+        monthly_payment: 290
+      });
+
+      await base44.entities.SpendingHabit.create({
+        name: 'Daily Matcha Latte',
+        emoji: '🍵',
+        monthly_average: 120,
+        pattern: 'luxury',
+        category: 'other'
+      });
+
+      await base44.entities.SpendingHabit.create({
+        name: 'Weekend Fine Dining',
+        emoji: '🍣',
+        monthly_average: 240,
+        pattern: 'luxury',
+        category: 'other'
+      });
+
+      await base44.entities.SpendingHabit.create({
+        name: 'Streaming Subscriptions',
+        emoji: '📺',
+        monthly_average: 60,
+        pattern: 'fixed',
+        category: 'credit_card'
+      });
+
+      window.location.href = '/#/';
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSeedLoading(false);
+    }
   };
 
   return (
@@ -181,6 +265,20 @@ export default function SettingsPage() {
                 ))}
               </div>
             </div>
+          </Section>
+
+          {/* Seeding & Playground (YOLO) */}
+          <Section icon={Sparkles} label="Playground Setup" defaultOpen={true}>
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed border-l-2 border-primary/30 pl-3">
+              Want to skip onboarding and instantly play with the beautiful Electroplankton sound map? This will reset your database and seed three glowing chains and habits automatically.
+            </p>
+            <Button
+              className="w-full bg-primary/20 border border-primary/40 hover:bg-primary/35 text-foreground text-xs font-mono py-2"
+              onClick={handleSeedPlayground}
+              loading={seedLoading}
+            >
+              ⚡ RESET & SEED PLAYGROUND DATA
+            </Button>
           </Section>
 
           {/* Session */}
