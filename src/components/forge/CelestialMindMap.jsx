@@ -85,24 +85,28 @@ export default function CelestialMindMap({ loans }) {
       const angle = (index / Math.max(1, habits.length)) * Math.PI * 2 + Math.PI / 4;
       const radius = 135 + habits.length * 2;
       const category = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.other;
-      const rankedLoans = [...loans]
-        .sort((a, b) => influenceScore(habit, b, totalBalance) - influenceScore(habit, a, totalBalance))
-        .slice(0, Math.min(3, loans.length));
+      
+      // ONLY draw dotted lines to loans with a matching category (e.g. CC to CC, car to car)
+      const linkedLoans = loans.filter(loan => {
+        const habitCategory = habit.category || habit.pattern || '';
+        return habitCategory && habitCategory === loan.category;
+      });
+
       return {
         id: `habit-${habit.id}`,
         dataId: habit.id,
         type: 'habit',
         x: CX + Math.cos(angle) * radius,
         y: CY + Math.sin(angle) * radius,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: (Math.random() - 0.5) * 0.1,
         name: habit.name,
         color: habit.color || category.color,
         category: habit.category,
         monthly: Number(habit.monthly_average) || 0,
         growth: 0.2 + Math.random() * 0.3,
         baseRadius: 6 + Math.random() * 3,
-        influences: rankedLoans.map(loan => loan.id),
+        influences: linkedLoans.map(loan => loan.id),
       };
     });
 
@@ -181,23 +185,23 @@ export default function CelestialMindMap({ loans }) {
 
       const state = particleStateRef.current;
 
-      // Update fluid drift physics & collision repulsion
+      // Update fluid drift physics & collision repulsion (slow, relaxing drift)
       state.forEach(p => {
         if (dragIdRef.current === p.id) return;
         
-        // Soft gravity pull to center
+        // Soft gravity pull to center (sluggish and gentle)
         const toCenterX = CX - p.x;
         const toCenterY = CY - p.y;
         const dist = Math.hypot(toCenterX, toCenterY) || 1;
         
-        p.vx += (toCenterX / dist) * 0.005;
-        p.vy += (toCenterY / dist) * 0.005;
+        p.vx += (toCenterX / dist) * 0.0015;
+        p.vy += (toCenterY / dist) * 0.0015;
 
-        // Active swimming drift noise (wiggling)
-        p.vx += Math.cos(currentTime * 0.0016 + p.id.length) * 0.03;
-        p.vy += Math.sin(currentTime * 0.0014 + p.id.length) * 0.03;
+        // Soft, peaceful ambient floating drift (slowed down)
+        p.vx += Math.cos(currentTime * 0.0006 + p.id.length) * 0.006;
+        p.vy += Math.sin(currentTime * 0.0005 + p.id.length) * 0.006;
 
-        // Repel other nodes to avoid clustering overlapping
+        // Repel other nodes very softly to avoid clustering overlapping
         state.forEach(other => {
           if (other.id === p.id) return;
           const dx = other.x - p.x;
@@ -205,14 +209,14 @@ export default function CelestialMindMap({ loans }) {
           const d = Math.hypot(dx, dy) || 0.1;
           const minDist = p.type === 'loan' ? 38 : p.type === 'habit' ? 24 : 14;
           if (d < minDist) {
-            const push = (minDist - d) * 0.012;
+            const push = (minDist - d) * 0.008;
             p.vx -= (dx / d) * push;
             p.vy -= (dy / d) * push;
           }
         });
 
-        p.vx *= 0.96;
-        p.vy *= 0.96;
+        p.vx *= 0.94; // heavier damping to slow down momentum
+        p.vy *= 0.94;
         p.x += p.vx;
         p.y += p.vy;
 

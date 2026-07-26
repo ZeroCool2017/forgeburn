@@ -91,7 +91,7 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
       </div>
 
       <div className="space-y-2">
-        <div className="grid grid-cols-6 gap-x-2 gap-y-4">
+        <div className="grid grid-cols-6 gap-1">
           {months.map((month, idx) => {
             const value = month.totalInterest || 0;
             const normalized = maxValue > 0 ? (value - minValue) / (maxValue - minValue) : 0;
@@ -101,59 +101,56 @@ export default function InteractiveHeatmap({ schedule, title = 'Interactive Inte
             const hasNote = notes[`M${idx + 1}`];
 
             return (
-              <div key={idx} className="flex flex-col items-center gap-1.5">
-                <motion.button
-                  onClick={() => handleCellClick(idx, value)}
-                  onHoverStart={() => {
-                    setHoveredCell(idx);
-                    const n = (value - minValue) / (maxValue - minValue || 1);
-                    playElectroplantonTone(n, 0.5);
-                  }}
-                  onHoverEnd={() => setHoveredCell(null)}
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.92 }}
-                  className="relative w-full aspect-square rounded-lg overflow-hidden cursor-pointer group transition-all"
-                  style={{
-                    background: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
-                    border: `1px solid hsl(${hue}, ${saturation}%, ${lightness + 20}%)`,
-                  }}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center p-1 bg-black/15 group-hover:bg-black/30 transition-colors">
-                    <p className="text-xs font-mono font-bold text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.85)]">M{month.month}</p>
-                  </div>
+              <motion.button
+                key={idx}
+                onClick={() => handleCellClick(idx, value)}
+                onHoverStart={() => {
+                  setHoveredCell(idx);
+                  const n = (value - minValue) / (maxValue - minValue || 1);
+                  playElectroplantonTone(n, 0.5);
+                }}
+                onHoverEnd={() => setHoveredCell(null)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.92 }}
+                className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group transition-all"
+                style={{
+                  background: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
+                  border: `1px solid hsl(${hue}, ${saturation}%, ${lightness + 20}%)`,
+                }}
+              >
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-1 bg-black/15 group-hover:bg-black/30 transition-colors">
+                  <p className="text-[11px] font-mono font-bold text-white drop-shadow-[0_1px_2.5px_rgba(0,0,0,0.85)]">M{month.month}</p>
+                  <p className="text-[9px] font-mono font-bold text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">${value.toFixed(0)}</p>
+                </div>
 
-                  {/* Note indicator dot */}
-                  {hasNote && (
-                    <div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-white/80 shadow-sm" />
-                  )}
+                {/* Note indicator dot */}
+                {hasNote && (
+                  <div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-white/80 shadow-sm" />
+                )}
 
-                  {hoveredCell === idx && (
-                    <motion.div
-                      className="absolute inset-0"
-                      style={{
-                        background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 70%)`,
-                        boxShadow: `0 0 20px hsl(${hue}, ${saturation}%, ${lightness + 30}%)`,
-                      }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    />
-                  )}
+                {hoveredCell === idx && (
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{
+                      background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 70%)`,
+                      boxShadow: `0 0 20px hsl(${hue}, ${saturation}%, ${lightness + 30}%)`,
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  />
+                )}
 
-                  {hoveredCell === idx && (
-                    <motion.div
-                      initial={{ scale: 0, opacity: 1 }}
-                      animate={{ scale: 2.5, opacity: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="absolute inset-0 border-2 rounded-lg"
-                      style={{ borderColor: `hsl(${hue}, 100%, 70%)` }}
-                    />
-                  )}
-                </motion.button>
-                <span className="text-[13px] md:text-sm font-mono font-bold text-foreground/95">
-                  ${value.toFixed(0)}
-                </span>
-              </div>
+                {hoveredCell === idx && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 1 }}
+                    animate={{ scale: 2.5, opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 border-2 rounded-lg"
+                    style={{ borderColor: `hsl(${hue}, 100%, 70%)` }}
+                  />
+                )}
+              </motion.button>
             );
           })}
         </div>
