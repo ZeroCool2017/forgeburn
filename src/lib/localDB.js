@@ -2,6 +2,20 @@ import Dexie from 'dexie';
 
 const db = new Dexie('CarryTheZero');
 
+// Handle database upgrade concurrency gracefully across multiple tabs
+db.on('versionchange', () => {
+  db.close();
+  if (typeof window !== 'undefined') {
+    window.location.reload();
+  }
+});
+
+db.on('blocked', () => {
+  if (typeof window !== 'undefined') {
+    alert('A database update is pending. Please close other tabs of this website to let it complete!');
+  }
+});
+
 db.version(1).stores({
   loans: '++id, name, category, current_balance',
   spending_habits: '++id, name, pattern',
