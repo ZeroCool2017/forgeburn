@@ -10,7 +10,7 @@ export default function QuoteBar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex(prev => (prev + 1) % Math.max(1, quotes.length));
-    }, 14000);
+    }, 18000);
     return () => clearInterval(interval);
   }, [quotes.length]);
 
@@ -35,7 +35,7 @@ export default function QuoteBar() {
             <Sparkles className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0 animate-pulse-glow" />
           )}
           <div className="flex-1 min-w-0">
-            <p className="obs-label mb-2">{isRetro ? '⚡ retro signal' : 'note'}</p>
+            <p className="obs-label mb-2">quotes</p>
             <AnimatePresence mode="wait">
               <motion.div
                 key={index}

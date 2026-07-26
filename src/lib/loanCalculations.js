@@ -103,11 +103,7 @@ export const QUOTES = [
   { text: "Life is good when you're living on your own terms.", author: "Future" },
 
   // Good Will Hunting
-  { text: "You're not perfect, sport. And let me save you the suspense — neither is your balance sheet. But the question is whether you're perfect for the life you want.", author: "Good Will Hunting (adapted)" },
   { text: "It's not your fault.", author: "Good Will Hunting" },
-  { text: "Most days I wish I never met you — the debt. Because then I could sleep at night.", author: "Good Will Hunting (adapted)" },
-  { text: "Do you like apples? I paid off that card. How do you like them apples?", author: "Good Will Hunting (adapted)" },
-  { text: "Real loss is only possible when you've loved something more than yourself. Love your future self more than this debt.", author: "Good Will Hunting (adapted)" },
   { text: "You'll have bad times, but it'll always wake you up to the good stuff you weren't paying attention to.", author: "Good Will Hunting" },
   { text: "Some people can't believe in themselves until someone else believes in them first.", author: "Good Will Hunting" },
 
@@ -118,7 +114,6 @@ export const QUOTES = [
   { text: "People operate with beliefs and biases. To the extent you can eliminate both and replace with data, you gain a competitive advantage.", author: "Billy Beane, Moneyball" },
   { text: "Anybody who's not using statistics is going to get left behind.", author: "Moneyball" },
   { text: "The first thing I learned was that there's an answer in the data if you know how to look for it.", author: "Moneyball" },
-  { text: "We're not selling jeans here. We're finding value where no one else is looking.", author: "Moneyball (adapted)" },
   { text: "The inability to envision a certain kind of person doing a certain kind of thing is the problem.", author: "Michael Lewis, Moneyball" },
 
   // Warby Parker founders (Neil Blumenthal & Dave Gilboa)
@@ -148,10 +143,6 @@ export const QUOTES = [
   { text: "Golden hour. That's what freedom feels like when you finally get there.", author: "Kacey Musgraves" },
   { text: "Same trailer, different park. Your zip code doesn't define your worth.", author: "Kacey Musgraves" },
   { text: "There's a light that shines in the darkness. Find it.", author: "Kacey Musgraves" },
-  { text: "Space and time mean nothing when you're together. But they mean everything when you're paying debt.", author: "Kacey Musgraves (adapted)" },
-  { text: "Oh, what a sight for sore eyes — a zero balance.", author: "Kacey Musgraves (adapted)" },
-  { text: "High time — that's what patience and compound interest give you.", author: "Kacey Musgraves (adapted)" },
-  { text: "These dreams are real. Make them debt-free.", author: "Kacey Musgraves (adapted)" },
 
   // Tracy Chapman
   { text: "All that you have is your soul.", author: "Tracy Chapman" },
@@ -160,42 +151,11 @@ export const QUOTES = [
   { text: "Fast car — sometimes you just need a way out, and that's okay. Then you build your way back.", author: "Tracy Chapman" },
   { text: "We've got to make a decision — leave tonight or live and die this way.", author: "Tracy Chapman" },
   { text: "Why do the babies starve when there's enough food to feed the world? Ask the same about wealth.", author: "Tracy Chapman" },
-  { text: "The revolution starts with you changing your relationship to money.", author: "Tracy Chapman (adapted)" },
 
   // Radiohead
   { text: "Everything in its right place.", author: "Radiohead" },
-  { text: "For a minute there, I lost myself. Then I found the spreadsheet.", author: "Radiohead (adapted)" },
   { text: "You do it to yourself — and that's what really hurts.", author: "Radiohead" },
-  { text: "Fitter, happier, more productive — one payment at a time.", author: "Radiohead (adapted)" },
   { text: "Just because you feel it doesn't mean it's there — unless it's on the balance sheet.", author: "Radiohead" },
-  { text: "No surprises, please. Know your numbers.", author: "Radiohead (adapted)" },
-  { text: "How to disappear completely — that's what debt does to your future if you let it.", author: "Radiohead (adapted)" },
-  { text: "I'm not living. I'm just killing time. Until the debt is gone.", author: "Radiohead (adapted)" },
-
-  // Pavement
-  { text: "Range life. Cut your costs, find your range, live in it.", author: "Pavement (adapted)" },
-  { text: "Gold soundz — the sound of a zero balance.", author: "Pavement (adapted)" },
-  { text: "Stop breathing, start living — once the debt stops breathing down your neck.", author: "Pavement (adapted)" },
-  { text: "Crooked rain, crooked rain — even the mess has a pattern if you look.", author: "Pavement (adapted)" },
-  { text: "Silence is golden but so is a paid-off loan.", author: "Pavement (adapted)" },
-  { text: "Stereo — two channels: what you owe and what you own.", author: "Pavement (adapted)" },
-
-  // Built to Spill
-  { text: "You have to know where you've been to know where you're going.", author: "Built to Spill (adapted)" },
-  { text: "Some things last a long time. Make sure your savings is one of them.", author: "Built to Spill (adapted)" },
-  { text: "Carry the zero — don't let it carry you.", author: "Built to Spill (adapted)" },
-  { text: "I want to see movies of my dreams — debt-free ones.", author: "Built to Spill (adapted)" },
-  { text: "Whatever people say, the numbers don't lie.", author: "Built to Spill (adapted)" },
-  { text: "Big dipper, little dipper — even stars navigate by fixed points. Find yours.", author: "Built to Spill (adapted)" },
-
-  // They Might Be Giants
-  { text: "Older — you're going to get older anyway. Make it count.", author: "They Might Be Giants" },
-  { text: "Birdhouse in your soul — build something that outlasts the debt.", author: "They Might Be Giants" },
-  { text: "Istanbul, not Constantinople — names change. So do your finances, if you work at it.", author: "They Might Be Giants (adapted)" },
-  { text: "The sun is a mass of incandescent gas — and debt is a mass of accumulated choices. Choices change.", author: "They Might Be Giants (adapted)" },
-  { text: "Flood — when the numbers rise, you rise with them.", author: "They Might Be Giants (adapted)" },
-  { text: "Particle man, triangle man — which one are you? Be the one who does the math.", author: "They Might Be Giants (adapted)" },
-  { text: "Ana Ng — somewhere out there, someone paid off their last loan today.", author: "They Might Be Giants (adapted)" },
 
   // Athletes through adversity
   { text: "I've missed more than 9,000 shots. I've lost almost 300 games. I've failed over and over. That is why I succeed.", author: "Michael Jordan" },
@@ -237,7 +197,6 @@ export const QUOTES = [
 
   // Caddo Nation — words, phrases, and adapted wisdom
   { text: "Nah nah kah-ha — All things come back to where they began.", author: "Caddo Nation (traditional)" },
-  { text: "The land holds the memory. So does the ledger — know both.", author: "Caddo Nation (adapted)" },
   { text: "A bird does not ask permission to migrate home. Neither should you.", author: "Caddo Nation (traditional)" },
   { text: "What you carry, carry lightly. What you owe, settle honestly.", author: "Caddo Nation (traditional)" },
   { text: "Haa'ish — it is well. And it will be well again.", author: "Caddo Nation" },
@@ -249,11 +208,9 @@ export const QUOTES = [
   { text: "The Red River does not ask if it is tired. It moves.", author: "Caddo Nation (Caddo Homeland)" },
   { text: "Borrow nothing from tomorrow that you cannot repay with today's action.", author: "Caddo Nation (elder saying)" },
   { text: "The cedars at Binger have stood through drought and flood. So will you.", author: "Caddo Nation (Anadarko, Oklahoma)" },
-  { text: "Wíčhoni — to live fully is to have no debt to your own spirit.", author: "Caddo Nation (adapted)" },
   { text: "When you clear your debts, you clear the path for those who walk behind you.", author: "Caddo Nation (elder wisdom)" },
   { text: "The Caddos knew: a man with his own land is a man with his own story.", author: "Caddo Nation (historical)" },
   { text: "Haa nah — the people. Us. Together. Building.", author: "Caddo Nation (traditional)" },
-  { text: "The circle is complete when the debt is settled and the spirit is free.", author: "Caddo Nation (adapted)" },
   { text: "Listen to the water. It knows about patience and persistence.", author: "Caddo Nation (water wisdom)" },
   { text: "We are still here. We will still be here. Make decisions that prove it.", author: "Caddo Nation (resilience)" },
 
@@ -398,7 +355,7 @@ export const QUOTES = [
   { text: "The system will push back. Learn to read the feedback, not fight it.", author: "Peter Senge" },
 
   // Marsha Linehan (DBT)
-  { text: "You can't go back and change the beginning, but you can start where you are and change the ending.", author: "Marsha Linehan" },
+  { text: "You can't go back and change the beginning, but you can start where you are and change the ending.", author: "C.S. Lewis" },
   { text: "Radical acceptance is the path out of hell — refusing it keeps you there.", author: "Marsha Linehan" },
   { text: "The willingness to suffer is what makes the willingness to change possible.", author: "Marsha Linehan" },
   { text: "A life worth living is built one moment at a time.", author: "Marsha Linehan" },
@@ -430,11 +387,11 @@ export const QUOTES = [
   { text: "McDonald's can deliver burgers to every corner of the world. Why can't we deliver sight?", author: "Dr. Govindappa Venkataswamy (Dr. V)" },
 
   // Oklahoma figures
-  { text: "The most beautiful things in the world cannot be seen or touched — they are felt with the heart.", author: "Wilma Mankiller, Cherokee Nation Chief" },
+  { text: "The best and most beautiful things in the world cannot be seen or even touched — they must be felt with the heart.", author: "Helen Keller" },
   { text: "We must trust our own thinking, trust our own strength.", author: "Wilma Mankiller, Cherokee Nation Chief" },
   { text: "In every crisis there is an opportunity.", author: "Wilma Mankiller, Cherokee Nation Chief" },
   { text: "I've always been a systems thinker. Look at the structure, not just the problem.", author: "Brad Henry, Oklahoma Governor" },
-  { text: "Music is the shorthand of emotion.", author: "Leon Russell, Oklahoma musician" },
+  { text: "Music is the shorthand of emotion.", author: "Leo Tolstoy" },
 
   // SGI / Daisaku Ikeda
   { text: "A great human revolution in just a single individual will help achieve a change in the destiny of a nation.", author: "Daisaku Ikeda" },
@@ -450,7 +407,7 @@ export const QUOTES = [
 
   // Indian business leaders
   { text: "I don't believe in taking right decisions. I take decisions and then make them right.", author: "Ratan Tata" },
-  { text: "The world is full of magic things, patiently waiting for our senses to grow sharper.", author: "Ratan Tata" },
+  { text: "The world is full of magic things, patiently waiting for our senses to grow sharper.", author: "W.B. Yeats" },
   { text: "Treat money as a tool, not a goal.", author: "Azim Premji" },
   { text: "Success is not just about making wealth but about making a difference.", author: "Narayana Murthy" },
   { text: "To survive, you must tell stories.", author: "Anita Roddick" },
@@ -466,7 +423,7 @@ export const QUOTES = [
   { text: "Every new medium gives us a new perspective on older media.", author: "David Hockney" },
 
   // Mitt Romney
-  { text: "Character is doing the right thing when nobody's looking.", author: "Mitt Romney" },
+  { text: "Character is doing the right thing when nobody's looking.", author: "J.C. Watts" },
 
   // Daria (MTV)
   { text: "I don't have low self-esteem. I have low esteem for everyone else.", author: "Daria Morgendorffer" },
@@ -502,25 +459,17 @@ export const QUOTES = [
   { text: "I still have a long way to go, but I'm already so far from where I used to be — and that's the point.", author: "Winona Ryder" },
   { text: "When you're young, you're not afraid of what comes next. You're excited by it.", author: "Winona Ryder" },
   { text: "I'm not really a part of any scene. I've always felt like an outsider.", author: "Winona Ryder" },
-  { text: "The quicker I can pay off my debt to myself, the sooner I'm free to live on my own terms.", author: "Winona Ryder (adapted)" },
   // Beetlejuice
   { text: "I myself am strange and unusual.", author: "Lydia Deetz, Beetlejuice" },
-  { text: "Being strange is just another way of being alive on your own terms.", author: "Lydia Deetz, Beetlejuice (adapted)" },
   // Reality Bites
   { text: "I was really going to be something by the age of 23.", author: "Lelaina Pierce, Reality Bites" },
-  { text: "You can't navigate the future by the map of the past.", author: "Reality Bites (adapted)" },
-  { text: "There's no point in being anything other than authentic when everything costs this much.", author: "Reality Bites (adapted)" },
-  { text: "I just need something more than this. That's not a problem — that's a plan.", author: "Lelaina Pierce, Reality Bites (adapted)" },
   // Girl, Interrupted
   { text: "Crazy isn't being broken or swallowing a dark secret. It's you or me, amplified.", author: "Susanna, Girl, Interrupted" },
   { text: "Have you ever confused a dream with life? Have you ever stolen something when you had the cash?", author: "Susanna, Girl, Interrupted" },
   { text: "I know what it's like to want to die. How it hurts to smile. How you try to fit in but you can't. But you'll never really know.", author: "Susanna, Girl, Interrupted" },
-  // Edward Scissorhands
-  { text: "I'm not a mistake. I'm unfinished. There's a difference.", author: "Edward Scissorhands (adapted)" },
   // Little Women
   { text: "I want to do something splendid — something heroic or wonderful that won't be forgotten after I'm dead.", author: "Jo March, Little Women (Winona Ryder)" },
   { text: "I find it poor logic to say that because women are good, women should vote. Men do not vote because they are good; they vote because they are men, and women should vote, not because we are angels, but because we are human.", author: "Jo March, Little Women" },
-
 
   // Donald Judd
   { text: "Design has to work. Art does not.", author: "Donald Judd" },
@@ -538,17 +487,10 @@ export const QUOTES = [
   { text: "Your goal shouldn't be to buy players. Your goal should be to buy wins. Figure out what winning is and buy that.", author: "Billy Beane, Moneyball" },
   { text: "The market for baseball players is an irrational one. So is the market for everything else.", author: "Michael Lewis, Moneyball" },
   { text: "People in both fields operate with beliefs and biases. To the extent you can eliminate both and replace with data, you gain a competitive advantage.", author: "Billy Beane, Moneyball" },
-  { text: "It's hard not to be romantic about baseball. It's hard not to be romantic about compound interest too.", author: "Moneyball (adapted)" },
-  { text: "How can you not be romantic about baseball? How can you not be romantic about carrying the zero?", author: "Billy Beane, Moneyball (adapted)" },
-  { text: "The first thing I do every morning is look at the scoreboard. Not yesterday's — today's. Same with your balance.", author: "Moneyball (adapted)" },
   { text: "You get on base, we win. You don't, we lose. The math of it is simple. Everything else is noise.", author: "Billy Beane, Moneyball" },
   { text: "There are rich teams and there are poor teams, and then there's fifty feet of crap, and then there's us. We work with what we've got.", author: "Billy Beane, Moneyball" },
-  { text: "I hate losing more than I even want to win. Losing is poverty. Winning is the absence of debt.", author: "Billy Beane, Moneyball (adapted)" },
-  { text: "It's hard to get on base if you can't step up to the plate. Show up. Pay something.", author: "Moneyball (adapted)" },
   { text: "The problem we're trying to solve is that there are rich teams and poor teams. Some are winning unfairly. We have to find a way to win anyway.", author: "Peter Brand, Moneyball" },
-  { text: "When you get the answer, it's hard to believe the question was that simple all along.", author: "Peter Brand, Moneyball (adapted)" },
   { text: "People who run ball clubs think in terms of buying players. Your mistake is doing the same thing.", author: "Peter Brand, Moneyball" },
-  { text: "We're trying to find value in places that other people are ignoring. Your payoff schedule is a market inefficiency. Exploit it.", author: "Moneyball (adapted)" },
 
   // 400m Track Stars
   { text: "The race is not always to the swift, but to those who keep on running.", author: "Michael Johnson" },
@@ -619,158 +561,62 @@ export const QUOTES = [
   { text: "I gave that credit card a full makeover — starting with a zero balance.", author: "Cher Horowitz, Clueless" },
   { text: "You're a virgin who can't drive — and apparently can't read a loan statement.", author: "Murray, Clueless" },
   { text: "Do you prefer 'financial survivor' or 'debt-free'? I'm going with debt-free.", author: "Cher Horowitz, Clueless" },
-  { text: "Searching for a direction? Try paying off the smallest balance first.", author: "Cher Horowitz, Clueless (adapted)" },
   { text: "She's a Monet — looks fine from far away but up close it's a mess. Don't be a Monet budget.", author: "Cher Horowitz, Clueless" },
-  { text: "Whatever! I'm out of here — as soon as I pay off this loan.", author: "Cher Horowitz, Clueless (adapted)" },
   { text: "You see how picky I am about my shoes and they only go on my feet. Be that picky about debt.", author: "Cher Horowitz, Clueless" },
-  { text: "My report card? Sporadic, yes. But I give myself an A in forward momentum.", author: "Cher Horowitz, Clueless (adapted)" },
-  { text: "It does not say RSVP on the debt notice, Amber. You have to respond.", author: "Cher Horowitz, Clueless (adapted)" },
 
   // Legally Blonde (2001)
   { text: "What, like it's hard? Paying off debt just takes a plan and a good conditioner routine.", author: "Elle Woods, Legally Blonde" },
   { text: "I once had to judge a Chanel suit from a Calvin Klein — trust me, I can read a balance sheet.", author: "Elle Woods, Legally Blonde" },
   { text: "The bend and snap works every time — so does compound interest, for or against you.", author: "Elle Woods, Legally Blonde" },
-  { text: "If I'm going to be a partner in a law firm by the time I'm 30, I cannot be carrying this debt at 29.", author: "Elle Woods, Legally Blonde (adapted)" },
-  { text: "Exercise gives you endorphins. Endorphins make you happy. Happy people pay off their loans.", author: "Elle Woods, Legally Blonde (adapted)" },
-  { text: "You got into Harvard Law. You can figure out your amortization schedule.", author: "Elle Woods, Legally Blonde (adapted)" },
-  { text: "Whoever said orange is the new black was seriously disturbed. But zero debt? That's always in style.", author: "Elle Woods, Legally Blonde (adapted)" },
-  { text: "Don't stomp your little last season Prada shoes at me, honey. We're paying off debt this season.", author: "Elle Woods, Legally Blonde (adapted)" },
   { text: "The rules of hair care are simple and finite. So are the rules of debt payoff.", author: "Elle Woods, Legally Blonde" },
-  { text: "I feel comfortable using legal jargon in everyday life. Like: I object to this interest rate.", author: "Elle Woods, Legally Blonde (adapted)" },
 
   // 90s / Gen-X culture
-  { text: "Just do it. The balance isn't going to pay itself.", author: "Nike, 1988 (adapted)" },
   { text: "Be excellent to each other — starting with your financial future.", author: "Bill & Ted's Excellent Adventure" },
-  { text: "Whoa. That's a lot of interest.", author: "Ted Theodore Logan, Bill & Ted (adapted)" },
-  { text: "There is no spoon. There is no shortcut. There is only the work.", author: "The Matrix, 1999 (adapted)" },
-  { text: "I know kung fu — and I know my credit utilization ratio.", author: "Neo, The Matrix (adapted)" },
-  { text: "To infinity and beyond — even when the balance feels infinite.", author: "Buzz Lightyear, Toy Story (adapted)" },
-  { text: "Hakuna matata means no more debt worries — for the rest of your days.", author: "The Lion King (adapted)" },
-  { text: "Life is like a box of chocolates — your loan payoff schedule shows you exactly what you're gonna get.", author: "Forrest Gump (adapted)" },
-  { text: "Run, Forrest, run — away from minimum-only payments.", author: "Forrest Gump (adapted)" },
-  { text: "You can't handle the truth — which is that minimum payments cost you years.", author: "A Few Good Men (adapted)" },
-  { text: "Show me the money. Then show me the payoff date.", author: "Jerry Maguire (adapted)" },
-  { text: "You had me at zero balance.", author: "Jerry Maguire (adapted)" },
-  { text: "In Seattle, the rain is relentless. So is interest. Pick one to fight.", author: "Sleepless in Seattle (adapted)" },
-  { text: "You've got mail — and it's a statement showing progress.", author: "You've Got Mail (adapted)" },
-  { text: "I'm the king of the world — and I have no credit card debt.", author: "Titanic (adapted)" },
-  { text: "Hasta la vista, interest charges.", author: "Terminator 2, 1991 (adapted)" },
-  { text: "I'll be back — to make another payment.", author: "The Terminator (adapted)" },
-  { text: "With great power comes great responsibility. Including credit card responsibility.", author: "Spider-Man (adapted)" },
-  { text: "After all, tomorrow is another day — and another chance to pay something.", author: "Gone with the Wind (classic, adapted)" },
   { text: "Grunge was about authenticity. So is knowing exactly how much you owe.", author: "90s Seattle (cultural)" },
-  { text: "Don't dream it. Be it — debt free.", author: "Rocky Horror Picture Show (adapted)" },
-  { text: "I'm walking here! And I'm walking away from this interest rate.", author: "Midnight Cowboy (adapted)" },
   { text: "The 90s taught us: alternative is not a genre, it's a posture. Debt freedom is your alternative.", author: "90s Gen X (cultural)" },
 
   // Skating Polly — Stop Digging
   { text: "Stop digging yourself deeper. The only way is up and out.", author: "Skating Polly, Stop Digging" },
-  { text: "I don't wanna be stuck in the same hole forever. Every payment is a ladder rung.", author: "Skating Polly, Stop Digging (adapted)" },
   { text: "It's not about where you started. It's about refusing to stay.", author: "Skating Polly" },
 
   // JD Samson (Le Tigre / MEN)
   { text: "We built community out of nothing. You can build a debt-free life out of a plan.", author: "JD Samson" },
   { text: "Art and survival look the same when you're broke. Keep making moves.", author: "JD Samson" },
-  { text: "DIY or die — that includes your finances.", author: "JD Samson (adapted)" },
 
   // Bratmobile
-  { text: "Girl germs, budget terms — both require you to know what you're carrying.", author: "Bratmobile (adapted)" },
-  { text: "Punk is not just loud music. Punk is refusing to let debt define your decade.", author: "Bratmobile (adapted)" },
   { text: "We were angry and broke. Now we're just strategic.", author: "Bratmobile (cultural)" },
 
   // Megan Thee Stallion
-  { text: "Real hot girl stuff includes knowing your interest rate.", author: "Megan Thee Stallion (adapted)" },
-  { text: "I'm a savage — systematically attacking each balance one by one.", author: "Megan Thee Stallion (adapted)" },
   { text: "Protect your peace. Pay off your debt. Both require discipline.", author: "Megan Thee Stallion" },
-  { text: "You can't pour from an empty account. Build the bag.", author: "Megan Thee Stallion (adapted)" },
-  { text: "Act up — on your financial goals, not your credit score.", author: "Megan Thee Stallion (adapted)" },
-
-  // Le Tigre
-  { text: "What's yr take on debt collection? Mine is: fight it with a plan.", author: "Le Tigre (adapted)" },
-  { text: "Get off the internet — and onto your amortization schedule.", author: "Le Tigre, Get Off the Internet (adapted)" },
-  { text: "Feminist sweepstakes: zero debt, full autonomy, no permission needed.", author: "Le Tigre (adapted)" },
-  { text: "TKO — total knockout of every balance. That's the plan.", author: "Le Tigre, TKO (adapted)" },
-
-  // Sonic Youth
-  { text: "Teenage riot — against minimum payments.", author: "Sonic Youth, Teenage Riot (adapted)" },
-  { text: "Dirty — but your credit doesn't have to be.", author: "Sonic Youth, Dirty (adapted)" },
-  { text: "Kool Thing is knowing your net worth.", author: "Sonic Youth, Kool Thing (adapted)" },
-  { text: "The noise outside is debt culture. The signal inside is your payoff date.", author: "Sonic Youth (adapted)" },
-  { text: "100% — that's the goal. Zero balance. Full ownership.", author: "Sonic Youth (adapted)" },
-
-  // Pavement
-  { text: "Cut your hair — and cut your unnecessary subscriptions while you're at it.", author: "Pavement, Cut Your Hair (adapted)" },
-  { text: "Silence kit: no more excuses about why the balance hasn't moved.", author: "Pavement, Silence Kit (adapted)" },
-  { text: "Crooked rain, crooked loan — straighten it with extra payments.", author: "Pavement, Crooked Rain (adapted)" },
-  { text: "Shady lane: where debt lives if you don't shine a light on it.", author: "Pavement, Shady Lane (adapted)" },
-  { text: "We dance like ballerinas, but our budget is disciplined.", author: "Pavement (adapted)" },
-
-  // Built to Spill
-  { text: "Keep it like a secret — the secret being how fast you paid this off.", author: "Built to Spill, Keep It Like a Secret (adapted)" },
-  { text: "You in reverse — but your debt balance is moving forward toward zero.", author: "Built to Spill, You In Reverse (adapted)" },
-  { text: "I would hurt a fly — but I won't let interest hurt my future.", author: "Built to Spill (adapted)" },
-  { text: "There's nothing wrong with the city you live in except what you owe in it.", author: "Built to Spill (adapted)" },
 
   // Japanese baseball players (notable)
   { text: "Preparation is everything. I prepare for every at-bat the way you should prepare for every payment.", author: "Shohei Ohtani" },
   { text: "Don't think about what you can't do. Think about what you can do right now.", author: "Ichiro Suzuki" },
   { text: "Even if you fail seven times, stand up eight.", author: "Ichiro Suzuki (Japanese proverb, practiced)" },
-  { text: "Small improvements every day. That is how championships — and debt freedom — are won.", author: "Ichiro Suzuki (adapted)" },
-  { text: "I want to be someone who surprises people. Including my past self who thought this debt was permanent.", author: "Shohei Ohtani (adapted)" },
   { text: "Hard work and preparation — that is the only path I know.", author: "Hideki Matsui" },
-  { text: "I never took anything for granted. Every game, every at-bat, every dollar.", author: "Hideki Matsui (adapted)" },
   { text: "Baseball taught me: you will fail. What matters is whether you show up the next day.", author: "Yu Darvish" },
-
-  // Rickey Sobers — former NBA player
-  { text: "You play hard, you play smart, and you finish what you started.", author: "Rickey Sobers, NBA (adapted)" },
-  { text: "Defense wins games. Offense pays debts. Run both.", author: "Rickey Sobers (adapted)" },
-  { text: "Most people don't know my name. My bank account does.", author: "Rickey Sobers, NBA (adapted)" },
 
   // OKC Thunder players
   { text: "I don't care about the doubt. I care about the work.", author: "Shai Gilgeous-Alexander, OKC Thunder" },
   { text: "Be yourself. Be consistent. The results will come.", author: "Shai Gilgeous-Alexander, OKC Thunder" },
-  { text: "I control what I can control. The rest? Adjust.", author: "Chet Holmgren, OKC Thunder (adapted)" },
-  { text: "There's no shortcut. Just the next play. Just the next payment.", author: "Luguentz Dort, OKC Thunder (adapted)" },
   { text: "We're building something. Every win adds up. So does every dollar.", author: "Mark Daigneault, OKC Thunder Coach" },
   { text: "Championship culture starts with discipline in the small moments.", author: "Mark Daigneault, OKC Thunder Coach" },
-  { text: "Jalen Williams: I trust the process even when the process is slow.", author: "Jalen Williams, OKC Thunder (adapted)" },
 
   // Mitt Romney
-  { text: "I like being able to pay off debt. I like seeing zero.", author: "Mitt Romney (adapted)" },
-  { text: "Corporations are people, my friend — but your loan balance is not your friend.", author: "Mitt Romney (adapted)" },
   { text: "I've been in business long enough to know: cash flow is everything.", author: "Mitt Romney" },
-  { text: "The answer to our financial challenges isn't complexity. It's discipline.", author: "Mitt Romney (adapted)" },
 
   // Bernie Sanders
-  { text: "I am sick and tired of hearing about your damn interest rates — so let's do something about them.", author: "Bernie Sanders (adapted)" },
-  { text: "When we stand together, we can break any chain — including debt.", author: "Bernie Sanders (adapted)" },
   { text: "The middle class built this country. Debt shouldn't be the reward.", author: "Bernie Sanders" },
-  { text: "It's not a radical idea that you should be able to pay off your loans in your lifetime.", author: "Bernie Sanders (adapted)" },
   { text: "Working families should not spend their lives in debt to the wealthy few.", author: "Bernie Sanders" },
-
-  // Hasan Piker
-  { text: "Eat the rich — but first, understand your loan documents so they can't eat you.", author: "Hasan Piker (adapted)" },
-  { text: "The system is designed to keep you in debt. That's the point. So break the design.", author: "Hasan Piker (adapted)" },
-  { text: "Reading your loan terms is an act of resistance.", author: "Hasan Piker (adapted)" },
-  { text: "You're not lazy. You're underpaid and over-indebted. There's a difference.", author: "Hasan Piker (adapted)" },
-  { text: "Financial literacy is class consciousness. Know your numbers.", author: "Hasan Piker (adapted)" },
 
   // Stephen King — On Writing
   { text: "Writing is telepathy. Two minds meeting across space and time without speaking aloud.", author: "Stephen King, On Writing" },
   { text: "You've got a table covered with red cloth. On it, a cage with a white rabbit marked with the number 8. We're close. We're having a meeting of minds.", author: "Stephen King, On Writing (The Room)" },
-  { text: "There is no magical way to perfect your finances. Only disciplined practice and showing up.", author: "Stephen King, On Writing (adapted)" },
-  { text: "The world is full of people who have stopped listening. Don't stop listening to your numbers.", author: "Stephen King, On Writing (adapted)" },
-  { text: "Your debt story is written in your balance sheet. What's the narrative you're telling?", author: "Stephen King (adapted)" },
-  { text: "Perfect is the enemy of done. Done payments beat perfect excuses.", author: "Stephen King (adapted)" },
-  { text: "The number on the rabbit's back is 8. The most interesting thing isn't the rabbit — it's what the number means to you. What does your balance mean?", author: "Stephen King, On Writing (adapted)" },
-  { text: "A transmission place and a receiving place. Your budget is the transmission. Your future is the receiving.", author: "Stephen King, On Writing (adapted)" },
-  { text: "Your reader lives inside you. So does your future self. Write the story they deserve.", author: "Stephen King, On Writing (adapted)" },
 
   // Remove this section — generic "Indigenous elder" and "Native American wisdom" without specific attribution
 
   // Debt collections history — looking back
   { text: "The ancient Code of Hammurabi set a maximum debt term of three years. Even 1754 BCE knew: debt cannot be forever.", author: "Code of Hammurabi, 1754 BCE" },
-  { text: "In medieval Europe, debt could land you in a debtor's prison. You carry a spreadsheet. That is progress.", author: "Debtor's Prison history (adapted)" },
   { text: "The Jubilee year in Leviticus — every 50 years, all debts cancelled. The system once imagined a reset.", author: "Leviticus 25 (historical)" },
   { text: "Indigenous land was 'purchased' for debt and trinkets. The history of debt is a history of power.", author: "American colonial debt history" },
   { text: "Sharecroppers were trapped in debt to landowners who set the prices. Know who holds the ledger.", author: "Post-Civil War sharecropping history" },
@@ -778,141 +624,49 @@ export const QUOTES = [
   { text: "Greenwood was burned because Black wealth threatened the debt economy that white supremacy depended on.", author: "Tulsa Race Massacre, 1921 (historical)" },
   { text: "Redlining wasn't just about neighborhoods. It was about who got to build credit and who was locked out.", author: "Federal Housing Administration, 1930s-1960s history" },
   { text: "The GI Bill gave returning soldiers loans and education — but not Black veterans. The gap was designed.", author: "GI Bill inequity, 1944 (historical)" },
-  { text: "Student debt as we know it was born in the 1970s when Nixon shifted education funding. You are not failing — the system shifted.", author: "Student loan history, 1972 (adapted)" },
   { text: "Credit scoring wasn't standardized until 1989. FICO is younger than most adults in debt right now.", author: "FICO history, 1989" },
   { text: "Payday lending was made legal state by state in the 1990s. 400% APR was a legislative choice, not a law of nature.", author: "Payday loan deregulation, 1990s history" },
 
   // Silent Bob / Clerks / Kevin Smith universe
   { text: "...", author: "Silent Bob (he nods in agreement with your payoff plan)" },
-  { text: "I'm not even supposed to be here today — but I am, and I'm paying this off anyway.", author: "Dante Hicks, Clerks (adapted)" },
-  { text: "You know, there's a million fine-looking ways to get out of debt, and they all start with the same step.", author: "Silent Bob, Chasing Amy (adapted)" },
-  { text: "This job would be great if it weren't for the debt.", author: "Dante Hicks, Clerks (adapted)" },
-  { text: "I'm a firm believer in the philosophy of a ruling class. Especially now that I'm not in one.", author: "Randal Graves, Clerks (adapted)" },
-  { text: "You know what the problem is? We have ideals, but no amortization schedule.", author: "Mallrats (Kevin Smith, adapted)" },
 
   // Good Will Hunting (Matt Damon / Ben Affleck)
   { text: "You wasted $150,000 on an education you coulda got for $1.50 in late fees at the public library.", author: "Will Hunting, Good Will Hunting" },
-  { text: "It's not your fault. But the debt is. And now it's your move.", author: "Good Will Hunting (adapted)" },
-  { text: "How do you like them apples? Zero balance.", author: "Will Hunting, Good Will Hunting (adapted)" },
-  { text: "I got to see the world. But first I had to stop running from what I owed — to myself and the bank.", author: "Good Will Hunting (adapted)" },
-  { text: "Son of a bitch — he figured out compound interest.", author: "Good Will Hunting (adapted)" },
-  { text: "Do you know what I wanna do right now? Pay off something.", author: "Good Will Hunting (adapted)" },
-
-  // Foxfire (1996) — starring Angelina Jolie
-  { text: "We run this. We run ourselves. No one owns us — especially not a creditor.", author: "Legs, Foxfire (1996, adapted)" },
-  { text: "They think we're nothing. We know exactly what we're worth.", author: "Foxfire, 1996 (adapted)" },
-  { text: "We were wild and broke. One of those things had to change.", author: "Foxfire, 1996 (adapted)" },
-  { text: "Burn it down — the idea that you can't get free of this.", author: "Foxfire, 1996 (adapted)" },
 
   // Reality Bites (1994)
-  { text: "I was really going to be something by the age of 23. Then I saw the balance.", author: "Lelaina Pierce, Reality Bites (adapted)" },
-  { text: "There's no point to any of this — unless you build the future you actually want.", author: "Reality Bites, 1994 (adapted)" },
-  { text: "Define irony: a generation that was promised everything now owes everything.", author: "Troy Dyer, Reality Bites (adapted)" },
-  { text: "Evian is naive spelled backwards. Minimum payments are hope spelled backwards.", author: "Reality Bites (adapted)" },
-  { text: "I am not defined by my debt — but I am determined to define when it ends.", author: "Reality Bites, Lelaina (adapted)" },
   { text: "We graduate. We owe. We work. But we don't stop.", author: "Reality Bites (cultural)" },
-
-  // Disney Haunted Mansion
-  { text: "There's no way out — oh wait, that's just the ride. There's always a way out of debt.", author: "Haunted Mansion (adapted)" },
-  { text: "Our tour has 999 happy haunts — but none of them are as scary as a 29% APR.", author: "Haunted Mansion Ghost Host (adapted)" },
-  { text: "We have 999 happy haunts here. There's room for one more: your old loan balance.", author: "Ghost Host, Haunted Mansion (adapted)" },
-  { text: "Hurry back... hurry back. Don't forget your debt payoff plan.", author: "Madame Leota, Haunted Mansion (adapted)" },
-  { text: "Master Gracey had debts too. Unlike him, you can still do something about it.", author: "Haunted Mansion lore (adapted)" },
-  { text: "They never found the way out. You will.", author: "Haunted Mansion (adapted)" },
 
   // Lowrider culture / Chicano culture
   { text: "A lowrider is a work of art. So is a life lived debt-free on your own terms.", author: "Lowrider culture (East LA)" },
   { text: "We take what we have and make it beautiful. The car, the neighborhood, the future.", author: "Lowrider culture (East LA)" },
-  { text: "Pride in what you own starts with actually owning it — not owing on it.", author: "Lowrider culture (adapted)" },
-  { text: "The hydraulics lift the car. The plan lifts the debt. Both take precision.", author: "Lowrider culture (adapted)" },
   { text: "Brown Pride means building wealth for our community, dollar by dollar.", author: "Chicano financial resilience (cultural)" },
-  { text: "Cruz Contreras: the streets taught me more about interest than any bank ever did.", author: "East LA cultural (adapted)" },
   { text: "Slow ride, steady progress. The lowrider philosophy applies to debt payoff.", author: "Lowrider culture (cultural)" },
-  { text: "We customize everything — the ride, the music, the financial plan.", author: "Lowrider / Chicano culture (adapted)" },
-  { text: "George Barris built dream machines from nothing. Build your dream from less debt.", author: "George Barris, Kustom King (adapted)" },
   { text: "The impala doesn't apologize. Neither should your financial ambition.", author: "Lowrider culture (cultural)" },
 
   // Megan Thee Stallion — more
   { text: "I went from sleeping on the floor to buying the building. Document the journey.", author: "Megan Thee Stallion" },
   { text: "I put my degrees on the wall because I earned them — not because someone handed them.", author: "Megan Thee Stallion" },
-  { text: "Hot girl is a state of mind. Debt-free is a state of bank account.", author: "Megan Thee Stallion (adapted)" },
   { text: "I am my own brand, my own business, my own boss. You can be too.", author: "Megan Thee Stallion" },
-  { text: "Thee Stallion doesn't beg. She builds.", author: "Megan Thee Stallion (adapted)" },
-
-  // Future — more
-  { text: "Used to count pennies on the floor. Now I count the months until debt hits zero.", author: "Future (adapted)" },
-  { text: "I upgraded. My situation upgraded. My balance is going down.", author: "Future (adapted)" },
-  { text: "Dirty Sprite taught me: what you pour into yourself matters. Pour into your future.", author: "Future (adapted)" },
-
-  // Chuck Berry
-  { text: "Roll over, debt — and tell minimum payments the news.", author: "Chuck Berry, Roll Over Beethoven (adapted)" },
-  { text: "Go, go, go Johnny go — straight to the payoff date.", author: "Chuck Berry, Johnny B. Goode (adapted)" },
-  { text: "I built rock and roll from nothing and got nothing for it. Learn from that. Own what you create.", author: "Chuck Berry (adapted)" },
-  { text: "Maybellene, why can't you be true — like a fixed-rate loan with no surprises.", author: "Chuck Berry, Maybellene (adapted)" },
-  { text: "Reelin' and rockin' until that balance hits zero.", author: "Chuck Berry, Reelin' and Rockin' (adapted)" },
-  { text: "No money down — but understand what that actually costs you long-term.", author: "Chuck Berry, No Money Down (adapted)" },
 
   // Dolly Parton
   { text: "It costs a lot of money to look this cheap. Manage accordingly.", author: "Dolly Parton" },
-  { text: "I'm not going to limit myself just because people won't accept the fact that I can do something else — including manage debt.", author: "Dolly Parton (adapted)" },
   { text: "The way I see it, if you want the rainbow, you gotta put up with the rain — and the interest payments.", author: "Dolly Parton" },
-  { text: "You'll never do a whole lot unless you're brave enough to try. That includes paying off the thing you've been avoiding.", author: "Dolly Parton (adapted)" },
   { text: "I'm a businesswoman. I just look like a showgirl. Know your numbers either way.", author: "Dolly Parton" },
-  { text: "Find out who you are and do it on purpose — debt-free if possible.", author: "Dolly Parton (adapted)" },
-  { text: "Working 9 to 5 — but every dollar after the minimum is a dollar toward freedom.", author: "Dolly Parton, 9 to 5 (adapted)" },
-
-  // Miley Cyrus
-  { text: "I came in like a wrecking ball — on my old spending habits.", author: "Miley Cyrus, Wrecking Ball (adapted)" },
-  { text: "We can't stop — paying this down. We won't stop.", author: "Miley Cyrus, We Can't Stop (adapted)" },
-  { text: "Party in the USA — once the loan is paid off.", author: "Miley Cyrus, Party in the USA (adapted)" },
-  { text: "I'm not a girl, not yet a woman — but I am definitely someone who reads her loan statements.", author: "Miley Cyrus (adapted)" },
-  { text: "I used to be a wild child. Now I'm a wildly intentional budgeter.", author: "Miley Cyrus (adapted)" },
-  { text: "Flowers — I can buy them for myself once the minimum payment frees up cash.", author: "Miley Cyrus, Flowers (adapted)" },
-  { text: "The climb never ends. But the loan balance does.", author: "Miley Cyrus, The Climb (adapted)" },
-
-  // Cali / SoCal roots (Sublime, RHCP, Kendrick)
-  { text: "What I got, you gotta give it to your children — including financial clarity.", author: "Sublime, What I Got (adapted)" },
-  { text: "Santeria: I don't practice but I do practice paying things off monthly.", author: "Sublime, Santeria (adapted)" },
-  { text: "Under the bridge downtown is where my credit score used to live. Not anymore.", author: "Red Hot Chili Peppers, Under the Bridge (adapted)" },
-  { text: "Californication isn't just an album. It's a warning about debt culture dressed up as paradise.", author: "Red Hot Chili Peppers (adapted)" },
-  { text: "Humble — sit down and look at the amortization table.", author: "Kendrick Lamar, HUMBLE. (adapted)" },
-  { text: "Swimming pools of debt — drown in it or learn to swim out.", author: "Kendrick Lamar, Swimming Pools (adapted)" },
-  { text: "DNA — discipline, numbers, accountability.", author: "Kendrick Lamar, DNA (adapted)" },
 
   // Kim Gordon (Sonic Youth / solo)
   { text: "I'm not afraid of being a girl in a band, a business, or a balance sheet.", author: "Kim Gordon" },
-  { text: "Noise is just signal you haven't decoded yet. Same with a confusing loan statement.", author: "Kim Gordon (adapted)" },
-  { text: "Girl in a band — who also knows her net worth. Both can be true.", author: "Kim Gordon (adapted)" },
   { text: "I've been making things on my own terms for decades. That's the only way I know.", author: "Kim Gordon" },
-  { text: "The independent spirit means you pay your own way. That starts with clarity.", author: "Kim Gordon (adapted)" },
-
-  // All Over Me (1997 film)
-  { text: "This city will eat you alive if you don't know what you're worth.", author: "All Over Me, 1997 (adapted)" },
-  { text: "She found herself in the city's noise. You can find your way through the numbers.", author: "All Over Me, 1997 (adapted)" },
-  { text: "Survival looks different for everyone. For me it's a zero balance.", author: "All Over Me, 1997 (adapted)" },
-  { text: "Claude knew: you can love where you are and still want more for yourself.", author: "All Over Me, 1997 (adapted)" },
-  { text: "The city doesn't owe you anything. Neither does your creditor. Act accordingly.", author: "All Over Me, 1997 (adapted)" },
 
   // Black business owners — notable and historical
   { text: "I was the first Black self-made female millionaire in America. I built it with a comb and sheer will.", author: "Madam C.J. Walker" },
   { text: "Don't sit down and wait for the opportunities to come. Get up and make them.", author: "Madam C.J. Walker" },
   { text: "I got my start by giving myself a start.", author: "Madam C.J. Walker" },
   { text: "Build your business on the foundation of service and substance. The rest follows.", author: "Robert F. Smith, Vista Equity Partners" },
-  { text: "I paid off the student loans for an entire graduating class. Imagine what you could do when debt is gone.", author: "Robert F. Smith (adapted)" },
-  { text: "Excellence is not a destination — it's a continuous journey that never ends.", author: "Brian Tracy (adapted) / Black Wall Street ethos" },
   { text: "Greenwood proved: when Black people control their dollars, they multiply.", author: "Greenwood District legacy" },
   { text: "The gap is not talent. The gap is access to capital. Close it yourself if you have to.", author: "Daymond John, FUBU" },
-  { text: "I used to sew hats in my mom's house. Now I build brands. Start where you are.", author: "Daymond John, FUBU (adapted)" },
   { text: "Power is not given. It is taken — one strategic move at a time.", author: "Daymond John" },
-  { text: "I don't have a Harvard MBA. I have hustle. And hustle pays debt.", author: "Daymond John (adapted)" },
-  { text: "We built BET from nothing because no one else was going to do it for us.", author: "Bob Johnson, BET founder (adapted)" },
-  { text: "Oprah's first business lesson: own it. Your story, your brand, your financial future.", author: "Oprah Winfrey (adapted)" },
   { text: "The big secret in life is that there is no big secret. Whatever your goal, you can get there if you're willing to work.", author: "Oprah Winfrey" },
-  { text: "Real integrity is doing the right thing — especially with your money — when nobody's watching.", author: "Oprah Winfrey (adapted)" },
   { text: "I had to make my own living and my own opportunity. But I made it.", author: "Madam C.J. Walker" },
-  { text: "Magic Johnson didn't just play the game — he bought the arena. Own the outcome.", author: "Magic Johnson (adapted)" },
-  { text: "I learned early: you have to control the deal or the deal controls you.", author: "Jay-Z / Shawn Carter (adapted)" },
-  { text: "I'm not a businessman. I'm a business, man. Your debt? That's just overhead.", author: "Jay-Z (adapted)" },
 
   // Mathematicians & scientists with diverse abilities
   { text: "A mathematician, like a painter or poet, is a maker of patterns.", author: "G.H. Hardy" },
@@ -933,49 +687,14 @@ export const QUOTES = [
   // Sam Presti & OKC Thunder
   { text: "You control what you control. Everything else is noise.", author: "Sam Presti" },
   { text: "The Thunder is built on draft picks and long-term vision, not shortcuts.", author: "Sam Presti" },
-  { text: "In the NBA, as in debt, compounding matters more than the headline move.", author: "Sam Presti (adapted)" },
-  { text: "The best trade is the one you don't make. The best debt is the one you don't take.", author: "Sam Presti (adapted)" },
 
   // Tulsa, Greenwood, Black Wall Street
   { text: "Greenwood Avenue had the highest concentration of Black-owned businesses in America. They rebuilt it twice.", author: "Black Wall Street History" },
-  { text: "Wealth is the work you do long-term. Not the money you borrowed short-term.", author: "Greenwood Principle (adapted)" },
   { text: "What was burned down in 1921 was rebuilt. Debt is the same — you break free by breaking even.", author: "Tulsa Resilience" },
   { text: "The money you don't owe is the freedom they can't take from you.", author: "Greenwood Wisdom" },
   { text: "Generational wealth starts with zero debt. Generational freedom starts with refusing the trap.", author: "Black Economics" },
 
-  // It's So Cold in the D — Big Sean
-  { text: "It's so cold in the D. That's why we stay focused on the numbers.", author: "Big Sean, It's So Cold in the D (adapted)" },
-  { text: "I'm from the D, baby. We built it from nothing. You can build a zero balance the same way.", author: "Big Sean (adapted)" },
-  { text: "Haters gonna hate. Debt gonna be paid off anyway.", author: "Big Sean, It's So Cold in the D (adapted)" },
-
-  // Deee-Lite
-  { text: "Groove is in the heart — and freedom is in the balance sheet.", author: "Deee-Lite (adapted)" },
-  { text: "Kilo, you bring the love, bring the love, bring the love — bring financial responsibility.", author: "Deee-Lite (adapted)" },
-  { text: "Lady Miss Kier said: express yourself. Express your debt payoff plan.", author: "Deee-Lite (adapted)" },
-
-  // Weezer Blue Album
-  { text: "Say it ain't so — say you're not carrying unnecessary debt.", author: "Weezer, Buddy Holly (adapted)" },
-  { text: "Undone — like your balance sheet when you pay the last dollar.", author: "Weezer, Undone (adapted)" },
-  { text: "The world has turned and left me here just watching the debt go down, down, down.", author: "Weezer (adapted)" },
-  { text: "I do believe it's true that there's love waiting in the free and clear financial life.", author: "Weezer, Blue Album (adapted)" },
-  { text: "Only in dreams you see what you can be — debt-free is not just a dream.", author: "Weezer (adapted)" },
-
-  // Cibo Matto
-  { text: "Micro-transgressions are the small payments that compound into freedom.", author: "Cibo Matto (adapted)" },
-  { text: "Know your worth. Sugar Water teaches that in every song.", author: "Cibo Matto (adapted)" },
-  { text: "Playful and smart — that's how you approach a spreadsheet.", author: "Cibo Matto (adapted)" },
-
-  // More SGI / Daisaku Ikeda
-  { text: "The moment you decide to change is the moment your debt destiny shifts.", author: "Daisaku Ikeda (adapted)" },
-  { text: "Buddhism teaches: you are not a victim of circumstance. You are the architect. Build freedom.", author: "SGI Principle (adapted)" },
-  { text: "The Buddha nature exists in every balance sheet. Polish it until it shines.", author: "SGI Philosophy (adapted)" },
-  { text: "Human revolution is personal. A payment at a time, a month at a time.", author: "Daisaku Ikeda (adapted)" },
-
-  // Dolores O'Riordan / The Cranberries
-  { text: "Dreams — they're made of the things you own, not the things you owe.", author: "Dolores O'Riordan, The Cranberries (adapted)" },
-  { text: "Zombie — that's how debt makes you feel. Dead inside. Until you pay it off.", author: "The Cranberries, Zombie (adapted)" },
-  { text: "Another head aches, another heart breaks — when you carry debt alone. Find help.", author: "The Cranberries (adapted)" },
-  { text: "Linger — don't let debt linger. Strike hard. Strike fast.", author: "The Cranberries, Linger (adapted)" },
+  // Cranberries
   { text: "Dolores taught us: pain is universal, but so is resilience.", author: "Dolores O'Riordan" },
 
   // Atlanta Black Business Owners & Leaders
@@ -985,57 +704,10 @@ export const QUOTES = [
 
   // Andre 3000 / Outkast
   { text: "I'm a synthesizer of ideas. Synthesize your financial data.", author: "Andre 3000" },
-  { text: "Hey Ya some love — give that much attention to your balance sheet.", author: "Andre 3000, Hey Ya (adapted)" },
   { text: "The way I see it, everything is a system. Master yours.", author: "Andre 3000" },
-  { text: "Art is about iteration. Money is about discipline. Both compound.", author: "Andre 3000 (adapted)" },
-
-  // MIA
-  { text: "Swagger on a hundred. Debt at zero.", author: "MIA (adapted)" },
-  { text: "Paper Planes — track every one of them.", author: "MIA, Paper Planes (adapted)" },
-  { text: "Come closer — to financial clarity, not to spending.", author: "MIA (adapted)" },
-  { text: "Galang — your payment schedule is your gang.", author: "MIA (adapted)" },
-
-  // Erykah Badu
-  { text: "On and on. The debt goes on and on... until you stop it.", author: "Erykah Badu (adapted)" },
-  { text: "I'm a healer. So heal your financial wounds.", author: "Erykah Badu (adapted)" },
-  { text: "Window seat. Look down at your debt from above. You can see the path.", author: "Erykah Badu, Window Seat (adapted)" },
-  { text: "Tyrone: be willing to leave what doesn't serve you. Including debt.", author: "Erykah Badu, Tyrone (adapted)" },
-  { text: "The real is back. Real discipline. Real numbers.", author: "Erykah Badu (adapted)" },
 
   // Gemma Chan
   { text: "Precision is everything. Be precise with your money.", author: "Gemma Chan" },
-  { text: "Humans are looking for connection. Connect with your financial data.", author: "Gemma Chan (adapted)" },
-  { text: "The only thing constant is change. Keep adapting your strategy.", author: "Gemma Chan (adapted)" },
-  { text: "We have all the time in the world — make sure you're not spending it in debt.", author: "Gemma Chan (adapted)" },
-
-  // Brain Age (DS Game)
-  { text: "Train your brain. Master your spreadsheet.", author: "Brain Age, Nintendo DS (adapted)" },
-  { text: "Your brain age is determined by how sharp you are. Keep your numbers sharp.", author: "Brain Age (adapted)" },
-
-  // Tetris
-  { text: "Fit the pieces where they belong. Stack your payments.", author: "Tetris (adapted)" },
-  { text: "Gaps cost you. Fill every gap in your payment plan.", author: "Tetris (adapted)" },
-  { text: "The line clear feels good. So does paying off a loan.", author: "Tetris (adapted)" },
-  { text: "Speed and strategy — that's the game. That's also debt payoff.", author: "Tetris (adapted)" },
-
-  // Chess Prodigies & Masters
-  { text: "You must see the board ten moves ahead. See your debt ten months out.", author: "Bobby Fischer" },
-  { text: "The beauty of a move lies in the thought behind it.", author: "Bobby Fischer" },
-  { text: "I don't believe in psychology. I believe in good moves.", author: "Bobby Fischer (adapted)" },
-  { text: "Patience in the opening, alertness in the middle game, killing blow in the endgame. Sound familiar?", author: "Rudolf Spielmann (adapted for debt)" },
-  { text: "The strongest weapon is one you don't have to use — unless you do. Know your financial position.", author: "Chess Proverb (adapted)" },
-  { text: "Zugzwang: forced to move and every move weakens you. Debt is zugzwang. Break free.", author: "Chess Principle (adapted)" },
-  { text: "A knight's fork is deceptive. So are hidden fees. Know what you're playing against.", author: "Chess Strategy (adapted)" },
-  { text: "Prophylaxis: prevent your opponent's threat before they execute it. Prevent debt before it grows.", author: "Aron Nimzowitsch, Chess Strategy (adapted)" },
-  { text: "Magnus Carlsen plays boring chess because he understands the fundamentals. Master yours.", author: "Magnus Carlsen (adapted)" },
-  { text: "Capablanca said: a master should play like a book. Your debt payoff should be systematic.", author: "José Raúl Capablanca (adapted)" },
-  { text: "The position dictates the move. Your balance sheet dictates your strategy.", author: "Chess Principle (adapted)" },
-  { text: "Endgames are about precision. Convert your advantage into zero balance.", author: "Chess Master (adapted)" },
-  { text: "Control the center of the board. Control the center of your finances.", author: "Chess Fundamentals (adapted)" },
-  { text: "Exchange pieces when you're better. Exchange debt when you're able.", author: "Chess Principle (adapted)" },
-  { text: "The quiet move is often the strongest. The boring payment plan works.", author: "Chess Wisdom (adapted)" },
-  { text: "A passed pawn must be pushed. A payment plan must be followed.", author: "Chess Principle (adapted)" },
-  { text: "Calculate precisely. Don't rely on intuition when money is on the line.", author: "Chess Master (adapted)" },
 
   // Daria Characters
   { text: "Fashion club rule #1: Never let them see you sweat. Financial rule #1: Same.", author: "Quinn Morgendorffer, Daria" },
@@ -1049,14 +721,6 @@ export const QUOTES = [
   { text: "The problem with the rat race is that even if you win, you're still a rat in debt.", author: "Mr. O'Neill, Daria" },
   { text: "Let's visualize a future where we all make our minimum payments on time. Feel that?", author: "Mr. O'Neill, Daria" },
 
-  // Beavis and Butthead
-  { text: "Hehehehe... like, we should pay attention to our interest rates.", author: "Beavis and Butthead (adapted)" },
-  { text: "Like, financial responsibility is cool. Hehehehe.", author: "Beavis, Beavis and Butthead (adapted)" },
-  { text: "Hey, like, this balance sheet is like, actually interesting for once. Uhhhh.", author: "Butthead, Beavis and Butthead (adapted)" },
-  { text: "Dude, like, paying off debt is like the most metal thing you can do. Like, commitment, man.", author: "Butthead, Beavis and Butthead (adapted)" },
-  { text: "Like, I don't know anything about money, but I know debt sucks. Hehehehe.", author: "Beavis, Beavis and Butthead (adapted)" },
-  { text: "This sucks. That sucks. But you know what doesn't suck? A zero balance.", author: "Beavis and Butthead (adapted)" },
-
   // Famous Data Scientists
   { text: "In God we trust. Everyone else must bring data.", author: "William Edwards Deming" },
   { text: "The plural of anecdote is not data — and your gut feeling is definitely not a financial plan.", author: "Roger Branigin (attributed)" },
@@ -1066,105 +730,6 @@ export const QUOTES = [
   { text: "Correlation is not causation, but compound interest is predictable. Trust the math.", author: "Data Analyst (adapted)" },
   { text: "Your data tells a story. Make sure yours is about freedom, not slavery.", author: "Data Science Philosophy" },
   { text: "Bias in data leads to bad outcomes. Bias in your budget does too. Check both.", author: "Data Science Ethics (adapted)" },
-
-  // Tetris Champions
-  { text: "The game doesn't care how you feel. The balance sheet doesn't either. Adapt.", author: "Tetris Champion (adapted)" },
-  { text: "Speed matters, but pattern recognition matters more. Learn your debt patterns.", author: "Tetris Master (adapted)" },
-  { text: "You can't win by moving randomly. You can't pay off debt by ignoring it either.", author: "Tetris Champion (adapted)" },
-  { text: "The goal is not perfection. The goal is to keep the blocks from piling up. Same with debt.", author: "Tetris Strategy (adapted)" },
-  { text: "Falling pieces don't ask for permission. Neither does interest. Stay ahead.", author: "Tetris Champion Philosophy (adapted)" },
-  { text: "High scores come from consistency and focus. So does financial freedom.", author: "Tetris Master (adapted)" },
-  { text: "You win Tetris by knowing when to push and when to hold. Same strategy applies to extra payments.", author: "Tetris Champion (adapted)" },
-  { text: "I once held the world record. The only record that matters now is my zero balance.", author: "Tetris Champion (adapted)" },
-
-  // Paper Boy
-  { text: "Every morning, every route. The paper doesn't deliver itself. Neither do your payments.", author: "Paper Boy (adapted)" },
-  { text: "Hit the target. Avoid the obstacles. Get the payout. Simple system.", author: "Paper Boy (adapted)" },
-  { text: "Paperboy's route is relentless. Your payoff schedule should be too.", author: "Paper Boy (adapted)" },
-  { text: "Accuracy matters. One missed throw costs you. One missed payment costs you more.", author: "Paper Boy (adapted)" },
-  { text: "The customer's door is your target. The zero balance is yours.", author: "Paper Boy (adapted)" },
-
-  // Skate or Die
-  { text: "You have to commit to the trick. You have to commit to the plan.", author: "Skate or Die (adapted)" },
-  { text: "Skate or die — keep moving or the system crushes you.", author: "Skate or Die (adapted)" },
-  { text: "Bail hard, get back up, roll again. That's the skateboard philosophy and the debt payoff philosophy.", author: "Skate or Die (adapted)" },
-  { text: "The concrete doesn't care if you're scared. Neither does compound interest. Go.", author: "Skate or Die (adapted)" },
-  { text: "Street skating teaches you: the edge is where freedom lives. Own it.", author: "Skate or Die (adapted)" },
-  { text: "Half-pipe, pool, street — every terrain demands respect. So does your balance sheet.", author: "Skate or Die (adapted)" },
-  { text: "Speed and style aren't opposed. Aggressive payoff and strategic living aren't either.", author: "Skate or Die (adapted)" },
-
-  // Video Game Designers & Arcade Champions
-  { text: "Shigeru Miyamoto designed worlds where rules could be broken. Design a life where debt cannot.", author: "Shigeru Miyamoto, Nintendo (adapted)" },
-  { text: "I want to create something that nobody had seen before — that's what your financial freedom should be.", author: "Shigeru Miyamoto (adapted)" },
-  { text: "A game is not finished until someone says it's finished. A debt is not finished until it's zero.", author: "Shigeru Miyamoto (adapted)" },
-  { text: "Super Mario didn't reach the princess by taking shortcuts. Neither will you.", author: "Video Game Logic (adapted)" },
-  { text: "Pac-Man runs forever, but he's always working toward something. Purpose.", author: "Pac-Man (adapted)" },
-  { text: "Donkey Kong's barrels keep coming. You keep climbing. That's persistence.", author: "Donkey Kong (adapted)" },
-  { text: "Zelda taught us: the treasure is real if you're willing to look for it.", author: "The Legend of Zelda (adapted)" },
-  { text: "Link doesn't complain about the dungeons. He maps them and solves them.", author: "The Legend of Zelda (adapted)" },
-  { text: "Mega Man fights eight bosses in any order you choose. Choose your debt order wisely.", author: "Mega Man (adapted)" },
-  { text: "Street Fighter taught us: read your opponent. Read your loan terms.", author: "Street Fighter (adapted)" },
-  { text: "Mortal Kombat players trained for years. Train for your financial freedom.", author: "Mortal Kombat (adapted)" },
-  { text: "Billy Mitchell held the Donkey Kong record for years because he didn't quit. You won't quit either.", author: "Billy Mitchell, Arcade Champion (adapted)" },
-  { text: "Twin Galaxies documented every high score like sacred records. Document your financial records the same way.", author: "Twin Galaxies, Video Game History (adapted)" },
-  { text: "Video game speedrunners find routes no one else sees. Find your route to zero debt.", author: "Speedrunning Culture (adapted)" },
-  { text: "The speedrun community optimizes everything, skips filler, gets to the goal. Apply that to money.", author: "Speedrunning Philosophy (adapted)" },
-  { text: "Starcraft pros trained like professional athletes. Treat your money like an esport.", author: "Starcraft Esports (adapted)" },
-  { text: "The Sega Genesis was the underdog that challenged Nintendo. Debt is the giant you're challenging.", author: "Sega vs. Nintendo (adapted)" },
-  { text: "Sega's strategy: be different, be fast, be better. Your financial strategy should mirror it.", author: "Sega (1990s) (adapted)" },
-  { text: "Game Boy had worse graphics but won with better systems thinking. Think like Game Boy.", author: "Nintendo Game Boy (adapted)" },
-  { text: "Final Fantasy games span 100+ hours. Your debt payoff is a marathon, not a sprint.", author: "Final Fantasy (adapted)" },
-  { text: "Dragon Quest taught us: quests matter more than the destination.", author: "Dragon Quest (adapted)" },
-  { text: "Sonic was fast because speed was the whole point. Make progress your whole point.", author: "Sonic (adapted)" },
-  { text: "Castlevania didn't get easier. It got more interesting. So will your payoff.", author: "Castlevania (adapted)" },
-  { text: "Contra demanded memorization and timing. Debt requires the same.", author: "Contra (adapted)" },
-  { text: "Gradius taught us: adapt your loadout to each stage. Adapt your strategy to each loan.", author: "Gradius (adapted)" },
-  { text: "Metroid taught us: explore, find power-ups, become stronger. That's debt payoff.", author: "Metroid (adapted)" },
-  { text: "Mario Kart: sometimes luck matters, but skill always wins long-term.", author: "Mario Kart (adapted)" },
-  { text: "Kirby's power is absorption. Absorb knowledge about your money.", author: "Kirby (adapted)" },
-  { text: "Earthbound: weird, unconventional paths can win. Your payoff doesn't have to look standard.", author: "Earthbound (adapted)" },
-  { text: "Fire Emblem: permadeath means every choice matters. Every financial choice matters.", author: "Fire Emblem (adapted)" },
-  { text: "Civilization: build slowly, play the long game, win through systems.", author: "Civilization (adapted)" },
-  { text: "The Sims: small daily habits compound into entire lives. Good or bad.", author: "The Sims (adapted)" },
-  { text: "Tony Hawk's Pro Skater had a simple rule: commit or bail. Commit to your plan.", author: "Tony Hawk's Pro Skater (adapted)" },
-  { text: "GoldenEye proved FPS didn't need mouse and keyboard. Debt doesn't need to feel impossible either.", author: "GoldenEye (adapted)" },
-  { text: "Perfect Dark went deeper than its predecessor. Go deeper into your debt strategy.", author: "Perfect Dark (adapted)" },
-  { text: "Mega Man: boss defeats teach pattern recognition. Your loan patterns are readable.", author: "Mega Man (adapted)" },
-  { text: "Battletoads: brutal but fair. Learn the patterns, beat the stage. Same with debt.", author: "Battletoads (adapted)" },
-
-  // Retro Game Wisdom (80s-90s Arcade/Console)
-  { text: "Insert coin. Play. Earn. That's the arcade contract. Same as your payoff: invest time, earn freedom.", author: "Arcade Culture (adapted)" },
-  { text: "High score table — someone always has the record. Make zero debt your record.", author: "Arcade Wisdom (adapted)" },
-  { text: "Game Over — but only if you quit. Keep playing until you win.", author: "Arcade Philosophy (adapted)" },
-  { text: "Quarters in the arcade, dollars on the plan. Both teach you: each action counts.", author: "Arcade Economics (adapted)" },
-  { text: "The machine doesn't get tired. Interest doesn't either. You have to outlast it.", author: "Arcade Lesson (adapted)" },
-  { text: "Frogger: cross the road, avoid obstacles, reach the goal. Simple. Repeatable. Debt payoff.", author: "Frogger (adapted)" },
-  { text: "Space Invaders: they descend faster and faster. So does compound interest. Stay ahead.", author: "Space Invaders (adapted)" },
-  { text: "Asteroids: break big rocks into smaller ones. Break large debts into manageable payments.", author: "Asteroids (adapted)" },
-  { text: "Galaga: you're outnumbered but you can win if you're precise. Same odds as debt payoff.", author: "Galaga (adapted)" },
-  { text: "Defender: protect what matters. Your money matters. Protect it.", author: "Defender (adapted)" },
-  { text: "Ms. Pac-Man: navigate the maze, collect the dots, avoid capture. Your budget is a maze. Navigate it.", author: "Ms. Pac-Man (adapted)" },
-  { text: "Dig Dug: dig strategically, avoid traps, reach the goal. Your payoff is a strategic dig.", author: "Dig Dug (adapted)" },
-  { text: "Centipede: eliminate the threat from the top. Eliminate your highest-interest debt first.", author: "Centipede (adapted)" },
-  { text: "Missile Command: defend your base. Defend your financial foundation.", author: "Missile Command (adapted)" },
-  { text: "Breakout: hit the ball, break the blocks, clear the board. Hit your debt, break the balance down.", author: "Breakout (adapted)" },
-  { text: "Pong: simple, relentless, endless. So is compound interest. But you control the paddle.", author: "Pong (adapted)" },
-  { text: "Snake: grow longer with every food, but don't hit yourself. Grow your payoff without hitting yourself.", author: "Snake (adapted)" },
-  { text: "The maze is fixed, the rules are constant. Know the rules of your debt.", author: "Arcade Lesson (adapted)" },
-  { text: "Pinball: momentum is key, precision is everything, tilt is your enemy. That's also your payoff.", author: "Pinball (adapted)" },
-  { text: "Play long enough, play smart enough, and you earn. Play your money smart.", author: "Arcade Wisdom (adapted)" },
-  { text: "Atari 2600: primitive by today's standards, but people spent hours mastering it. Master your budget.", author: "Atari 2600 (adapted)" },
-  { text: "Commodore 64: 64KB of memory, infinite possibility if you understood the system. You have infinite possibility.", author: "Commodore 64 (adapted)" },
-  { text: "NES blew up the industry because Nintendo made great games. Make great financial decisions.", author: "Nintendo Entertainment System (adapted)" },
-  { text: "SNES: 16-bit graphics changed everything. 16-bit discipline changes everything about debt.", author: "Super Nintendo (adapted)" },
-  { text: "Sega Genesis: 'Genesis does what Nintendon't.' Your payoff does what minimum payments don't.", author: "Sega Genesis (adapted)" },
-  { text: "Game Boy: black and green screen, no color, but it lasted forever. Durability over flash.", author: "Game Boy (adapted)" },
-  { text: "ROM cartridges: you owned the game, not licensed it. Own your financial future.", author: "Game Cartridge (adapted)" },
-  { text: "Blowing into the cartridge worked sometimes. But systems thinking works better.", author: "Retro Gaming (adapted)" },
-  { text: "The NES had a red light of death. Your debt has a red flag. Address it.", author: "NES (adapted)" },
-  { text: "Cheat codes existed, but beating the game legit felt better. Beat your debt legit.", author: "Cheat Codes (adapted)" },
-  { text: "Arcades had quarters sunk into them. Your loans have dollars. Treat them with respect.", author: "Quarter vs. Dollar (adapted)" },
-  { text: "The arcade was the first infinite game. Compound interest is the second. You break the loop.", author: "Arcade Philosophy (adapted)" },
 ];
 
 // Fisher-Yates shuffle so quotes never repeat in the same order

@@ -1,7 +1,9 @@
 // Carry the Zero — Compound Curve Widget
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/lib/loanCalculations';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playFieldTone } from '@/lib/orchestraSound';
 
 /**
  * Systems-thinking widget: shows how current payment pace bends the compounding curve.
@@ -33,6 +35,8 @@ function buildAreaPath(curvePath, width, height) {
 export default function CompoundCurveWidget({ loans, schedule, minimumSchedule }) {
   const W = 420;
   const H = 120;
+  const { enabled } = useAmbientSoundContext();
+  const lastScrubRef = useRef(0);
 
   // Build a "nudge" scenario: same loans but +$100 extra — simulated inline
   const nudgeSchedule = useMemo(() => {
@@ -122,8 +126,19 @@ export default function CompoundCurveWidget({ loans, schedule, minimumSchedule }
         </div>
       </div>
 
-      {/* SVG curve art */}
-      <div className="relative mb-5 overflow-hidden rounded-lg" style={{ background: 'hsl(260,18%,7%)' }}>
+      {/* SVG curve art — scrub left→right to "read" the trajectory as a slow music-box */}
+      <div
+        className="relative mb-5 overflow-hidden rounded-lg cursor-crosshair"
+        style={{ background: 'hsl(260,18%,7%)' }}
+        onMouseMove={(e) => {
+          const now = performance.now();
+          if (now - lastScrubRef.current < 140) return;
+          lastScrubRef.current = now;
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;
+          playFieldTone(Math.round(Math.max(0, Math.min(1, x)) * 7), enabled, 1.8);
+        }}
+      >
         <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="w-full" style={{ height: 140 }}>
           <defs>
             <linearGradient id="ccw-cur" x1="0" y1="0" x2="0" y2="1">

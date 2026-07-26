@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
-import { getAllActiveQuotes } from '@/lib/quoteStore';
-import { Sparkles, BookOpen } from 'lucide-react';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playDataBloom, playFieldBass } from '@/lib/orchestraSound';
 
 // Obsidian / Notion editorial style — each panel is a clean, typographic data story
 
@@ -187,47 +187,6 @@ function StoryPanel({ totalDebt, interestSaved, months }) {
   );
 }
 
-// Obsidian callout quote panel — matches QuoteBar style exactly
-function CalloutQuotePanel({ quote }) {
-  if (!quote) return null;
-  // Greenwood quotes get a warm amber accent; others get primary purple
-  const isGreenwood = quote.author?.includes('Greenwood') || quote.author?.includes('Black Wall Street') ||
-    quote.author?.includes('Gurley') || quote.author?.includes('Stradford') || quote.author?.includes('Mabel Little') ||
-    quote.author?.includes('A.C. Jackson');
-  const accentColor = isGreenwood ? 'hsl(38,90%,55%)' : 'hsl(258,80%,68%)';
-  const labelText = isGreenwood ? 'greenwood / black wall street' : 'from the library';
-
-  return (
-    <div className="flex flex-col justify-center h-full py-1">
-      <div className="relative rounded-xl border overflow-hidden"
-        style={{ borderColor: `${accentColor}30`, background: `${accentColor}06` }}>
-        {/* Left callout accent */}
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl"
-          style={{ background: `linear-gradient(to bottom, ${accentColor}80, ${accentColor}20)` }} />
-        <div className="pl-5 pr-4 py-4">
-          <div className="flex items-start gap-2.5">
-            {isGreenwood
-              ? <BookOpen className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: accentColor }} />
-              : <Sparkles className="w-3.5 h-3.5 mt-0.5 shrink-0 animate-pulse-glow" style={{ color: accentColor }} />
-            }
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: accentColor, opacity: 0.7 }}>
-                {labelText}
-              </p>
-              <p className="text-sm font-display italic leading-relaxed" style={{ color: 'hsl(240,10%,88%)', opacity: 0.9 }}>
-                "{quote.text}"
-              </p>
-              <p className="text-[11px] font-mono text-muted-foreground mt-2">
-                — {quote.author}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // Debt Story panel — each loan linked to a narrative sentence
 function DebtStoryPanel({ loans }) {
   if (!loans?.length) return null;
@@ -284,24 +243,39 @@ function DebtStoryPanel({ loans }) {
   );
 }
 
-const PANELS = ['story', 'debtstory', 'zero', 'compound', 'grid', 'time', 'quote'];
+const PANELS = ['story', 'debtstory', 'zero', 'compound', 'grid', 'time'];
+
+// Dense panels get more dwell time so readers can finish; simple ones move sooner
+const PANEL_DURATIONS = {
+  story: 14000,
+  debtstory: 14000,
+  zero: 9000,
+  compound: 9000,
+  grid: 8000,
+  time: 8000,
+};
 
 export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved, months, loans }) {
   const [panelIndex, setPanelIndex] = useState(0);
-  const [activeQuotes] = useState(() => getAllActiveQuotes());
-  const [quoteIdx, setQuoteIdx] = useState(0);
   const paidOff = (totalOriginal || totalDebt) - totalDebt;
+  const { enabled } = useAmbientSoundContext();
+
+  // Each panel reveal exhales a slow therapeutic chord — deep, layered, never loops.
+  // A little Endel-style bass pulses under every story beat; deeper on the
+  // contemplative narrative panels (the Tetris-Effect heartbeat of the dashboard).
+  useEffect(() => {
+    const panel = PANELS[panelIndex];
+    playDataBloom(panelIndex / Math.max(1, PANELS.length - 1), enabled);
+    playFieldBass(enabled, panel === 'story' || panel === 'debtstory' ? 0.6 : 0.3);
+  }, [panelIndex, enabled]);
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setPanelIndex(p => {
-        const next = (p + 1) % PANELS.length;
-        if (PANELS[next] === 'quote') setQuoteIdx(q => (q + 1) % Math.max(1, activeQuotes.length));
-        return next;
-      });
-    }, 10000);
-    return () => clearInterval(t);
-  }, [activeQuotes.length]);
+    const dur = PANEL_DURATIONS[PANELS[panelIndex]] || 10000;
+    const t = setTimeout(() => {
+      setPanelIndex(p => (p + 1) % PANELS.length);
+    }, dur);
+    return () => clearTimeout(t);
+  }, [panelIndex]);
 
   const panel = PANELS[panelIndex];
 
@@ -341,7 +315,6 @@ export default function VisualizeValue({ totalDebt, totalOriginal, interestSaved
           {panel === 'zero'     && <ZeroPanel totalDebt={totalOriginal || totalDebt} paidOff={paidOff} />}
           {panel === 'grid'     && <GridPanel interestSaved={interestSaved} months={months} />}
           {panel === 'time'     && <TimePanel months={months} />}
-          {panel === 'quote'   && <CalloutQuotePanel quote={activeQuotes[quoteIdx]} />}
           {panel === 'debtstory' && <DebtStoryPanel loans={loans} />}
         </motion.div>
       </AnimatePresence>

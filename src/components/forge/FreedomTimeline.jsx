@@ -1,8 +1,43 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playFieldTone } from '@/lib/orchestraSound';
+
+let ftLastToneAt = 0;
+function FreedomTooltip({ active, payload, label, enabled }) {
+  if (!active || !payload?.length) return null;
+  const bal = payload.find(p => p.dataKey === 'balance');
+  const prog = payload.find(p => p.dataKey === 'progress');
+
+  if (enabled && prog) {
+    const now = performance.now();
+    if (now - ftLastToneAt > 200) {
+      ftLastToneAt = now;
+      playFieldTone(Math.round(Math.max(0, Math.min(1, prog.value / 100)) * 7), enabled, 1.7);
+    }
+  }
+
+  return (
+    <div style={{
+      background: 'hsl(260, 18%, 10%)',
+      border: '1px solid hsl(258, 80%, 68%, 0.3)',
+      borderRadius: '6px',
+      boxShadow: '0 0 12px hsl(258, 80%, 68%, 0.2)',
+      padding: '6px 10px',
+      fontFamily: 'monospace',
+      fontSize: '11px',
+      color: 'hsl(240, 10%, 88%)',
+    }}>
+      <div style={{ marginBottom: 4 }}>{label}</div>
+      {bal && <div style={{ color: 'hsl(270, 80%, 65%)' }}>Balance: ${(bal.value / 1000).toFixed(1)}k</div>}
+      {prog && <div style={{ color: 'hsl(100, 70%, 50%)' }}>Progress: {prog.value.toFixed(1)}%</div>}
+    </div>
+  );
+}
 
 export default function FreedomTimeline({ schedule, months }) {
+  const { enabled } = useAmbientSoundContext();
   // Build a timeline from now to payoff with milestone markers
   const today = new Date();
   const payoffDate = new Date(today.getFullYear(), today.getMonth() + months, 1);
@@ -129,19 +164,7 @@ export default function FreedomTimeline({ schedule, months }) {
             tickFormatter={(v) => `${v}%`}
             width={40}
           />
-          <Tooltip
-            contentStyle={{
-              background: 'hsl(260, 18%, 10%)',
-              border: '1px solid hsl(258, 80%, 68%, 0.3)',
-              borderRadius: '6px',
-              boxShadow: '0 0 12px hsl(258, 80%, 68%, 0.2)',
-            }}
-            labelStyle={{ color: 'hsl(240, 10%, 88%)', fontFamily: 'monospace', fontSize: '11px' }}
-            formatter={(value, name) => [
-              name === 'balance' ? `$${(value / 1000).toFixed(1)}k` : `${value.toFixed(1)}%`,
-              name === 'balance' ? 'Balance' : 'Progress'
-            ]}
-          />
+          <Tooltip content={<FreedomTooltip enabled={enabled} />} />
           <Line
             yAxisId="left"
             type="natural"

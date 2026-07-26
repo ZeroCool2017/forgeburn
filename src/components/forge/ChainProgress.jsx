@@ -4,13 +4,14 @@ import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanC
 import { dueStatus, formatDueDate } from '@/lib/dueDates';
 import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
-import { playElectroplantonTone } from '@/lib/musicalInterface';
+import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
+import { playFieldTone } from '@/lib/orchestraSound';
 import DebtStoryAdventure from './DebtStoryAdventure';
 import EditLoanDialog from './EditLoanDialog';
 import MoneyStorySession from './MoneyStorySession';
 
 // Dot-grid canvas that draws the payoff connection line from current balance → zero
-function PayoffCanvas({ progress, color }) {
+function PayoffCanvas({ progress, color, onResonate }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -90,7 +91,8 @@ function PayoffCanvas({ progress, color }) {
       ref={canvasRef}
       width={280}
       height={52}
-      className="w-full rounded-sm"
+      onClick={onResonate}
+      className="w-full rounded-sm cursor-pointer"
       style={{ display: 'block' }}
     />
   );
@@ -117,6 +119,8 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const stopDraggingRef = useRef(null);
   const noteIdRef = useRef(0);
   const { playStrike } = useForgeSound();
+  const { enabled } = useAmbientSoundContext();
+  const pitchIndex = Math.round(progress * 7);
   const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
   const paymentDue = dueStatus(loan);
   const dueTone = paymentDue.tone === 'danger'
@@ -139,7 +143,8 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
     if (lastPlayedRef.current === linkIndex) return;
     lastPlayedRef.current = linkIndex;
     const normalized = linkIndex / (links - 1);
-    playElectroplantonTone(normalized, 0.55);
+    // Lush field voice — soft, varied, deep; fits the orchestra instead of a bright pluck
+    playFieldTone(Math.round(normalized * 7), true, 1.6);
     setLitLinks(prev => { const s = new Set(prev); s.add(linkIndex); return s; });
     setTimeout(() => setLitLinks(prev => { const s = new Set(prev); s.delete(linkIndex); return s; }), 300);
     spawnNote(linkIndex, x, y);
@@ -281,7 +286,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
 
       {/* Dot-grid canvas — balance → zero connection line */}
       <div className="mb-3 rounded-lg overflow-hidden border border-border/20 bg-background/30">
-        <PayoffCanvas progress={progress} color={cat.color} />
+        <PayoffCanvas progress={progress} color={cat.color} onResonate={() => playFieldTone(pitchIndex, enabled, 2.2)} />
       </div>
 
       {/* Payoff date estimate */}
