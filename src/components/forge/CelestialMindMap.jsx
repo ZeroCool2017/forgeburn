@@ -175,18 +175,22 @@ export default function CelestialMindMap({ loans }) {
     const microParticles = loans.flatMap((loan, idx) => 
       Array.from({ length: 3 + Math.floor(Math.random() * 2) }).map((_, i) => {
         const angle = Math.random() * Math.PI * 2;
-        const radius = 25 + Math.random() * 45;
+        const radius = 22 + Math.random() * 24; // orbital distance
         const category = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
         return {
           id: `micro-${loan.id}-${i}`,
+          parentLoanId: `loan-${loan.id}`,
           type: 'micro',
           x: CX + radius * Math.cos(angle),
           y: CY + radius * Math.sin(angle),
-          vx: (Math.random() - 0.5) * 0.1,
-          vy: (Math.random() - 0.5) * 0.1,
+          vx: 0,
+          vy: 0,
+          angle: angle,
+          orbitRadius: radius,
+          orbitSpeed: (0.002 + Math.random() * 0.003) * (Math.random() > 0.5 ? 1 : -1), // slow, soothing orbit
           color: category.color,
           growth: 0.1 + Math.random() * 0.2,
-          baseRadius: 1.5 + Math.random() * 1.5,
+          baseRadius: 1.0 + Math.random() * 0.8,
         };
       })
     );
@@ -250,6 +254,17 @@ export default function CelestialMindMap({ loans }) {
       state.forEach(p => {
         if (dragIdRef.current === p.id) return;
         
+        if (p.type === 'micro') {
+          // Micro-particles orbit smoothly around their parent loans (swirling Saturn rings)
+          const parent = state.find(parent => parent.id === p.parentLoanId);
+          if (parent) {
+            p.angle += p.orbitSpeed;
+            p.x = parent.x + Math.cos(p.angle) * p.orbitRadius;
+            p.y = parent.y + Math.sin(p.angle) * p.orbitRadius;
+          }
+          return;
+        }
+
         // Soft gravity pull to center (sluggish and gentle)
         const toCenterX = CX - p.x;
         const toCenterY = CY - p.y;
@@ -383,11 +398,13 @@ export default function CelestialMindMap({ loans }) {
         ctx.arc(anchorX, anchorY, radius * 0.45, 0, Math.PI * 2);
         ctx.fill();
         
-        // Icon centered
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
-        ctx.font = '10px sans-serif';
+        // Clean high-contrast vector letter centered in the box (Jack Butcher style)
+        const label = (anchor.name || 'A')[0].toUpperCase();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.font = 'bold 10px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(anchor.emoji || '⚓', anchorX, anchorY - 6);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, anchorX, anchorY - 2);
         ctx.restore();
 
         // Calculate proximity of particles to each anchor
@@ -596,7 +613,7 @@ export default function CelestialMindMap({ loans }) {
           onPointerUp={handlePointerEnd}
           onPointerCancel={handlePointerEnd}
           onPointerLeave={handlePointerEnd}
-          style={{ display: 'block', width: '100%', height: 'auto', touchAction: 'none', cursor: isDragging ? 'grabbing' : 'grab' }}
+          style={{ display: 'block', width: '100%', height: 'auto', touchAction: 'none', cursor: isDragging ? 'pointer' : 'default' }}
           aria-label="Interactive living financial mind map. Drag debt and spending pattern bubbles."
         />
         {selectedNode && (

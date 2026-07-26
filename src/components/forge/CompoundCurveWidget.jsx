@@ -128,7 +128,7 @@ export default function CompoundCurveWidget({ loans, schedule, minimumSchedule }
 
       {/* SVG curve art — scrub left→right to "read" the trajectory as a slow music-box */}
       <div
-        className="relative mb-5 overflow-hidden rounded-lg cursor-crosshair"
+        className="relative mb-5 overflow-hidden rounded-lg cursor-pointer"
         style={{ background: 'hsl(260,18%,7%)' }}
         onMouseMove={(e) => {
           const now = performance.now();
