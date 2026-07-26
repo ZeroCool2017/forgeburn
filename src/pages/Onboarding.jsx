@@ -80,6 +80,31 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const { refreshUser } = useAuth();
 
+  const handleYOLOSkip = async () => {
+    setIsLoading(true);
+    try {
+      const demoAnswers = {
+        name: 'Lindsey',
+        biggest_fear: 'not being in control of my time',
+        freedom_looks_like: 'absolute creative autonomy and peace of mind',
+        admire_who: 'pioneering artists and free thinkers',
+        hobbies_passions: 'sound synthesis, design, and interactive coding',
+        songs_that_move: 'Aphex Twin - Stone in Focus',
+        small_win: 'getting this beautiful dashboard unblocked and live',
+        dream_impossible: 'build a self-sustaining eco-sound art park'
+      };
+      await base44.auth.updateMe({
+        personalization: JSON.stringify(demoAnswers),
+      });
+      await refreshUser();
+      navigate('/');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const currentQuestion = QUESTIONS[step];
   const progress = ((step + 1) / QUESTIONS.length) * 100;
 
@@ -210,6 +235,14 @@ export default function Onboarding() {
               >
                 ← BACK
               </button>
+
+              <button
+                onClick={handleYOLOSkip}
+                className="text-[10px] font-mono text-primary/60 hover:text-primary hover:underline transition-colors"
+              >
+                ⚡ YOLO SKIP & LOAD DEMO DATA
+              </button>
+
               <Button
                 onClick={handleNext}
                 disabled={!answers[currentQuestion.id]}
