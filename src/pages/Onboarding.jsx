@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
+import { db } from '@/lib/localDB';
 
 const QUESTIONS = [
   {
@@ -93,9 +94,66 @@ export default function Onboarding() {
         small_win: 'getting this beautiful dashboard unblocked and live',
         dream_impossible: 'build a self-sustaining eco-sound art park'
       };
+      
       await base44.auth.updateMe({
         personalization: JSON.stringify(demoAnswers),
       });
+
+      // Clear any empty state and seed high-quality test data
+      await db.loans.clear();
+      await db.spending_habits.clear();
+
+      await base44.entities.Loan.create({
+        name: 'Credit Card',
+        category: 'credit_card',
+        current_balance: 4200,
+        original_balance: 8000,
+        interest_rate: 18.9,
+        monthly_payment: 150
+      });
+
+      await base44.entities.Loan.create({
+        name: 'Tesla Auto Loan',
+        category: 'auto_loan',
+        current_balance: 14500,
+        original_balance: 22000,
+        interest_rate: 4.5,
+        monthly_payment: 380
+      });
+
+      await base44.entities.Loan.create({
+        name: 'Federal Student Loan',
+        category: 'student_loan',
+        current_balance: 28000,
+        original_balance: 35000,
+        interest_rate: 5.8,
+        monthly_payment: 290
+      });
+
+      await base44.entities.SpendingHabit.create({
+        name: 'Daily Matcha Latte',
+        emoji: '🍵',
+        monthly_average: 120,
+        pattern: 'luxury',
+        category: 'other'
+      });
+
+      await base44.entities.SpendingHabit.create({
+        name: 'Weekend Fine Dining',
+        emoji: '🍣',
+        monthly_average: 240,
+        pattern: 'luxury',
+        category: 'other'
+      });
+
+      await base44.entities.SpendingHabit.create({
+        name: 'Streaming Subscriptions',
+        emoji: '📺',
+        monthly_average: 60,
+        pattern: 'fixed',
+        category: 'credit_card'
+      });
+
       await refreshUser();
       navigate('/');
     } catch (e) {
