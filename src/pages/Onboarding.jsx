@@ -109,7 +109,7 @@ export default function Onboarding() {
         current_balance: 4200,
         original_balance: 8000,
         interest_rate: 18.9,
-        monthly_payment: 150
+        minimum_payment: 150
       });
 
       await base44.entities.Loan.create({
@@ -118,7 +118,7 @@ export default function Onboarding() {
         current_balance: 14500,
         original_balance: 22000,
         interest_rate: 4.5,
-        monthly_payment: 380
+        minimum_payment: 380
       });
 
       await base44.entities.Loan.create({
@@ -127,7 +127,7 @@ export default function Onboarding() {
         current_balance: 28000,
         original_balance: 35000,
         interest_rate: 5.8,
-        monthly_payment: 290
+        minimum_payment: 290
       });
 
       await base44.entities.SpendingHabit.create({
