@@ -21,16 +21,13 @@ function influenceScore(habit, loan, totalBalance) {
   const balanceShare = (Math.max(0, Number(loan.current_balance) || 0) / Math.max(totalBalance, 1));
   const rate = Math.max(0, Number(loan.interest_rate) || 0);
   const monthly = Math.max(0, Number(habit.monthly_average) || 0);
-  // Category fit is strongest; balance share, APR, and monthly cost keep the
-  // heuristic from hiding large/high-interest debts behind tiny balances.
   return (sameCategory ? 4 : 1) + balanceShare * 2 + rate / 25 + monthly / 1000;
 }
 
 /**
- * The living map is a small financial system, not a random particle field.
- * Large nodes are debts. Small nodes are spending patterns. Dashed edges show
- * the strongest calculated habit-to-debt influence, while motion keeps the
- * system alive without changing the meaning of the data.
+ * Living Mind Map — Momentum Field
+ * Blends the original high-fidelity neural network of loans, habits, and floating micro-particles
+ * with tactile Electroplankton wiggling tails, expanding ripples, and vertical pitch-mapped chimes.
  */
 export default function CelestialMindMap({ loans }) {
   const { data: habits = [] } = useQuery({
@@ -49,6 +46,7 @@ export default function CelestialMindMap({ loans }) {
   const [particles, setParticles] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
 
+  // Initialize nodes (loans, habits, and floating micro-particles) to match the style before
   useEffect(() => {
     if (!loans.length) {
       setParticles([]);
@@ -57,9 +55,11 @@ export default function CelestialMindMap({ loans }) {
     }
 
     const totalBalance = loans.reduce((sum, loan) => sum + Math.max(0, Number(loan.current_balance) || 0), 0);
+    
+    // 1. Debt nodes (loans)
     const loanParticles = loans.map((loan, index) => {
       const angle = (index / Math.max(1, loans.length)) * Math.PI * 2 - Math.PI / 2;
-      const radius = Math.min(78, 34 + loans.length * 5);
+      const radius = 40 + loans.length * 4;
       const category = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
       return {
         id: `loan-${loan.id}`,
@@ -67,20 +67,23 @@ export default function CelestialMindMap({ loans }) {
         type: 'loan',
         x: CX + Math.cos(angle) * radius,
         y: CY + Math.sin(angle) * radius,
-        vx: 0,
-        vy: 0,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
         balance: Number(loan.current_balance) || 0,
         original: Math.max(1, Number(loan.original_balance) || Number(loan.current_balance) || 1),
         name: loan.name,
         color: category.color,
         category: loan.category,
+        growth: 0.5 + Math.random() * 0.5,
+        baseRadius: 10 + Math.random() * 4,
         influences: [],
       };
     });
 
+    // 2. Spending habit nodes (organisms)
     const habitParticles = habits.map((habit, index) => {
-      const angle = (index / Math.max(1, habits.length)) * Math.PI * 2 + Math.PI / 6;
-      const radius = Math.min(158, 122 + habits.length * 3);
+      const angle = (index / Math.max(1, habits.length)) * Math.PI * 2 + Math.PI / 4;
+      const radius = 135 + habits.length * 2;
       const category = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.other;
       const rankedLoans = [...loans]
         .sort((a, b) => influenceScore(habit, b, totalBalance) - influenceScore(habit, a, totalBalance))
@@ -91,22 +94,45 @@ export default function CelestialMindMap({ loans }) {
         type: 'habit',
         x: CX + Math.cos(angle) * radius,
         y: CY + Math.sin(angle) * radius,
-        vx: 0,
-        vy: 0,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
         name: habit.name,
         color: habit.color || category.color,
         category: habit.category,
         monthly: Number(habit.monthly_average) || 0,
+        growth: 0.2 + Math.random() * 0.3,
+        baseRadius: 6 + Math.random() * 3,
         influences: rankedLoans.map(loan => loan.id),
       };
     });
 
-    const next = [...loanParticles, ...habitParticles];
+    // 3. Visual dust micro-particles clustered around debts to bring back the rich design style before
+    const microParticles = loans.flatMap((loan, idx) => 
+      Array.from({ length: 3 + Math.floor(Math.random() * 2) }).map((_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 25 + Math.random() * 45;
+        const category = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
+        return {
+          id: `micro-${loan.id}-${i}`,
+          type: 'micro',
+          x: CX + radius * Math.cos(angle),
+          y: CY + radius * Math.sin(angle),
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          color: category.color,
+          growth: 0.1 + Math.random() * 0.2,
+          baseRadius: 1.5 + Math.random() * 2.0,
+        };
+      })
+    );
+
+    const next = [...loanParticles, ...habitParticles, ...microParticles];
     particleStateRef.current = next;
     setParticles(next);
     return undefined;
   }, [loans, habits]);
 
+  // Main high fidelity render & physics animation loop
   useEffect(() => {
     if (!canvasRef.current || !particles.length) return undefined;
     const canvas = canvasRef.current;
@@ -121,6 +147,8 @@ export default function CelestialMindMap({ loans }) {
       const ctx = canvas.getContext('2d');
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
+      
+      // Draw grid dots
       ctx.fillStyle = 'rgba(140, 100, 240, 0.025)';
       for (let x = 24; x < W; x += 24) {
         for (let y = 24; y < H; y += 24) {
@@ -130,16 +158,16 @@ export default function CelestialMindMap({ loans }) {
         }
       }
 
-      // Draw Electroplankton expanding ripples
+      // Draw Electroplankton expanding water ripples
       ctx.save();
       ripplesRef.current = ripplesRef.current.filter(r => {
-        r.radius += 1.8;
-        r.alpha -= 0.015;
+        r.radius += 2.0;
+        r.alpha -= 0.016;
         if (r.alpha <= 0) return false;
         ctx.beginPath();
         ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(${r.r}, ${r.g}, ${r.b}, ${r.alpha})`;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.6;
         ctx.stroke();
 
         ctx.beginPath();
@@ -152,32 +180,55 @@ export default function CelestialMindMap({ loans }) {
       ctx.restore();
 
       const state = particleStateRef.current;
+
+      // Update fluid drift physics & collision repulsion
       state.forEach(p => {
         if (dragIdRef.current === p.id) return;
+        
+        // Soft gravity pull to center
         const toCenterX = CX - p.x;
         const toCenterY = CY - p.y;
-        const distance = Math.hypot(toCenterX, toCenterY) || 1;
-        p.vx += (toCenterX / distance) * 0.006;
-        p.vy += (toCenterY / distance) * 0.006;
-        p.vx += Math.cos(currentTime * 0.0018 + p.id.length) * 0.035;
-        p.vy += Math.sin(currentTime * 0.0015 + p.id.length) * 0.035;
-        p.vx *= 0.965;
-        p.vy *= 0.965;
+        const dist = Math.hypot(toCenterX, toCenterY) || 1;
+        
+        p.vx += (toCenterX / dist) * 0.005;
+        p.vy += (toCenterY / dist) * 0.005;
+
+        // Active swimming drift noise (wiggling)
+        p.vx += Math.cos(currentTime * 0.0016 + p.id.length) * 0.03;
+        p.vy += Math.sin(currentTime * 0.0014 + p.id.length) * 0.03;
+
+        // Repel other nodes to avoid clustering overlapping
+        state.forEach(other => {
+          if (other.id === p.id) return;
+          const dx = other.x - p.x;
+          const dy = other.y - p.y;
+          const d = Math.hypot(dx, dy) || 0.1;
+          const minDist = p.type === 'loan' ? 38 : p.type === 'habit' ? 24 : 14;
+          if (d < minDist) {
+            const push = (minDist - d) * 0.012;
+            p.vx -= (dx / d) * push;
+            p.vy -= (dy / d) * push;
+          }
+        });
+
+        p.vx *= 0.96;
+        p.vy *= 0.96;
         p.x += p.vx;
         p.y += p.vy;
+
+        // Keep inside bounds
         const margin = p.type === 'loan' ? 28 : 18;
         p.x = Math.max(margin, Math.min(W - margin, p.x));
         p.y = Math.max(margin, Math.min(H - margin, p.y));
       });
 
-      // Electroplankton Node Collision & Proximity Bridge Synthesis
+      // Electroplankton Proximity Bridges of Glowing Light
       const draggedNode = state.find(p => p.id === dragIdRef.current);
       if (draggedNode) {
         state.forEach(p => {
           if (p.id === draggedNode.id) return;
           const dist = Math.hypot(p.x - draggedNode.x, p.y - draggedNode.y);
           if (dist < 52) {
-            // Draw a temporary bridge of glowing light
             const [r1, g1, b1] = colorToRgb(draggedNode.color);
             const [r2, g2, b2] = colorToRgb(p.color);
             ctx.beginPath();
@@ -187,7 +238,7 @@ export default function CelestialMindMap({ loans }) {
             ctx.lineTo(p.x, p.y);
             ctx.stroke();
 
-            // Trigger beautiful sound chime & expanding ripple on first overlap
+            // Sound chime cooldown trigger
             const pairId = `${draggedNode.id}-${p.id}`;
             const now = Date.now();
             if (!collisionCooldownsRef.current[pairId] || now - collisionCooldownsRef.current[pairId] > 1500) {
@@ -207,6 +258,7 @@ export default function CelestialMindMap({ loans }) {
         });
       }
 
+      // Draw Connections (Dense Neural Network lines with flow particles)
       const pulse = 0.55 + Math.sin(currentTime * 0.006) * 0.25;
       state.filter(p => p.type === 'habit').forEach(habit => {
         habit.influences.forEach(loanId => {
@@ -216,36 +268,51 @@ export default function CelestialMindMap({ loans }) {
           const strength = Math.max(0.12, 1 - distance / 260);
           const [hr, hg, hb] = colorToRgb(habit.color);
           const [lr, lg, lb] = colorToRgb(loan.color);
+          
           const gradient = ctx.createLinearGradient(habit.x, habit.y, loan.x, loan.y);
-          gradient.addColorStop(0, `rgba(${hr},${hg},${hb},${0.12 * strength * pulse})`);
-          gradient.addColorStop(1, `rgba(${lr},${lg},${lb},${0.28 * strength * pulse})`);
+          gradient.addColorStop(0, `rgba(${hr},${hg},${hb},${0.18 * strength * pulse})`);
+          gradient.addColorStop(1, `rgba(${lr},${lg},${lb},${0.35 * strength * pulse})`);
+          
           ctx.strokeStyle = gradient;
-          ctx.lineWidth = 0.7 + strength * 1.4;
+          ctx.lineWidth = 0.8 + strength * 1.5;
           ctx.setLineDash([3, 4]);
           ctx.beginPath();
           ctx.moveTo(habit.x, habit.y);
           ctx.lineTo(loan.x, loan.y);
           ctx.stroke();
           ctx.setLineDash([]);
+
+          // Flow specs (swimming particles of light)
           const t = (currentTime * 0.0012 + habit.id.length / 10) % 1;
-          ctx.fillStyle = `rgba(${(hr + lr) / 2},${(hg + lg) / 2},${(hb + lb) / 2},${0.35 * strength})`;
+          ctx.fillStyle = `rgba(${(hr + lr) / 2},${(hg + lg) / 2},${(hb + lb) / 2},${0.45 * strength})`;
           ctx.beginPath();
-          ctx.arc(habit.x + (loan.x - habit.x) * t, habit.y + (loan.y - habit.y) * t, 1.2, 0, Math.PI * 2);
+          ctx.arc(habit.x + (loan.x - habit.x) * t, habit.y + (loan.y - habit.y) * t, 1.3, 0, Math.PI * 2);
           ctx.fill();
         });
       });
 
+      // Render all Nodes
+      const globalBreath = 1 + Math.sin(currentTime * 0.004) * 0.08;
+      
       state.forEach(p => {
         const progress = p.type === 'loan' ? Math.max(0, Math.min(1, 1 - p.balance / p.original)) : 0;
         const paidOff = p.type === 'loan' && p.balance <= 0;
-        const baseRadius = p.type === 'loan' ? 10 + progress * 7 : 5 + Math.min(6, p.monthly / 120);
-        const radius = baseRadius * (1 + Math.sin(currentTime * 0.004 + p.id.length) * 0.08);
+        
+        let radius = 6;
+        if (p.type === 'loan') {
+          radius = (p.baseRadius + progress * 8) * globalBreath;
+        } else if (p.type === 'habit') {
+          radius = (p.baseRadius + Math.min(5, p.monthly / 150)) * globalBreath;
+        } else {
+          radius = p.baseRadius * (0.95 + Math.sin(currentTime * 0.007 + p.id.length) * 0.15);
+        }
+
         const [r, g, b] = paidOff ? [52, 211, 153] : colorToRgb(p.color);
         ctx.save();
 
-        // Electroplankton Organism Flagella/Tail (for spending habits)
+        // 1. Draw swimming flagella tail for habits
         if (p.type === 'habit') {
-          const angle = Math.atan2(p.y - CY, p.x - CX) + Math.PI; // point away from center
+          const angle = Math.atan2(p.y - CY, p.x - CX) + Math.PI;
           ctx.beginPath();
           ctx.strokeStyle = `rgba(${r},${g},${b},0.45)`;
           ctx.lineWidth = 1.2;
@@ -261,16 +328,20 @@ export default function CelestialMindMap({ loans }) {
           ctx.stroke();
         }
 
-        ctx.fillStyle = `rgba(${r},${g},${b},0.85)`;
+        // 2. Draw core nodes with glows
+        ctx.fillStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.45 : 0.85})`;
         ctx.shadowColor = `rgba(${r},${g},${b},0.45)`;
-        ctx.shadowBlur = p.type === 'loan' ? 10 : 6;
+        ctx.shadowBlur = p.type === 'loan' ? 12 : p.type === 'habit' ? 6 : 2;
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
-        ctx.strokeStyle = `rgba(${r},${g},${b},0.9)`;
-        ctx.lineWidth = p.type === 'loan' ? 1.2 : 0.8;
+        
+        ctx.strokeStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.5 : 0.9})`;
+        ctx.lineWidth = p.type === 'loan' ? 1.2 : p.type === 'micro' ? 0.4 : 0.8;
         ctx.stroke();
+
+        // 3. Paid-off checkmark pulse ring
         if (p.type === 'loan' && progress > 0 && !paidOff) {
           ctx.beginPath();
           ctx.arc(p.x, p.y, radius + 4, -Math.PI / 2, -Math.PI / 2 + progress * Math.PI * 2);
@@ -285,8 +356,10 @@ export default function CelestialMindMap({ loans }) {
         }
         ctx.restore();
       });
+
       frame = requestAnimationFrame(animate);
     };
+
     frame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frame);
   }, [particles]);
@@ -300,6 +373,7 @@ export default function CelestialMindMap({ loans }) {
   };
 
   const hitTest = point => [...particleStateRef.current].reverse().find(p => {
+    if (p.type === 'micro') return false; // don't drag tiny visual dust particles
     const radius = p.type === 'loan' ? 25 : 18;
     return Math.hypot(point.x - p.x, point.y - p.y) <= radius;
   });
@@ -312,7 +386,6 @@ export default function CelestialMindMap({ loans }) {
     setIsDragging(true);
     setSelectedNode(node);
     
-    // Play initial elegant Electroplankton tone & emit ripple
     lastXRef.current = node.x;
     lastYRef.current = node.y;
     const normalizedValue = Math.min(1, Math.max(0, 1 - (node.y / H)));
@@ -334,7 +407,6 @@ export default function CelestialMindMap({ loans }) {
     node.vy = 0;
     setSelectedNode({ ...node });
 
-    // Track dragging path distance for continuous aquatic sound emission
     const dist = Math.hypot(node.x - lastXRef.current, node.y - lastYRef.current);
     if (dist > 22) {
       lastXRef.current = node.x;
@@ -353,7 +425,6 @@ export default function CelestialMindMap({ loans }) {
     if (dragIdRef.current) {
       const node = particleStateRef.current.find(p => p.id === dragIdRef.current);
       if (node) {
-        // Drop release sound chime & ripple
         const normalizedValue = Math.min(1, Math.max(0, 1 - (node.y / H)));
         playElectroplantonTone(normalizedValue, 0.9);
         const [r, g, b] = colorToRgb(node.color);
