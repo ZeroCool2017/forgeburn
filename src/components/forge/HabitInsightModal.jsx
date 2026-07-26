@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, TrendingUp, Zap } from 'lucide-react';
+import { X, Zap } from 'lucide-react';
 
 const PATTERN_INSIGHTS = {
   presence_over_things: {

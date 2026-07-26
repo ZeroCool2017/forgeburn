@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
-import { CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import CategorySheet from '@/components/forge/CategorySheet';
 
 export default function EditLoanDialog({ loan, open, onOpenChange }) {

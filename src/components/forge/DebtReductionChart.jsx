@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  ReferenceLine, Area, AreaChart, CartesianGrid,
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart, CartesianGrid,
 } from 'recharts';
 import { formatCurrency } from '@/lib/loanCalculations';
 import { TrendingDown } from 'lucide-react';

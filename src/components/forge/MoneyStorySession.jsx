@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, X, Brain, Sparkles } from 'lucide-react';
+import { X, Brain } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 /**
@@ -122,13 +122,21 @@ const PSYCHOLOGIST_QUESTIONS = [
   },
 ];
 
-function InsightResult({ loanName, answers, onClose }) {
-  const [insight, setInsight] = useState(null);
-  const [loading, setLoading] = useState(true);
+function cleanStoryText(value = '') {
+  return value
+    .replace(/[\u2010-\u2015-]/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.!?])/g, '$1')
+    .trim();
+}
+
+function InsightResult({ loanId, loanName, answers, onClose, existingStory = null }) {
+  const [insight, setInsight] = useState(existingStory);
+  const [loading, setLoading] = useState(!existingStory);
 
   React.useEffect(() => {
-    generateInsight();
-  }, []);
+    if (!existingStory) generateInsight();
+  }, [existingStory]);
 
   const generateInsight = async () => {
     try {
@@ -140,7 +148,7 @@ function InsightResult({ loanName, answers, onClose }) {
         .join('\n');
 
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are the world's most empathetic and insightful money psychologist. You have just completed a deep session with a client about their debt: "${loanName}".
+        prompt: `You are a financial behavior reflection assistant. You have just completed a reflective session with a person about their debt: "${loanName}".
 
 Based on their responses, here are their psychological patterns:
 ${tagSummary}
@@ -151,11 +159,21 @@ Write a personalized "Money Story" — a compassionate, psychologically precise 
 3. Identifies the hidden belief about money or self-worth that's been running in the background
 4. Offers one precise, powerful reframe that changes how they see this debt — not as a failure, but as information
 
-Tone: wise, warm, direct. Like a great therapist who also knows finance deeply. Do NOT be generic or vague. Speak to what you actually see in their specific answers.`,
+Tone: wise, warm, direct, and careful. Do not diagnose, provide therapy, claim to know hidden motives, or call yourself a psychologist. Speak only to the answers provided. Avoid hyphens and dash punctuation.`,
       });
-      setInsight(result);
+      const cleaned = cleanStoryText(result);
+      setInsight(cleaned);
+      await base44.entities.MoneyStory.create({
+        loan_id: loanId,
+        loan_name: loanName,
+        answers,
+        story: cleaned,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      await base44.entities.MoneyStoryDraft.delete(`loan-${loanId}`);
     } catch {
-      setInsight(`Your relationship with ${loanName} carries more meaning than the number suggests. The patterns you've shared reveal someone navigating real tension between who they've been and who they're becoming with money. This debt is not a character flaw — it's a chapter. The awareness you've shown today is the first page of the next one.`);
+      setInsight(cleanStoryText(`Your relationship with ${loanName} carries more meaning than the number suggests. The patterns you shared reveal someone navigating real tension between who they have been and who they are becoming with money. This debt is not a character flaw. It is a chapter. The awareness you showed today is the first page of the next one.`));
     } finally {
       setLoading(false);
     }
@@ -179,7 +197,7 @@ Tone: wise, warm, direct. Like a great therapist who also knows finance deeply. 
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full"
           />
-          <p className="text-xs font-mono text-muted-foreground">The psychologist is reading your patterns...</p>
+          <p className="text-xs font-mono text-muted-foreground">Reading your patterns...</p>
         </div>
       ) : (
         <>
@@ -187,7 +205,7 @@ Tone: wise, warm, direct. Like a great therapist who also knows finance deeply. 
             <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line">{insight}</p>
           </div>
           <p className="text-[10px] font-mono text-muted-foreground/60 text-center">
-            This story is yours. It explains the past — it does not define the future.
+            This story is yours. It describes a pattern. It does not define your future.
           </p>
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -212,14 +230,59 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
   const currentQuestion = PSYCHOLOGIST_QUESTIONS[questionIndex];
   const progress = ((questionIndex + (selectedTag ? 1 : 0)) / PSYCHOLOGIST_QUESTIONS.length) * 100;
 
+  const [savedStory, setSavedStory] = useState(null);
+
+  useEffect(() => {
+    if (!open || !loan?.id) return;
+    let cancelled = false;
+    Promise.all([
+      base44.entities.MoneyStoryDraft.get(`loan-${loan.id}`),
+      base44.entities.MoneyStory.list(),
+    ]).then(([draft, stories]) => {
+      if (cancelled) return;
+      const savedAnswers = draft?.answers || {};
+      const savedIndex = Math.min(draft?.question_index || 0, PSYCHOLOGIST_QUESTIONS.length - 1);
+      const latestStory = (stories || [])
+        .filter(story => story.loan_id === loan.id)
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))[0];
+      setSavedStory(draft ? null : latestStory?.story || null);
+      if (draft) {
+        setAnswers(savedAnswers);
+        setQuestionIndex(savedIndex);
+        setSelectedTag(savedAnswers[PSYCHOLOGIST_QUESTIONS[savedIndex]?.id] || null);
+      } else if (latestStory) {
+        setAnswers(latestStory.answers || {});
+        setShowResult(true);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [open, loan?.id]);
+
+  const saveDraft = async (nextAnswers, nextIndex = questionIndex) => {
+    if (!loan?.id) return;
+    const record = {
+      id: `loan-${loan.id}`,
+      loan_id: loan.id,
+      loan_name: loan.name,
+      answers: nextAnswers,
+      question_index: nextIndex,
+      updated_at: new Date().toISOString(),
+    };
+    const existing = await base44.entities.MoneyStoryDraft.get(record.id);
+    if (existing) await base44.entities.MoneyStoryDraft.update(record.id, record);
+    else await base44.entities.MoneyStoryDraft.create(record);
+  };
+
   const handleChoose = (choice) => {
     setSelectedTag(choice.tag);
+    saveDraft({ ...answers, [currentQuestion.id]: choice.tag });
   };
 
   const handleNext = () => {
     if (!selectedTag) return;
     const newAnswers = { ...answers, [currentQuestion.id]: selectedTag };
     setAnswers(newAnswers);
+    saveDraft(newAnswers, isLastQuestion ? questionIndex : questionIndex + 1);
     setSelectedTag(null);
     if (isLastQuestion) {
       setShowResult(true);
@@ -233,6 +296,7 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
     setAnswers({});
     setSelectedTag(null);
     setShowResult(false);
+    setSavedStory(null);
     onOpenChange(false);
   };
 
@@ -258,14 +322,14 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
             exit={{ opacity: 0, y: 60 }}
             transition={{ type: 'spring', stiffness: 280, damping: 32 }}
             className="relative z-10 w-full sm:max-w-lg glass rounded-t-3xl sm:rounded-2xl border border-border/40 shadow-2xl flex flex-col"
-            style={{ maxHeight: '90vh' }}
+            style={{ maxHeight: '90vh', minHeight: 'min(620px, 90vh)' }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-border/20 shrink-0">
               <div className="flex items-center gap-2">
                 <Brain className="w-5 h-5 text-primary" />
                 <div>
-                  <h2 className="text-sm font-bold text-foreground">Money Psychologist</h2>
+                  <h2 className="text-sm font-bold text-foreground">Money Story</h2>
                   <p className="text-[10px] font-mono text-muted-foreground">Session: {loan.name}</p>
                 </div>
               </div>
@@ -279,7 +343,7 @@ export default function MoneyStorySession({ loan, open, onOpenChange }) {
               <AnimatePresence mode="wait">
                 {showResult ? (
                   <motion.div key="result" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <InsightResult loanName={loan.name} answers={answers} onClose={handleClose} />
+                    <InsightResult loanId={loan.id} loanName={loan.name} answers={answers} existingStory={savedStory} onClose={handleClose} />
                   </motion.div>
                 ) : (
                   <motion.div

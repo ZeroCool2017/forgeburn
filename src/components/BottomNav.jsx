@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Hammer, Swords, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import MuteButton from './MuteButton';

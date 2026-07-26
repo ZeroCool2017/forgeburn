@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { X, Sparkles, Loader2 } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 
 /**
  * Deep philosophical insights about habit-debt relationships.
@@ -105,7 +105,7 @@ Be poetic, wise, and genuinely helpful. Sound like you're reading their financia
           transition={{ delay: 0.4 }}
           className="text-[9px] font-mono text-muted-foreground/60 mt-4 pt-3 border-t border-border/20"
         >
-          The field learns from your patterns. You learn from the field. This is the feedback loop of growth.
+          The field reflects your current patterns. You learn from the field, then decide what to change next.
         </motion.p>
       </motion.div>
     </AnimatePresence>

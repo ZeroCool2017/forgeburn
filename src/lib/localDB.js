@@ -10,6 +10,16 @@ db.version(1).stores({
   user_profile: 'id',
 });
 
+db.version(2).stores({
+  loans: '++id, name, category, current_balance, due_date, next_due_date',
+  spending_habits: '++id, name, pattern',
+  transactions: '++id, date, habit_id',
+  notes: '++id, month, created_at',
+  user_profile: 'id',
+  money_stories: '++id, loan_id, created_at, updated_at',
+  money_story_drafts: 'id, loan_id, updated_at',
+});
+
 // Seed default user profile
 async function initProfile() {
   const count = await db.user_profile.count();

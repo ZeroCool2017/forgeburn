@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatCurrency, CATEGORY_CONFIG, estimatePayoffDate } from '@/lib/loanCalculations';
-import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain, PartyPopper } from 'lucide-react';
+import { dueStatus, formatDueDate } from '@/lib/dueDates';
+import { Link2Off, Link2, Zap, MoreHorizontal, Trash2, Book, Brain } from 'lucide-react';
 import { useForgeSound } from '@/hooks/useForgeSound';
 import { playElectroplantonTone } from '@/lib/musicalInterface';
 import DebtStoryAdventure from './DebtStoryAdventure';
@@ -98,8 +99,9 @@ function PayoffCanvas({ progress, color }) {
 const MUSICAL_SYMBOLS = ['♩', '♪', '♫', '♬', '𝅘𝅥𝅮'];
 
 export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, isShattering }) {
-  const original = loan.original_balance || loan.current_balance;
-  const progress = Math.max(0, Math.min(1, 1 - (loan.current_balance / original)));
+  const original = Math.max(1, Number(loan.original_balance) || Number(loan.current_balance) || 1);
+  const current = Number(loan.current_balance) || 0;
+  const progress = Math.max(0, Math.min(1, 1 - current / original));
   const cat = CATEGORY_CONFIG[loan.category] || CATEGORY_CONFIG.other;
   const links = 20;
   const brokenLinks = Math.floor(progress * links);
@@ -111,10 +113,20 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
   const [litLinks, setLitLinks] = useState(new Set());
   const lastPlayedRef = useRef(-1);
   const isDraggingRef = useRef(false);
+  const chainRef = useRef(null);
+  const stopDraggingRef = useRef(null);
   const noteIdRef = useRef(0);
   const { playStrike } = useForgeSound();
   const { date: payoffDate } = estimatePayoffDate(loan, 0, 'momentum');
+  const paymentDue = dueStatus(loan);
+  const dueTone = paymentDue.tone === 'danger'
+    ? 'text-red-400'
+    : paymentDue.tone === 'warning'
+      ? 'text-amber-300'
+      : 'text-muted-foreground';
   const formatPayoffDate = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+  useEffect(() => () => stopDraggingRef.current?.(), []);
 
   const spawnNote = useCallback((linkIndex, x, y) => {
     const id = noteIdRef.current++;
@@ -139,13 +151,32 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
     playLinkSound(i, rect.left + rect.width / 2, rect.top);
   }, [playLinkSound]);
 
+  const handleLinkPointerMove = useCallback((e) => {
+    if (!isDraggingRef.current) return;
+    const link = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-chain-link]');
+    const index = Number(link?.getAttribute('data-chain-link'));
+    if (!Number.isInteger(index)) return;
+    const rect = link.getBoundingClientRect();
+    playLinkSound(index, rect.left + rect.width / 2, rect.top);
+  }, [playLinkSound]);
+
   const handleLinkPointerDown = useCallback((e, i) => {
     isDraggingRef.current = true;
     lastPlayedRef.current = -1;
+    chainRef.current?.setPointerCapture?.(e.pointerId);
     const rect = e.currentTarget.getBoundingClientRect();
     playLinkSound(i, rect.left + rect.width / 2, rect.top);
-    const stop = () => { isDraggingRef.current = false; lastPlayedRef.current = -1; };
-    window.addEventListener('pointerup', stop, { once: true });
+    const stop = () => {
+      isDraggingRef.current = false;
+      lastPlayedRef.current = -1;
+      if (chainRef.current?.hasPointerCapture?.(e.pointerId)) chainRef.current.releasePointerCapture(e.pointerId);
+      window.removeEventListener('pointerup', stop);
+      window.removeEventListener('pointercancel', stop);
+      if (stopDraggingRef.current === stop) stopDraggingRef.current = null;
+    };
+    stopDraggingRef.current = stop;
+    window.addEventListener('pointerup', stop);
+    window.addEventListener('pointercancel', stop);
   }, [playLinkSound]);
 
   return (
@@ -254,12 +285,15 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
       </div>
 
       {/* Payoff date estimate */}
-      <p className="text-xs font-mono text-muted-foreground mb-3 tracking-widest">
+      <p className="text-xs font-mono text-muted-foreground mb-1 tracking-widest">
         free by {formatPayoffDate(payoffDate)}
+      </p>
+      <p className={`text-xs font-mono ${dueTone} mb-3`}>
+        {paymentDue.days === null ? paymentDue.label : `${paymentDue.label} · ${formatDueDate(loan.next_due_date || loan.due_date)}`}
       </p>
 
       {/* Chain link visualization — drag/swipe to play electroplankton notes */}
-      <div className="relative mb-3 select-none" style={{ touchAction: 'none' }}>
+      <div ref={chainRef} className="relative mb-3 select-none" style={{ touchAction: 'none' }} onPointerMove={handleLinkPointerMove}>
         <div className="flex items-center gap-0.5">
           {Array.from({ length: links }).map((_, i) => {
             const isBroken = i < brokenLinks;
@@ -268,6 +302,7 @@ export default function ChainProgress({ loan, totalOriginal, onPay, onDelete, is
             return (
               <motion.div
                 key={i}
+                data-chain-link={i}
                 onPointerDown={(e) => handleLinkPointerDown(e, i)}
                 onPointerEnter={(e) => handleLinkPointerEnter(e, i)}
                 animate={

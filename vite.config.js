@@ -4,7 +4,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/forgeburn/',
+  base: '/',
   logLevel: 'error',
   plugins: [react()],
   resolve: {

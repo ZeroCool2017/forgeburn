@@ -6,6 +6,15 @@ export function useAmbientSound() {
   const timersRef = useRef([]);
   const playingRef = useRef(false);
 
+  const registerNode = (node) => {
+    nodesRef.current.push(node);
+    if (!node.isLoop && node.osc?.addEventListener) {
+      node.osc.addEventListener('ended', () => {
+        nodesRef.current = nodesRef.current.filter(active => active !== node);
+      }, { once: true });
+    }
+  };
+
   const getCtx = () => {
     if (!ctx.current) ctx.current = new (window.AudioContext || window.webkitAudioContext)();
     return ctx.current;
@@ -16,18 +25,17 @@ export function useAmbientSound() {
     playingRef.current = false;
     timersRef.current.forEach(t => clearTimeout(t));
     timersRef.current = [];
-    nodesRef.current.forEach(n => {
+    // Detach the old generation immediately. A delayed cleanup can otherwise
+    // clear nodes belonging to a newly selected sound mode.
+    const nodesToStop = nodesRef.current;
+    nodesRef.current = [];
+    nodesToStop.forEach(n => {
       try {
         n.gain.gain.cancelScheduledValues(n.ac.currentTime);
         n.gain.gain.linearRampToValueAtTime(0, n.ac.currentTime + 0.5);
-        if (!n.isLoop) {
-          n.osc.stop(n.ac.currentTime + 0.6);
-        } else {
-          n.osc.stop(n.ac.currentTime + 0.6);
-        }
+        n.osc.stop(n.ac.currentTime + 0.6);
       } catch (e) {}
     });
-    setTimeout(() => { nodesRef.current = []; }, 700);
   }, []);
 
   // ─── DRIFT MODE ─────────────────────────────────────────────────────────
@@ -91,7 +99,7 @@ export function useAmbientSound() {
       gain.connect(warmFilter);
       vib.start(t); osc.start(t);
       osc.stop(t + duration + 0.1); vib.stop(t + duration + 0.1);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       const nextIn = 500 + Math.random() * 3200;
       const tid = setTimeout(spawnTone, nextIn);
@@ -117,7 +125,7 @@ export function useAmbientSound() {
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
-      nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
+      registerNode({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
 
     // Ambient beat layer — kick/drum pulse
@@ -164,7 +172,7 @@ export function useAmbientSound() {
       drone.connect(droneGain);
       droneGain.connect(master);
       drone.start();
-      nodesRef.current.push({ osc: drone, gain: droneGain, ac, isLoop: true });
+      registerNode({ osc: drone, gain: droneGain, ac, isLoop: true });
     });
 
     // Shimmer layer (upper harmonics)
@@ -178,7 +186,7 @@ export function useAmbientSound() {
       shimmer.connect(shimmerGain);
       shimmerGain.connect(master);
       shimmer.start();
-      nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
+      registerNode({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
     });
   }, []);
 
@@ -220,7 +228,7 @@ export function useAmbientSound() {
       gain.connect(lpf);
       osc.start(t);
       osc.stop(t + duration);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       // Faster spawn — 400-1200ms
       const nextIn = 400 + Math.random() * 800;
@@ -250,7 +258,7 @@ export function useAmbientSound() {
       sub.connect(subGain);
       subGain.connect(master);
       sub.start();
-      nodesRef.current.push({ osc: sub, gain: subGain, ac, isLoop: true });
+      registerNode({ osc: sub, gain: subGain, ac, isLoop: true });
     });
   }, []);
 
@@ -314,7 +322,7 @@ export function useAmbientSound() {
       osc.start(t);
       osc.stop(t + duration + 0.3);
       vibrato.stop(t + duration + 0.3);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       // Slower, more meditative rhythm
       const nextIn = 2000 + Math.random() * 4000;
@@ -336,7 +344,7 @@ export function useAmbientSound() {
     bassDrone.connect(bassGain);
     bassGain.connect(master);
     bassDrone.start();
-    nodesRef.current.push({ osc: bassDrone, gain: bassGain, ac, isLoop: true });
+    registerNode({ osc: bassDrone, gain: bassGain, ac, isLoop: true });
 
     // Slow, subtle breathing — contemplative, not unsettling
     const lfo = ac.createOscillator();
@@ -346,7 +354,7 @@ export function useAmbientSound() {
     lfo.connect(lfoGain);
     lfoGain.connect(master.gain);
     lfo.start();
-    nodesRef.current.push({ osc: lfo, gain: lfoGain, ac });
+    registerNode({ osc: lfo, gain: lfoGain, ac });
   }, []);
 
   // ─── ARCADE MODE — retro 8-bit chiptune ─────────────────────────────────
@@ -383,7 +391,7 @@ export function useAmbientSound() {
       gain.connect(hpf);
       osc.start(t);
       osc.stop(t + duration);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       // Rapid bleeps
       const nextIn = 150 + Math.random() * 600;
@@ -428,7 +436,7 @@ export function useAmbientSound() {
       osc.connect(gain);
       gain.connect(lpf);
       osc.start();
-      nodesRef.current.push({ osc, gain, ac, isLoop: true });
+      registerNode({ osc, gain, ac, isLoop: true });
     });
 
     // Slow pulse
@@ -439,7 +447,7 @@ export function useAmbientSound() {
     lfo.connect(lfoGain);
     lfoGain.connect(master.gain);
     lfo.start();
-    nodesRef.current.push({ osc: lfo, gain: lfoGain, ac });
+    registerNode({ osc: lfo, gain: lfoGain, ac });
   }, []);
 
   // ─── GREENWOOD MODE — blues, soul, resilience ─────────────────────────────
@@ -505,7 +513,7 @@ export function useAmbientSound() {
       gain.connect(warmLpf);
       osc.start(t);
       osc.stop(t + duration + 0.2);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       const nextIn = 900 + Math.random() * 4000;
       timersRef.current.push(setTimeout(spawnBlues, nextIn));
@@ -527,7 +535,7 @@ export function useAmbientSound() {
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
-      nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
+      registerNode({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
   }, []);
 
@@ -570,7 +578,7 @@ export function useAmbientSound() {
       gain.connect(lpf);
       osc.start(t);
       osc.stop(t + duration);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       const nextIn = 600 + Math.random() * 2400;
       const tid = setTimeout(spawnAscent, nextIn);
@@ -591,7 +599,7 @@ export function useAmbientSound() {
     bass.connect(bassGain);
     bassGain.connect(master);
     bass.start();
-    nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
+    registerNode({ osc: bass, gain: bassGain, ac, isLoop: true });
   }, []);
 
   // ─── WESTERN MODE — pedal steel, outlaw spirit ───────────────────────────
@@ -654,7 +662,7 @@ export function useAmbientSound() {
       gain.connect(warmLpf);
       osc.start(t);
       osc.stop(t + duration + 0.2);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       const nextIn = 800 + Math.random() * 3500;
       timersRef.current.push(setTimeout(spawnSlide, nextIn));
@@ -675,7 +683,7 @@ export function useAmbientSound() {
       bass.connect(bassGain);
       bassGain.connect(master);
       bass.start();
-      nodesRef.current.push({ osc: bass, gain: bassGain, ac, isLoop: true });
+      registerNode({ osc: bass, gain: bassGain, ac, isLoop: true });
     });
 
     // Bright harmonic shimmer — twang presence
@@ -688,7 +696,7 @@ export function useAmbientSound() {
     shimmer.connect(shimmerGain);
     shimmerGain.connect(master);
     shimmer.start();
-    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
+    registerNode({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
   }, []);
 
   // ─── SOUTHERN TRAP MODE — hip hop, boom bap, dark southern soul ───────────
@@ -734,7 +742,7 @@ export function useAmbientSound() {
       kickGain.connect(master);
       kickOsc.start(t);
       kickOsc.stop(t + 0.3);
-      nodesRef.current.push({ osc: kickOsc, gain: kickGain, ac });
+      registerNode({ osc: kickOsc, gain: kickGain, ac });
 
       // Trap hi-hat layer (sparse, syncopated)
       if (Math.random() > 0.4) {
@@ -748,7 +756,7 @@ export function useAmbientSound() {
         hatGain.connect(master);
         hatOsc.start(t + 0.05);
         hatOsc.stop(t + 0.15);
-        nodesRef.current.push({ osc: hatOsc, gain: hatGain, ac });
+        registerNode({ osc: hatOsc, gain: hatGain, ac });
       }
 
       // Trap timing: off-beat, syncopated
@@ -782,7 +790,7 @@ export function useAmbientSound() {
       gain.connect(warmFilter);
       osc.start(t);
       osc.stop(t + duration);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       const nextIn = 2000 + Math.random() * 3500;
       const tid = setTimeout(spawnMelody, nextIn);
@@ -804,7 +812,7 @@ export function useAmbientSound() {
       sub.connect(subGain);
       subGain.connect(master);
       sub.start();
-      nodesRef.current.push({ osc: sub, gain: subGain, ac, isLoop: true });
+      registerNode({ osc: sub, gain: subGain, ac, isLoop: true });
     });
   }, []);
 
@@ -852,7 +860,7 @@ export function useAmbientSound() {
       gain.connect(lpf);
       osc.start(t);
       osc.stop(t + duration + 0.2);
-      nodesRef.current.push({ osc, gain, ac });
+      registerNode({ osc, gain, ac });
 
       const nextIn = 1500 + Math.random() * 4500;
       timersRef.current.push(setTimeout(spawnPad, nextIn));
@@ -904,9 +912,9 @@ export function useAmbientSound() {
       ultraSub.start(t);
       ultraSub.stop(t + 0.5);
 
-      nodesRef.current.push({ osc: kickOsc, gain: kickGain, ac });
-      nodesRef.current.push({ osc: subBass, gain: subGain, ac });
-      nodesRef.current.push({ osc: ultraSub, gain: ultraSubGain, ac });
+      registerNode({ osc: kickOsc, gain: kickGain, ac });
+      registerNode({ osc: subBass, gain: subGain, ac });
+      registerNode({ osc: ultraSub, gain: ultraSubGain, ac });
 
       // Four-on-the-floor house beat (~120 BPM)
       const nextKick = 500;
@@ -925,7 +933,7 @@ export function useAmbientSound() {
     shimmer.connect(shimmerGain);
     shimmerGain.connect(lpf);
     shimmer.start();
-    nodesRef.current.push({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
+    registerNode({ osc: shimmer, gain: shimmerGain, ac, isLoop: true });
   }, []);
 
   const start = useCallback((mode = 'drift', debtProgress = 0) => {

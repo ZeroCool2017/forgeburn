@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { Sparkles, Sun, Moon, Star } from 'lucide-react';
-import { formatBirthData } from '@/lib/astrologyCalc';
 
 export default function MoneyHoroscope({ birthData: userBirthData }) {
   const [birthData, setBirthData] = useState(null);

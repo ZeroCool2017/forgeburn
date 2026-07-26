@@ -1,7 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { CATEGORY_CONFIG, formatCurrency } from '@/lib/loanCalculations';
-import { useAmbientSound } from '@/hooks/useAmbientSound';
 
 /**
  * ThermalIntensityMap — visualizes loan paydown as forge heat.

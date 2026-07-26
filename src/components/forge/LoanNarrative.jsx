@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen } from 'lucide-react';
-import { playNoteFromData, playHarmonicChord, playShimmerChime } from '@/lib/musicalInterface';
+import { playShimmerChime } from '@/lib/musicalInterface';
 
 /**
  * Narrative context for loans — ironic, intelligent storytelling + audio.

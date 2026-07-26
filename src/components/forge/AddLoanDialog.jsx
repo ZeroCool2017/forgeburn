@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus } from 'lucide-react';
-import { CATEGORY_CONFIG } from '@/lib/loanCalculations';
 import CategorySheet from '@/components/forge/CategorySheet';
 
 export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
@@ -26,6 +25,8 @@ export default function AddLoanDialog({ onAdd, open, onOpenChange }) {
       original_balance: parseFloat(form.original_balance || form.current_balance),
       interest_rate: parseFloat(form.interest_rate),
       minimum_payment: parseFloat(form.minimum_payment),
+      payment_frequency: 'monthly',
+      next_due_date: form.due_date || null,
     };
     onAdd(loan);
     setForm({ name: '', current_balance: '', original_balance: '', interest_rate: '', minimum_payment: '', due_date: '', category: 'personal' });

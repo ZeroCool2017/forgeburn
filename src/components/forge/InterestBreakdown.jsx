@@ -1,6 +1,6 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
+import { formatCurrency } from '@/lib/loanCalculations';
 
 const COLORS = ['#818cf8', '#38bdf8', '#a78bfa', '#f472b6', '#34d399', '#fb923c', '#94a3b8'];
 

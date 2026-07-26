@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Sparkles, Brain, Heart, Shield, Users } from 'lucide-react';
 import { analyzeDbtProfile, generateDbtNarrative, generateDbtActions } from '@/lib/dbtAnalysis';

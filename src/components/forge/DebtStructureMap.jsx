@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
+import { CATEGORY_CONFIG } from '@/lib/loanCalculations';
 
 /**
  * Obsidian-inspired node graph visualization of debt structure.

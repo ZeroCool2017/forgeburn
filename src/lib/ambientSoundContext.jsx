@@ -93,16 +93,32 @@ export function AmbientSoundProvider({ children }) {
 
   const { start, stop } = useAmbientSound();
 
+  const [hasUserGesture, setHasUserGesture] = useState(false);
+
   useEffect(() => {
     localStorage.setItem(MODE_KEY, mode);
     localStorage.setItem(STORAGE_KEY, String(mode !== 'off'));
     stop();
-    if (mode !== 'off') {
-      setTimeout(() => start(mode, 0), 100);
-    }
-  }, [mode, start, stop]);
+    if (mode !== 'off' && hasUserGesture) start(mode, 0);
+  }, [mode, hasUserGesture, start, stop]);
 
-  const toggle = () => setMode(m => m === 'off' ? 'drift' : 'off');
+  // Web Audio must begin inside a user gesture. A persisted sound preference
+  // is honored after the first pointer or keyboard interaction, never on mount.
+  useEffect(() => {
+    if (hasUserGesture || mode === 'off') return undefined;
+    const activate = () => setHasUserGesture(true);
+    window.addEventListener('pointerdown', activate, { once: true, passive: true });
+    window.addEventListener('keydown', activate, { once: true, passive: true });
+    return () => {
+      window.removeEventListener('pointerdown', activate);
+      window.removeEventListener('keydown', activate);
+    };
+  }, [hasUserGesture, mode]);
+
+  const toggle = () => {
+    setHasUserGesture(true);
+    setMode(m => m === 'off' ? 'drift' : 'off');
+  };
 
   return (
     <AmbientSoundContext.Provider value={{ enabled: mode !== 'off', mode, setMode, toggle }}>

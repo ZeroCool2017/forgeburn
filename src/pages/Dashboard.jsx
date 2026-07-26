@@ -2,20 +2,16 @@ import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Download, PartyPopper } from 'lucide-react';
+import { Download, PartyPopper } from 'lucide-react';
 import { exportAllData } from '@/lib/exportData';
 
 import { calculatePayoffSchedule, calculateMinimumOnlyPayoff, formatCurrency, CATEGORY_CONFIG } from '@/lib/loanCalculations';
+import { advanceDueDate } from '@/lib/dueDates';
 import QuoteBar from '@/components/forge/QuoteBar';
 import ChainProgress from '@/components/forge/ChainProgress';
 import StatsOrb from '@/components/forge/StatsOrb';
-import BurndownChart from '@/components/forge/BurndownChart';
-import InterestBreakdown from '@/components/forge/InterestBreakdown';
 import FreedomTimeline from '@/components/forge/FreedomTimeline';
-import PaymentTimeline from '@/components/forge/PaymentTimeline';
-import StrategyCompare from '@/components/forge/StrategyCompare';
 import FreedomScore from '@/components/forge/FreedomScore';
-import MonthlyHeatmap from '@/components/forge/MonthlyHeatmap';
 import ExtraBudgetSlider from '@/components/forge/ExtraBudgetSlider';
 import DebtReductionChart from '@/components/forge/DebtReductionChart';
 import AddLoanDialog from '@/components/forge/AddLoanDialog';
@@ -28,16 +24,9 @@ import { detectMilestone } from '@/lib/milestones';
 import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
 import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
-import SystemsMapWidget from '@/components/forge/SystemsMapWidget';
 
-import LoanNarrative from '@/components/forge/LoanNarrative';
 import MoneyStorySession from '@/components/forge/MoneyStorySession';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
-import MindMapInsights from '@/components/forge/MindMapInsights';
-import TypingInsightPanel from '@/components/forge/TypingInsightPanel';
-import MoneyHoroscope from '@/components/forge/MoneyHoroscope';
-import HabitNodes from '@/components/forge/HabitNodes';
-import HabitAstrologyPanel from '@/components/forge/HabitAstrologyPanel';
 import InteractiveHeatmap from '@/components/forge/InteractiveHeatmap';
 import { useForgeSound } from '@/hooks/useForgeSound';
 
@@ -141,16 +130,44 @@ export default function Dashboard() {
   });
 
   const recordPayment = useMutation({
-    mutationFn: ({ loan, amount }) => {
+    mutationFn: ({ loan, amount, countsTowardDueDate = true }) => {
       const newBalance = Math.max(0, loan.current_balance - amount);
-      return base44.entities.Loan.update(loan.id, { current_balance: newBalance });
+      const payment = {
+        amount,
+        date: new Date().toISOString(),
+        counts_toward_due_date: countsTowardDueDate,
+      };
+      const paymentHistory = [...(loan.payment_history || []), payment];
+      const nextDueDate = countsTowardDueDate && (loan.next_due_date || loan.due_date)
+        ? advanceDueDate(loan.next_due_date || loan.due_date, loan.payment_frequency || 'monthly')
+        : (loan.next_due_date || loan.due_date || null);
+      return base44.entities.Loan.update(loan.id, {
+        current_balance: newBalance,
+        payment_history: paymentHistory,
+        last_payment_date: payment.date,
+        next_due_date: nextDueDate,
+      });
     },
-    onMutate: async ({ loan, amount }) => {
+    onMutate: async ({ loan, amount, countsTowardDueDate = true }) => {
       await queryClient.cancelQueries({ queryKey: ['loans'] });
       const prev = queryClient.getQueryData(['loans']);
       const newBalance = Math.max(0, loan.current_balance - amount);
+      const payment = {
+        amount,
+        date: new Date().toISOString(),
+        counts_toward_due_date: countsTowardDueDate,
+      };
+      const nextDueDate = countsTowardDueDate && (loan.next_due_date || loan.due_date)
+        ? advanceDueDate(loan.next_due_date || loan.due_date, loan.payment_frequency || 'monthly')
+        : (loan.next_due_date || loan.due_date || null);
       queryClient.setQueryData(['loans'], (old = []) =>
-        old.map(l => l.id === loan.id ? { ...l, current_balance: newBalance } : l)
+        old.map(l => l.id === loan.id ? {
+          ...l,
+          current_balance: newBalance,
+          payment_history: [...(l.payment_history || []), payment],
+          last_payment_date: payment.date,
+          next_due_date: nextDueDate,
+        } : l)
       );
       return { prev };
     },
