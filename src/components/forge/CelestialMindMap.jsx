@@ -44,6 +44,7 @@ export default function CelestialMindMap({ loans }) {
   const ripplesRef = useRef([]);
   const lastXRef = useRef(0);
   const lastYRef = useRef(0);
+  const collisionCooldownsRef = useRef({});
   const [isDragging, setIsDragging] = useState(false);
   const [particles, setParticles] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -168,6 +169,43 @@ export default function CelestialMindMap({ loans }) {
         p.x = Math.max(margin, Math.min(W - margin, p.x));
         p.y = Math.max(margin, Math.min(H - margin, p.y));
       });
+
+      // Electroplankton Node Collision & Proximity Bridge Synthesis
+      const draggedNode = state.find(p => p.id === dragIdRef.current);
+      if (draggedNode) {
+        state.forEach(p => {
+          if (p.id === draggedNode.id) return;
+          const dist = Math.hypot(p.x - draggedNode.x, p.y - draggedNode.y);
+          if (dist < 52) {
+            // Draw a temporary bridge of glowing light
+            const [r1, g1, b1] = colorToRgb(draggedNode.color);
+            const [r2, g2, b2] = colorToRgb(p.color);
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(${(r1 + r2) / 2}, ${(g1 + g2) / 2}, ${(b1 + b2) / 2}, 0.5)`;
+            ctx.lineWidth = 2.0;
+            ctx.moveTo(draggedNode.x, draggedNode.y);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+
+            // Trigger beautiful sound chime & expanding ripple on first overlap
+            const pairId = `${draggedNode.id}-${p.id}`;
+            const now = Date.now();
+            if (!collisionCooldownsRef.current[pairId] || now - collisionCooldownsRef.current[pairId] > 1500) {
+              collisionCooldownsRef.current[pairId] = now;
+              playElectroplantonTone(Math.min(1, Math.max(0, 1 - (p.y / H))), 0.85);
+              ripplesRef.current.push({
+                x: (draggedNode.x + p.x) / 2,
+                y: (draggedNode.y + p.y) / 2,
+                radius: 12,
+                alpha: 0.8,
+                r: Math.floor((r1 + r2) / 2),
+                g: Math.floor((g1 + g2) / 2),
+                b: Math.floor((b1 + b2) / 2),
+              });
+            }
+          }
+        });
+      }
 
       const pulse = 0.55 + Math.sin(currentTime * 0.006) * 0.25;
       state.filter(p => p.type === 'habit').forEach(habit => {
