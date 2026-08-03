@@ -4,7 +4,8 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/',
+  // GitHub Pages serves this project from /forgeburn/, not the domain root.
+  base: '/forgeburn/',
   logLevel: 'error',
   plugins: [react()],
   resolve: {
