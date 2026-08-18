@@ -15,6 +15,41 @@ function colorToRgb(color) {
   return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
 }
 
+// Shift the hue of a hex color by N degrees — gives each sphere a distinct
+// identity even when multiple loans share the same category.
+function shiftHue(hex, degrees) {
+  const [r, g, b] = colorToRgb(hex);
+  const rn = r / 255, gn = g / 255, bn = b / 255;
+  const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = 0; s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case rn: h = (gn - bn) / d + (gn < bn ? 6 : 0); break;
+      case gn: h = (bn - rn) / d + 2; break;
+      default: h = (rn - gn) / d + 4; break;
+    }
+    h /= 6;
+  }
+  h = (h + degrees / 360) % 1;
+  if (h < 0) h += 1;
+  const hue2rgb = (p, q, t) => {
+    if (t < 0) t += 1; if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const nr = Math.round(hue2rgb(p, q, h + 1/3) * 255);
+  const ng = Math.round(hue2rgb(p, q, h) * 255);
+  const nb = Math.round(hue2rgb(p, q, h - 1/3) * 255);
+  return `#${((1 << 24) + (nr << 16) + (ng << 8) + nb).toString(16).slice(1)}`;
+}
+
 /**
  * Living Mind Map — Momentum Field
  * Fuses the original dense neural network of loans, habits, and floating micro-particles
@@ -133,7 +168,7 @@ export default function CelestialMindMap({ loans }) {
         balance: Number(loan.current_balance) || 0,
         original: Math.max(1, Number(loan.original_balance) || Number(loan.current_balance) || 1),
         name: loan.name,
-        color: category.color,
+        color: shiftHue(category.color, index * 37),
         category: loan.category,
         growth: 0.5 + Math.random() * 0.5,
         baseRadius: 10 + Math.random() * 4,
@@ -162,7 +197,7 @@ export default function CelestialMindMap({ loans }) {
         vx: (Math.random() - 0.5) * 0.05,
         vy: (Math.random() - 0.5) * 0.05,
         name: habit.name,
-        color: habit.color || category.color,
+        color: shiftHue(habit.color || category.color, index * 37),
         category: habit.category,
         monthly: Number(habit.monthly_average) || 0,
         growth: 0.2 + Math.random() * 0.3,
@@ -469,17 +504,25 @@ export default function CelestialMindMap({ loans }) {
         }
 
         // 2. Draw core nodes with glows
-        ctx.fillStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.45 : 0.85})`;
-        ctx.shadowColor = `rgba(${r},${g},${b},0.45)`;
-        ctx.shadowBlur = p.type === 'loan' ? 12 : p.type === 'habit' ? 6 : 2;
+        ctx.fillStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.5 : 0.95})`;
+        ctx.shadowColor = `rgba(${r},${g},${b},0.3)`;
+        ctx.shadowBlur = p.type === 'loan' ? 4 : p.type === 'habit' ? 2 : 1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
-        
-        ctx.strokeStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.5 : 0.9})`;
-        ctx.lineWidth = p.type === 'loan' ? 1.2 : p.type === 'micro' ? 0.4 : 0.8;
+
+        ctx.strokeStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.6 : 1})`;
+        ctx.lineWidth = p.type === 'loan' ? 1.8 : p.type === 'micro' ? 0.5 : 1.2;
         ctx.stroke();
+
+        // Crisp inner highlight — solid 3D sphere feel instead of a blurry blob
+        if (p.type !== 'micro') {
+          ctx.beginPath();
+          ctx.arc(p.x - radius * 0.3, p.y - radius * 0.3, radius * 0.32, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.28)';
+          ctx.fill();
+        }
 
         // 3. Paid-off checkmark pulse ring
         if (p.type === 'loan' && progress > 0 && !paidOff) {
