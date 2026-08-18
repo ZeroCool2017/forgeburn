@@ -168,7 +168,7 @@ export default function CelestialMindMap({ loans }) {
         balance: Number(loan.current_balance) || 0,
         original: Math.max(1, Number(loan.original_balance) || Number(loan.current_balance) || 1),
         name: loan.name,
-        color: shiftHue(category.color, index * 37),
+        color: shiftHue(category.color, index * 12),
         category: loan.category,
         growth: 0.5 + Math.random() * 0.5,
         baseRadius: 10 + Math.random() * 4,
@@ -197,7 +197,7 @@ export default function CelestialMindMap({ loans }) {
         vx: (Math.random() - 0.5) * 0.05,
         vy: (Math.random() - 0.5) * 0.05,
         name: habit.name,
-        color: shiftHue(habit.color || category.color, index * 37),
+        color: shiftHue(habit.color || category.color, index * 12),
         category: habit.category,
         monthly: Number(habit.monthly_average) || 0,
         growth: 0.2 + Math.random() * 0.3,
@@ -505,12 +505,9 @@ export default function CelestialMindMap({ loans }) {
 
         // 2. Draw core nodes with glows
         ctx.fillStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.5 : 0.95})`;
-        ctx.shadowColor = `rgba(${r},${g},${b},0.3)`;
-        ctx.shadowBlur = p.type === 'loan' ? 4 : p.type === 'habit' ? 2 : 1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
 
         ctx.strokeStyle = `rgba(${r},${g},${b},${p.type === 'micro' ? 0.6 : 1})`;
         ctx.lineWidth = p.type === 'loan' ? 1.8 : p.type === 'micro' ? 0.5 : 1.2;
