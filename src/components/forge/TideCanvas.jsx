@@ -146,12 +146,6 @@ export default function TideCanvas({ income, anchors, habits, depth }) {
         ctx.arc(e.x, e.y, 1.8, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(196,181,253,0.45)';
         ctx.fill();
-        if (e.emoji) {
-          ctx.font = '9px monospace';
-          ctx.fillStyle = 'rgba(200,190,230,0.35)';
-          ctx.textAlign = 'center';
-          ctx.fillText(e.emoji, e.x, e.y + radius + 12);
-        }
       });
 
       // Anchor drains — steady outflow at the bottom
@@ -171,12 +165,6 @@ export default function TideCanvas({ income, anchors, habits, depth }) {
             vy: 0.4 + Math.random() * 0.8,
             life: 1,
           });
-        }
-        if (d.emoji) {
-          ctx.font = '9px monospace';
-          ctx.fillStyle = 'rgba(200,190,230,0.35)';
-          ctx.textAlign = 'center';
-          ctx.fillText(d.emoji, d.x, d.y + 14);
         }
       });
 

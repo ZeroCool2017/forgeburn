@@ -414,32 +414,17 @@ export default function CelestialMindMap({ loans }) {
         const radius = 12 + Math.min(22, (anchor.monthly_average || 0) / 75);
         
         ctx.save();
-        // Slow-breathing outline
-        ctx.strokeStyle = 'rgba(139, 92, 246, 0.18)';
-        ctx.lineWidth = 1.0;
-        ctx.setLineDash([4, 6]);
+        // Single clean breathing ring — no clutter
+        const breath = 1 + Math.sin(currentTime * 0.0015 + i) * 0.1;
+        ctx.strokeStyle = 'rgba(139, 92, 246, 0.22)';
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.arc(anchorX, anchorY, radius * (1.25 + Math.sin(currentTime * 0.0015 + i) * 0.12), 0, Math.PI * 2);
+        ctx.arc(anchorX, anchorY, radius * breath, 0, Math.PI * 2);
         ctx.stroke();
-
-        ctx.strokeStyle = 'rgba(139, 92, 246, 0.07)';
-        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(139, 92, 246, 0.1)';
         ctx.beginPath();
-        ctx.arc(anchorX, anchorY, radius * 0.75, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        ctx.fillStyle = 'rgba(139, 92, 246, 0.09)';
-        ctx.beginPath();
-        ctx.arc(anchorX, anchorY, radius * 0.45, 0, Math.PI * 2);
+        ctx.arc(anchorX, anchorY, radius * 0.5, 0, Math.PI * 2);
         ctx.fill();
-        
-        // Clean high-contrast vector letter centered in the box (Jack Butcher style)
-        const label = (anchor.name || 'A')[0].toUpperCase();
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.font = 'bold 10px monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(label, anchorX, anchorY - 2);
         ctx.restore();
 
         // Calculate proximity of particles to each anchor
@@ -633,16 +618,10 @@ export default function CelestialMindMap({ loans }) {
       transition={{ duration: 0.6 }}
       className="glass rounded-2xl p-5 relative overflow-hidden"
     >
-      <div className="mb-4 space-y-1.5">
+      <div className="mb-4 space-y-1">
         <h3 className="text-sm font-semibold text-foreground">Living Mind Map</h3>
-        <p className="text-[11px] leading-relaxed text-muted-foreground/80">
-          Your financial ecosystem in motion. <span className="font-semibold text-foreground">Large glowing spheres</span> are your debts; <span className="font-semibold text-foreground">small floating, wiggling organisms</span> are your monthly habits.
-        </p>
-        <p className="text-[11px] leading-relaxed text-muted-foreground/80">
-          Glowing dotted threads show calculated <span className="text-primary font-medium">influence paths</span> where spending habits feed specific debts. Concentric rings at the bottom are your <span className="text-purple-400 font-semibold">Anchors</span> (fixed bills).
-        </p>
-        <p className="text-[10px] italic text-muted-foreground/60">
-          Drag the organisms to play the feedback loop. Drifting close to the Anchors synthesizes a deep, relaxing Endel style sub-bass focus drone.
+        <p className="text-[11px] leading-relaxed text-muted-foreground/70">
+          <span className="font-semibold text-foreground">Spheres</span> are your debts, <span className="font-semibold text-foreground">organisms</span> are your habits. Drag them to play the field.
         </p>
       </div>
       <div className="relative overflow-hidden rounded-lg border border-border/20 bg-background/30">
@@ -693,14 +672,9 @@ export default function CelestialMindMap({ loans }) {
           <span className="text-[10px] font-mono text-muted-foreground">Paid off</span>
         </div>
       </div>
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="text-[11px] text-muted-foreground/80 mt-4 leading-relaxed border-t border-border/10 pt-3"
-      >
-        <span className="font-semibold text-foreground">How to read the map:</span> Debt nodes grow larger based on their remaining balance; spending pattern nodes pulse in size based on their monthly cost; influence threads are automatically computed from category matches, relative balance sizes, interest rates (APR), and monthly spending amounts.
-      </motion.p>
+      <p className="text-[10px] text-muted-foreground/50 mt-3 leading-relaxed border-t border-border/10 pt-3">
+        Debt nodes grow with their balance; habit organisms pulse with their monthly cost; threads show where spending feeds debt.
+      </p>
     </motion.div>
   );
 }

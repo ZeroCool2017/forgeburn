@@ -6,9 +6,17 @@ export const BILL_PSYCHOLOGY = {
   housing: {
     reframe: "Your largest anchor is your largest lever. A small percent here outweighs big cuts in a dozen smaller bills.",
     levers: [
-      "Renegotiate at renewal — landlords fear turnover more than a small reduction. A vacancy costs them more than keeping you.",
+      "Renegotiate at renewal — a vacancy costs a landlord more than a small reduction. The threat of turnover is your leverage.",
       "House-hack: one room or one roommate can halve your single biggest expense.",
-      "Question the space: are you paying for square footage you don't use, or a commute you no longer make?",
+      "Question the space: are you paying for square footage you don't use, or a location you no longer need daily?",
+    ],
+  },
+  mortgage: {
+    reframe: "A mortgage is the one bill where the rate, not the balance, is the lever. A fraction of a percent is worth thousands.",
+    levers: [
+      "Refinance when rates drop half a point or more — the break-even is often under two years. Run the numbers, don't just feel it.",
+      "Drop PMI the moment you hit 20% equity — many lenders won't do it automatically. One call, permanent savings.",
+      "Recast, don't refinance: a lump sum toward principal can lower your payment without the closing costs of a new loan.",
     ],
   },
   utilities: {
@@ -92,17 +100,35 @@ export const BILL_PSYCHOLOGY = {
     ],
   },
   default: {
-    reframe: "Ask: is this a need, or a familiar comfort? The comfort isn't wrong — but it should be chosen, not inherited.",
+    reframe: "Every bill is a decision you keep paying for. The question isn't just 'can I cut it' — it's 'did I choose this, or did I inherit it?'",
     levers: [
-      "What would shift if this were 10% smaller? Try it for one month before you decide it's impossible.",
-      "Is this cost the same every month, or does it swing? If it swings, the high month is telling you something.",
-      "Could this be paused for 30 days without harm? If yes, you've learned it's optional — even if you keep it.",
+      "Compare it to a competitor once a year. Loyalty is rarely rewarded in pricing — the deal you have is usually not the best they'd give.",
+      "Ask for 10% less. Call the provider, say you're reviewing costs, and ask what's possible. A one-minute call saves people money more often than any app.",
+      "Could this be paused for 30 days without real harm? If yes, it's optional — even if you decide to keep it.",
+      "Is it the same each month, or does it swing? The high months are where the opportunity hides; track three and find your low.",
     ],
   },
 };
 
+// Categories offered in the add-bill form — the picked key feeds the psychology.
+export const BILL_CATEGORIES = [
+  { key: 'other', label: 'Other' },
+  { key: 'housing', label: 'Rent / Housing' },
+  { key: 'mortgage', label: 'Mortgage' },
+  { key: 'utilities', label: 'Utilities' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'internet', label: 'Internet' },
+  { key: 'subscriptions', label: 'Subscriptions' },
+  { key: 'streaming', label: 'Streaming' },
+  { key: 'insurance', label: 'Insurance' },
+  { key: 'groceries', label: 'Groceries' },
+  { key: 'transport', label: 'Transport' },
+  { key: 'gym', label: 'Gym' },
+  { key: 'health', label: 'Health' },
+];
+
 const NAME_KEYWORDS = [
-  ['rent', 'housing'], ['mortgage', 'housing'], ['apartment', 'housing'],
+  ['rent', 'housing'], ['mortgage', 'mortgage'], ['apartment', 'housing'],
   ['electric', 'utilities'], ['gas', 'utilities'], ['water', 'utilities'], ['power', 'utilities'], ['utility', 'utilities'],
   ['phone', 'phone'], ['cell', 'phone'], ['mobile', 'phone'],
   ['internet', 'internet'], ['wifi', 'internet'], ['broadband', 'internet'],

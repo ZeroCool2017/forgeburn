@@ -6,6 +6,7 @@ import { Plus, Waves } from 'lucide-react';
 import { formatCurrency } from '@/lib/loanCalculations';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
 import { playOrbTone, playDataBloom, playFieldBass } from '@/lib/orchestraSound';
+import { BILL_CATEGORIES } from '@/lib/billPsychology';
 import TideCanvas from '@/components/forge/TideCanvas';
 import BillCard from '@/components/forge/BillCard';
 
@@ -25,6 +26,7 @@ export default function Tides() {
   const [billAmount, setBillAmount] = useState('');
   const [billEmoji, setBillEmoji] = useState('🪨');
   const [billType, setBillType] = useState('fixed');
+  const [billCategory, setBillCategory] = useState('other');
 
   // Add-current form state
   const [addingCurrent, setAddingCurrent] = useState(false);
@@ -70,8 +72,8 @@ export default function Tides() {
   const submitBill = () => {
     const amt = parseFloat(billAmount) || 0;
     if (!billName.trim() || amt <= 0) return;
-    createAnchor.mutate({ name: billName.trim(), emoji: billEmoji, monthly_average: amt, category: 'other', bill_type: billType });
-    setBillName(''); setBillAmount(''); setBillEmoji('🪨'); setBillType('fixed'); setAddingBill(false);
+    createAnchor.mutate({ name: billName.trim(), emoji: billEmoji, monthly_average: amt, category: billCategory, bill_type: billType });
+    setBillName(''); setBillAmount(''); setBillEmoji('🪨'); setBillType('fixed'); setBillCategory('other'); setAddingBill(false);
   };
 
   const submitCurrent = () => {
@@ -191,6 +193,13 @@ export default function Tides() {
               <input value={billEmoji} onChange={e => setBillEmoji(e.target.value)} maxLength={2} className="w-8 text-center bg-transparent text-sm focus:outline-none" placeholder="🪨" />
               <input value={billName} onChange={e => setBillName(e.target.value)} placeholder="bill name (e.g. Rent, Electric)" autoFocus className="flex-1 bg-transparent text-sm font-mono text-foreground placeholder:text-muted-foreground/40 focus:outline-none" onKeyDown={e => e.key === 'Enter' && submitBill()} />
               <input type="number" value={billAmount} onChange={e => setBillAmount(e.target.value)} placeholder="$ / mo" className="w-20 bg-transparent text-right text-sm font-mono text-foreground placeholder:text-muted-foreground/40 focus:outline-none" onKeyDown={e => e.key === 'Enter' && submitBill()} />
+            </div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-[0.16em] w-8">type</span>
+              <select value={billCategory} onChange={e => setBillCategory(e.target.value)} className="flex-1 bg-secondary/40 text-xs font-mono text-foreground rounded px-2 py-1 focus:outline-none border border-border/40">
+                {BILL_CATEGORIES.map(c => <option key={c.key} value={c.key}>{c.label}</option>)}
+              </select>
+              <span className="text-[9px] font-mono text-muted-foreground/40">guides the tips</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
