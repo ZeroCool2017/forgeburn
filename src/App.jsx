@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Dashboard from './pages/Dashboard';
 import Strategy from './pages/Strategy';
 import SettingsPage from './pages/SettingsPage';
+import Tides from './pages/Tides';
 import Onboarding from './pages/Onboarding';
 import AppLayout from './components/AppLayout';
 import CelestialBackground from './components/forge/CelestialBackground';
@@ -17,7 +18,7 @@ import { AmbientSoundProvider } from './lib/ambientSoundContext';
 import SaveIndicator from './components/SaveIndicator';
 // Add page imports here
 
-const TAB_ORDER = ['/', '/strategy', '/settings'];
+const TAB_ORDER = ['/', '/strategy', '/tides', '/settings'];
 
 const slideVariants = {
   enter: (direction) => ({
@@ -56,6 +57,7 @@ function AnimatedRoutes() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/strategy" element={<Strategy />} />
+            <Route path="/tides" element={<Tides />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />

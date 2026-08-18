@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Hammer, Swords, Settings } from 'lucide-react';
+import { Hammer, Swords, Waves, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import MuteButton from './MuteButton';
 
 const TABS = [
   { to: '/', label: 'Forge', icon: Hammer },
   { to: '/strategy', label: 'Strategy', icon: Swords },
+  { to: '/tides', label: 'Tides', icon: Waves },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
