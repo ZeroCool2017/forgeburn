@@ -24,6 +24,7 @@ import { detectMilestone } from '@/lib/milestones';
 import PullToRefresh from '@/components/forge/PullToRefresh';
 import VisualizeValue from '@/components/forge/VisualizeValue';
 import CompoundCurveWidget from '@/components/forge/CompoundCurveWidget';
+import TidesSection from '@/components/forge/TidesSection';
 
 import MoneyStorySession from '@/components/forge/MoneyStorySession';
 import CelestialMindMap from '@/components/forge/CelestialMindMap';
@@ -548,10 +549,14 @@ export default function Dashboard() {
                 </AnimatePresence>
               </div>
             )}
+          {/* Tides — cash flow */}
+          <div className="obs-divider my-8" />
+          <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">— tides</p>
+          <TidesSection />
           </>
-        )}
-      </div>
-    </div>
-    </PullToRefresh>
+          )}
+          </div>
+          </div>
+          </PullToRefresh>
   );
 }
