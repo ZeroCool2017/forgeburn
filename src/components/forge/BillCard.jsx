@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, X } from 'lucide-react';
 import { formatCurrency } from '@/lib/loanCalculations';
 import { getBillPsychology } from '@/lib/billPsychology';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playOrbTone } from '@/lib/orchestraSound';
+import { playOrbTone, playFieldTone, playFieldBass, playDataBloom } from '@/lib/orchestraSound';
 
 // Jack Butcher bill card — huge number, thin label, one bar, one accent.
-// Not a sphere. The graph IS the typography.
+// The bar is a living instrument: drag across it to play the bill as a tone
+// (Electroplankton scrub), it breathes (Endel), and a light travels it.
 export default function BillCard({ bill, totalOutflow, onToggleType, onDelete }) {
   const [open, setOpen] = useState(false);
   const { enabled } = useAmbientSoundContext();
@@ -15,6 +16,48 @@ export default function BillCard({ bill, totalOutflow, onToggleType, onDelete })
   const amount = bill.monthly_average || 0;
   const share = totalOutflow > 0 ? Math.round((amount / totalOutflow) * 100) : 0;
   const isVariable = bill.bill_type === 'variable';
+
+  const barRef = useRef(null);
+  const lastPlayRef = useRef(0);
+  const draggingRef = useRef(false);
+
+  // Bigger bills sing deeper — map amount to a pitch band, then scrub within.
+  const pitchBand = Math.max(0, Math.min(6, 7 - Math.round(Math.log10(Math.max(10, amount)) * 1.6)));
+
+  const playAt = (clientX) => {
+    const rect = barRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const norm = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    playFieldTone(pitchBand + Math.round(norm * 2), enabled, 1.8);
+  };
+
+  const handleBarDown = (e) => {
+    draggingRef.current = true;
+    playFieldBass(enabled, 0.5);
+    playAt(e.clientX);
+    lastPlayRef.current = performance.now();
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const handleBarMove = (e) => {
+    if (!draggingRef.current) return;
+    const now = performance.now();
+    if (now - lastPlayRef.current < 130) return;
+    lastPlayRef.current = now;
+    playAt(e.clientX);
+  };
+
+  const handleBarUp = (e) => {
+    draggingRef.current = false;
+    e.currentTarget?.releasePointerCapture?.(e.pointerId);
+  };
+
+  const toggleOpen = () => {
+    const next = !open;
+    setOpen(next);
+    if (next) playDataBloom(pitchBand / 7, enabled);
+    else playOrbTone(0.4, enabled, 1.0);
+  };
 
   return (
     <div className="group relative border-t border-border/40 py-5 transition-colors hover:bg-secondary/10">
@@ -27,23 +70,47 @@ export default function BillCard({ bill, totalOutflow, onToggleType, onDelete })
           <p className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-[0.18em] mt-1">/ month</p>
         </div>
 
-        {/* Identity + bar */}
+        {/* Identity + living bar */}
         <div className="flex-1 min-w-0 pt-1">
           <div className="flex items-center gap-2 mb-1.5">
             <span className="text-sm">{bill.emoji || '🪨'}</span>
             <p className="text-sm font-semibold text-foreground truncate">{bill.name}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-border/40 relative overflow-hidden">
+          {/* The bar — drag to play */}
+          <div
+            ref={barRef}
+            onPointerDown={handleBarDown}
+            onPointerMove={handleBarMove}
+            onPointerUp={handleBarUp}
+            onPointerCancel={handleBarUp}
+            className="relative h-2.5 rounded-full bg-border/30 cursor-ew-resize touch-none select-none"
+            style={{ touchAction: 'none' }}
+            role="slider"
+            aria-label={`Play ${bill.name} — drag to hear`}
+          >
+            {/* Breathing fill */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${share}%` }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-y-0 left-0 rounded-full overflow-hidden"
+              style={{ background: isVariable ? 'hsl(258 35% 50%)' : 'hsl(258 80% 68%)' }}
+            >
+              {/* Endel breathing glow */}
               <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${share}%` }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-y-0 left-0"
-                style={{ background: isVariable ? 'hsl(258 30% 45%)' : 'hsl(258 80% 68%)', height: '2px', top: '-0.5px' }}
+                animate={{ opacity: [0.5, 0.9, 0.5] }}
+                transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute inset-0 rounded-full"
+                style={{ boxShadow: `0 0 10px ${isVariable ? 'hsl(258 35% 50% / 0.6)' : 'hsl(258 80% 68% / 0.6)'}` }}
               />
-            </div>
-            <span className="text-[10px] font-mono text-muted-foreground/60 shrink-0">{share}%</span>
+              {/* Traveling light particle — Electroplankton flow */}
+              <motion.div
+                animate={{ left: ['0%', '100%'] }}
+                transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute top-0 bottom-0 w-6 -skew-x-12"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)' }}
+              />
+            </motion.div>
           </div>
           <div className="flex items-center gap-2 mt-2">
             <button
@@ -57,16 +124,15 @@ export default function BillCard({ bill, totalOutflow, onToggleType, onDelete })
             >
               {isVariable ? 'variable' : 'fixed'}
             </button>
-            <span className="text-[9px] font-mono text-muted-foreground/40">
-              {isVariable ? 'swings month to month' : 'same each month'}
-            </span>
+            <span className="text-[9px] font-mono text-muted-foreground/40">{share}% of outflow</span>
+            <span className="text-[9px] font-mono text-muted-foreground/30 italic">· drag the bar</span>
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-1 shrink-0 pt-1">
           <button
-            onClick={() => { playOrbTone(0.7, enabled, 1.3); setOpen(o => !o); }}
+            onClick={toggleOpen}
             className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded"
           >
             ways to lower

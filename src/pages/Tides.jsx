@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Waves } from 'lucide-react';
 import { formatCurrency } from '@/lib/loanCalculations';
 import { useAmbientSoundContext } from '@/lib/ambientSoundContext';
-import { playOrbTone } from '@/lib/orchestraSound';
+import { playOrbTone, playDataBloom, playFieldBass } from '@/lib/orchestraSound';
 import TideCanvas from '@/components/forge/TideCanvas';
 import BillCard from '@/components/forge/BillCard';
 
@@ -47,6 +47,17 @@ export default function Tides() {
   const totalAnchors = anchors.reduce((s, a) => s + (a.monthly_average || 0), 0);
   const totalHabits = habits.reduce((s, h) => s + (h.monthly_average || 0), 0);
   const depth = income - totalAnchors - totalHabits;
+
+  // The three big numbers exhale a slow chord when they first appear — Endel reveal.
+  const bloomedRef = React.useRef(false);
+  React.useEffect(() => {
+    if (bloomedRef.current) return;
+    if (anchors.length || habits.length || income > 0) {
+      bloomedRef.current = true;
+      playDataBloom(0.35, enabled);
+      playFieldBass(enabled, 0.35);
+    }
+  }, [anchors.length, habits.length, income, enabled]);
 
   const saveIncome = (val) => {
     const n = parseFloat(val) || 0;
